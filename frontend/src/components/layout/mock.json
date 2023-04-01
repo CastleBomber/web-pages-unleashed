@@ -1,20 +1,20 @@
 [
   {
-    "image": "images/draggy.jpg",
+    "image": "public-images/L1.jpeg",
     "title": "Title 1",
-    "subTitle": "xxxxxxx",
+    "subTitle": "Red",
     "interval": 2500
   },
   {
-    "image": "https://www.themoviedb.org/t/p/w1920_and_h800_multi_faces/yYrvN5WFeGYjJnRzhY0QXuo4Isw.jpg",
+    "image": "public-images/L2.png",
     "title": "Title 2",
-    "subTitle": "xxx",
+    "subTitle": "Blue",
     "interval": 2000
   },
   {
-    "image": "https://www.themoviedb.org/t/p/original/4avmIRBBOs9b4DKoenf8SWWJJP7.jpg",
+    "image": "public-images/L3.jpeg",
     "title": "Title 3",
-    "subTitle": "xxx",
+    "subTitle": "Green",
     "interval": 4000
   }
 ]
