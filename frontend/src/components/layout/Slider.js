@@ -1,3 +1,8 @@
+/**
+ * Photos for carousel may need to be put into the folder:
+ * ./frontend/public to be able to be seen
+ *
+ */
 import React, { useState } from "react";
 import Carousel from "react-bootstrap/Carousel";
 import "./slider.css";
@@ -6,7 +11,6 @@ function Slider({ slides }) {
   const [index, setIndex] = useState(0);
 
   const handleSelect = (selectedIndex, e) => {
-    console.log("selected index: ", selectedIndex);
     setIndex(selectedIndex);
   };
 

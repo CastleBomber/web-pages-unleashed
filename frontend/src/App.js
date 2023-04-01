@@ -39,12 +39,13 @@ import Navbar from "./components/layout/Navbar";
 import Slider from "./components/layout/Slider";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import slides from './components/layout/mock.json'
+import slides from "./components/layout/mock.json";
 
 function App() {
   return (
     <div className="App">
-      <Slider slides={slides}/>
+      <Navbar />
+      <Slider slides={slides} />
     </div>
   );
 }
