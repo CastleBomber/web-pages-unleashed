@@ -26,6 +26,12 @@
  *  URL variables may need ending '/' added to function properly
  *
  *  Bootstrap uses: public/index.html
+ *
+ *  For multiple package.json files, the needed dependency will need
+ *  to be loaded up from the ~immediate directory (perhaps where npm* was called)
+ *  ex: frontend/src/App.js uses react-bootstrap.
+ *      so frontend/package.json needs to show react-bootstrap
+ *      ./package.json version not seen/used
  */
 
 import React, { Component } from "react";
@@ -33,12 +39,12 @@ import Navbar from "./components/layout/Navbar";
 import Slider from "./components/layout/Slider";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import slides from './components/layout/mock.json'
 
 function App() {
   return (
     <div className="App">
-      <Navbar />
-      <Slider />
+      <Slider slides={slides}/>
     </div>
   );
 }
