@@ -11,3 +11,10 @@
 .carousel .carousel-control-prev-icon.changed {
   background-image: url("./arrow-left-solid.svg");
 }
+
+@media (max-width: 800) {
+  .carousel {
+    width: auto;
+    height: auto;
+  }
+}

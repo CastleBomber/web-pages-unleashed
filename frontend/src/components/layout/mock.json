@@ -1,18 +1,18 @@
 [
   {
-    "image": "public-images/L1.jpeg",
+    "image": "public-images/W1.jpg",
     "title": "Title 1",
     "subTitle": "Red",
     "interval": 2500
   },
   {
-    "image": "public-images/L2.png",
+    "image": "public-images/W2.jpg",
     "title": "Title 2",
     "subTitle": "Blue",
     "interval": 2000
   },
   {
-    "image": "public-images/L3.jpeg",
+    "image": "public-images/W3.jpg",
     "title": "Title 3",
     "subTitle": "Green",
     "interval": 4000
