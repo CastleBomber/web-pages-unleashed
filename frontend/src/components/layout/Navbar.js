@@ -12,7 +12,8 @@ function NavigationBar() {
       {["xxl"].map((expand) => (
         <Navbar
           key={expand}
-          bg="light"
+          bg="dark"
+          variant="dark"
           sticky="top"
           expand={expand}
           className="mb-3"

@@ -37,19 +37,42 @@
  */
 
 import React, { Component } from "react";
+import { Container, Row, Col } from "react-bootstrap";
 import NavigationBar from "./components/layout/Navbar";
 import Slider from "./components/layout/Slider";
 import slides from "./components/layout/mock.json";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
+// class App extends Component {
+//   render() {
+//     return (
+//       <div className="App">
+//         <NavigationBar />
+//         <Slider slides={slides} />
+//       </div>
+//     );
+//   }
+// }
+
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <NavigationBar />
-        <Slider slides={slides} />
-      </div>
+      <Container fluid>
+        <Row className="rows">
+          <Col className="columns">
+            <NavigationBar />
+          </Col>
+        </Row>
+        <Row className="rows">
+          <Col className="columns">
+            <Slider slides={slides} />
+          </Col>
+          <Col className="columns">
+            <Slider slides={slides} />
+          </Col>
+        </Row>
+      </Container>
     );
   }
 }
