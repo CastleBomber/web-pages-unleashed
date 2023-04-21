@@ -5,6 +5,7 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Offcanvas from "react-bootstrap/Offcanvas";
+import "./navbar.css";
 
 function NavigationBar() {
   return (
@@ -14,9 +15,8 @@ function NavigationBar() {
           key={expand}
           bg="dark"
           variant="dark"
-          sticky="top"
           expand={expand}
-          className="mb-3"
+          className="navbar"
         >
           <Container fluid>
             <Navbar.Brand href="#">Web Pages Unleashed</Navbar.Brand>

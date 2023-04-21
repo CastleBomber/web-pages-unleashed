@@ -1,3 +1,7 @@
+.carousel {
+  grid-column: 1/5;
+}
+
 .carousel .carousel-indicators button {
   width: 20px;
   height: 20px;
