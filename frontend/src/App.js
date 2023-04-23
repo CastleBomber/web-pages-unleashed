@@ -40,7 +40,8 @@ import React, { Component } from "react";
 import NavigationBar from "./components/NavBar/Navbar";
 import Slider from "./components/Slider/Slider";
 import slides from "./components/Slider/mock.json";
-import Tile from "./components/Card/Card";
+import tiles from "./components/Card/card-info.json";
+import CardTileGroup from "./components/Card/Card";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
@@ -48,10 +49,9 @@ class App extends Component {
   render() {
     return (
       <div className="container">
-          <NavigationBar />
-          <Slider slides={slides} />
-          <Tile />
-          <Tile />
+        <NavigationBar />
+        <Slider slides={slides} />
+        <CardTileGroup tiles={tiles} />
       </div>
     );
   }
