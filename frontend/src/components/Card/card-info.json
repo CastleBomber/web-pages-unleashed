@@ -1,14 +1,20 @@
 [
   {
-    "title": "Card Title 1",
-    "text": "Red"
+    "title": "Red Card Art",
+    "text": "description about Red",
+    "image": "public-images/card-images/CB.jpg",
+    "smalltext": "button link"
   },
   {
-    "title": "Card Title 2",
-    "text": "Green"
+    "title": "Green Card Art",
+    "text": "Green",
+    "image": "public-images/card-images/CB.jpg",
+    "smalltext": "button stuff"
   },
   {
-    "title": "Card Title 3",
-    "text": "Blue"
+    "title": "Blue Card Art",
+    "text": "Blue",
+    "image": "public-images/card-images/CB.jpg",
+    "smalltext": "button stuff"
   }
 ]
