@@ -34,6 +34,9 @@
  *     ./package.json version not seen/used
  *
  * For image carousel, keep images 1920w x 800h to prevent page resizing
+ *
+ * If ever getting errors from using BrowserRouter, ensure that each level of package.json
+ * is equipped with all the needed dependencies (check if some have what other don't)
  */
 
 import React, { Component } from "react";
@@ -42,6 +45,10 @@ import Slider from "./components/Slider/Slider";
 import slides from "./components/Slider/mock.json";
 import tiles from "./components/Card/card-info.json";
 import CardTileGroup from "./components/Card/Card";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { Home } from "./components/Home/Home";
+import { About } from "./components/About/About";
+import { Contact } from "./components/Contact/Contact";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 

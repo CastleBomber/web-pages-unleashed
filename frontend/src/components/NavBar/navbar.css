@@ -1,4 +1,15 @@
 .navbar {
   grid-column: 1/7;
   grid-row: 1/2;
+  width: 100vw;
+  height: 100vh;
+
+  max-width: 100%;
+  max-height: 100%;
+  padding-right: 0px;
+  padding-left: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  margin-right: auto;
+  margin-left: auto;
 }
