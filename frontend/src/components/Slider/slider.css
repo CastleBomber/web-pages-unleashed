@@ -1,6 +1,5 @@
 .carousel {
-  grid-row: 2/3;
-  grid-column: 1/7;
+  font-family: "Barlow Semi Condensed", sans-serif;
 }
 
 .carousel .carousel-indicators button {
@@ -17,9 +16,3 @@
   background-image: url("./arrow-left-solid.svg");
 }
 
-@media (max-width: 800) {
-  .carousel {
-    width: auto;
-    height: auto;
-  }
-}

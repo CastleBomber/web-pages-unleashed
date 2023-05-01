@@ -40,26 +40,27 @@
  */
 
 import React, { Component } from "react";
-import NavigationBar from "./components/NavBar/Navbar";
-import Slider from "./components/Slider/Slider";
-import slides from "./components/Slider/mock.json";
-import tiles from "./components/Card/card-info.json";
-import CardTileGroup from "./components/Card/Card";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { Home } from "./components/Home/Home";
 import { About } from "./components/About/About";
 import { Contact } from "./components/Contact/Contact";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
 class App extends Component {
   render() {
     return (
-      <div className="container">
-        <NavigationBar />
-        <Slider slides={slides} />
-        <CardTileGroup tiles={tiles} />
-      </div>
+      <BrowserRouter>
+        <Home />
+
+        <div>
+          <Routes>
+            <Route exact path="/" element={<Home />} />
+            <Route exact path="/about" element={<About />} />
+            <Route exact path="/contact" element={<Contact />} />
+          </Routes>
+        </div>
+      </BrowserRouter>
     );
   }
 }

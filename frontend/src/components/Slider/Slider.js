@@ -18,7 +18,6 @@ function Slider({ slides }) {
     <Carousel
       activeIndex={index}
       onSelect={handleSelect}
-      className="carousel"
       nextIcon={
         <span
           aria-hidden="true"
