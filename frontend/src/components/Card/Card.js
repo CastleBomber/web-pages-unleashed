@@ -1,10 +1,14 @@
 import Card from "react-bootstrap/Card";
 import CardGroup from "react-bootstrap/CardGroup";
-import React from "react";
+import Button from "react-bootstrap/Button";
+import useSound from "use-sound";
+import mySong from "./Songs/LaBouche-BeMyLover-Hypatan.mp3";
 import "./card.css";
 import "./card-info.json";
 
 function CardTileGroup({ tiles }) {
+  const [playSound] = useSound(mySong);
+
   return (
     <CardGroup className="card-tile-group">
       <Card>
@@ -14,7 +18,11 @@ function CardTileGroup({ tiles }) {
           <Card.Text>{tiles[0].text}</Card.Text>
         </Card.Body>
         <Card.Footer>
-          <small className="text-muted">{tiles[0].smalltext}</small>
+          <small className="text-muted">
+            <Button href="/about" variant="danger" onClick={() => playSound()}>
+              {tiles[0].smalltext}
+            </Button>
+          </small>
         </Card.Footer>
       </Card>
       <Card>

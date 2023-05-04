@@ -1,4 +1,3 @@
-import React from "react";
 import CardTileGroup from "../Card/Card";
 import Slider from "../Slider/Slider";
 import slides from "../Slider/mock.json";
