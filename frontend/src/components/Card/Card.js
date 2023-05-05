@@ -7,7 +7,11 @@ import "./card.css";
 import "./card-info.json";
 
 function CardTileGroup({ tiles }) {
-  const [playSound] = useSound(mySong);
+  const [playSound] = useSound(mySong, { volume: 0.3 });
+
+  const handleClick = () => {
+    playSound();
+  };
 
   return (
     <CardGroup className="card-tile-group">
@@ -19,9 +23,10 @@ function CardTileGroup({ tiles }) {
         </Card.Body>
         <Card.Footer>
           <small className="text-muted">
-            <Button href="/about" variant="danger" onClick={() => playSound()}>
+            <Button variant="danger" onClick={() => handleClick()}>
               {tiles[0].smalltext}
             </Button>
+            <Button href="/about" variant="danger">Go to about page</Button>
           </small>
         </Card.Footer>
       </Card>
