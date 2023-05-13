@@ -9,10 +9,10 @@
 }
 
 .carousel .carousel-control-next-icon.changed {
-  background-image: url("./arrow-right-solid.svg");
+  background-image: url("./extras/arrow-right-solid.svg");
 }
 
 .carousel .carousel-control-prev-icon.changed {
-  background-image: url("./arrow-left-solid.svg");
+  background-image: url("./extras/arrow-left-solid.svg");
 }
 

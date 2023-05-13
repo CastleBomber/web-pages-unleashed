@@ -4,13 +4,14 @@ import slides from "../Slider/mock.json";
 import tiles from "../Card/card-info.json";
 import NavigationBar from "../NavBar/Navbar";
 import "../NavBar/navbar.css";
-import "./about.css";
+import "./PageBlue.css";
 import "../Slider/slider.css";
 import "../Card/card.css";
 
-export const About = () => {
+// AI art or music page
+export const PageBlue = () => {
   return (
-    <div className="about">
+    <div className="page-blue">
       <nav>
         <NavigationBar className="navbar" />
       </nav>

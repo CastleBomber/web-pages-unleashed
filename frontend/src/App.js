@@ -41,8 +41,8 @@
 
 import React, { Component } from "react";
 import { Home } from "./components/Home/Home";
-import { About } from "./components/About/About";
-import { Contact } from "./components/Contact/Contact";
+import { PageBlue } from "./components/PageBlue/PageBlue";
+import { PageRed } from "./components/PageRed/PageRed";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -54,8 +54,8 @@ class App extends Component {
         <div>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
+            <Route path="/PageRed" element={<PageRed />} />
+            <Route path="/PageBlue" element={<PageBlue />} />
           </Routes>
         </div>
       </BrowserRouter>
