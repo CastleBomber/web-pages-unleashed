@@ -3,9 +3,9 @@ const getGoals = (req, res) => {
 };
 
 const setGoal = (req, res) => {
-  if(!req.body.text){
-    res.status(400)
-    throw new Error('Please add a text field')
+  if (!req.body.text) {
+    res.status(400);
+    throw new Error("Please add a text field");
   }
 };
 
@@ -17,7 +17,7 @@ const deleteGoal = (req, res) => {
   res.status(200).json({ message: `Delete ${req.params.id}` });
 };
 
-moudule.exports = {
+module.exports = {
   getGoals,
   setGoal,
   updateGoal,

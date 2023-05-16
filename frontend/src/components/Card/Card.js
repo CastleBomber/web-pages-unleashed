@@ -26,7 +26,9 @@ function CardTileGroup({ tiles }) {
             <Button variant="danger" onClick={() => handleClick()}>
               {tiles[0].smalltext}
             </Button>
-            <Button href="/about" variant="danger">Go to about page</Button>
+            <Button href="/PageRed" variant="danger">
+              Go to Page Red
+            </Button>
           </small>
         </Card.Footer>
       </Card>
@@ -37,7 +39,14 @@ function CardTileGroup({ tiles }) {
           <Card.Text>{tiles[1].text}</Card.Text>
         </Card.Body>
         <Card.Footer>
-          <small className="text-muted">{tiles[1].smalltext}</small>
+          <small className="text-muted">
+            <Button variant="danger" onClick={() => handleClick()}>
+              {tiles[1].smalltext}
+            </Button>
+            <Button href="/PageBlue" variant="danger">
+              Go to Page Blue
+            </Button>
+          </small>
         </Card.Footer>
       </Card>
       <Card>
@@ -47,7 +56,14 @@ function CardTileGroup({ tiles }) {
           <Card.Text>{tiles[2].text}</Card.Text>
         </Card.Body>
         <Card.Footer>
-          <small className="text-muted">{tiles[2].smalltext}</small>
+          <small className="text-muted">
+            <Button variant="danger" onClick={() => handleClick()}>
+              {tiles[2].smalltext}
+            </Button>
+            <Button href="/PageBlue" variant="danger">
+              Go to Page Green
+            </Button>
+          </small>
         </Card.Footer>
       </Card>
     </CardGroup>

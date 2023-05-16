@@ -9,4 +9,6 @@ const errorHandler = (err, req, res, next) => {
   });
 };
 
-moudule.exports = { errorHandler };
+module.exports = {
+  errorHandler,
+};

@@ -14,15 +14,15 @@ const NavigationBar = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link className="link" to="/">
+            <Nav.Link className="link" href="/">
               Home
             </Nav.Link>
 
-            <Nav.Link className="link" to="/PageRed">
+            <Nav.Link className="link" href="/PageRed">
               PageRed
             </Nav.Link>
 
-            <Nav.Link className="link" to="/PageBlue">
+            <Nav.Link className="link" href="/PageBlue">
               PageBlue
             </Nav.Link>
           </Nav>

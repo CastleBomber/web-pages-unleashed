@@ -3,18 +3,18 @@
     "title": "Red Card Art",
     "text": "description about Red",
     "image": "public-images/card-images/CB.jpg",
-    "smalltext": "button to play red's music"
+    "smalltext": "Play red's music"
   },
   {
     "title": "Green Card Art",
     "text": "Green",
     "image": "public-images/card-images/CB.jpg",
-    "smalltext": "button to blue page"
+    "smalltext": "Play blue's music"
   },
   {
     "title": "Blue Card Art",
     "text": "Blue",
     "image": "public-images/card-images/CB.jpg",
-    "smalltext": "button to green page"
+    "smalltext": "Play green's music"
   }
 ]

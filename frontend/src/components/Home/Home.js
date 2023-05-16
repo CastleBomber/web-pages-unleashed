@@ -8,7 +8,6 @@ import "../NavBar/navbar.css";
 import "./Home.css";
 import "../Slider/slider.css";
 import "../Card/card.css";
-import "../Footer/footer.css";
 
 export const Home = () => {
   return (

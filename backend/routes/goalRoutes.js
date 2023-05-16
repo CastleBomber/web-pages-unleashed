@@ -10,4 +10,4 @@ const {
 router.route("/").get(getGoals).post(setGoal);
 router.route("/:id").delete(deleteGoal).put(updateGoal);
 
-moudule.exports = router;
+module.exports = router;
