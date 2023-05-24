@@ -3,18 +3,18 @@
     "image": "public-images/slider-images/W1.jpg",
     "title": "Title 1",
     "subTitle": "Red",
-    "interval": 5000
+    "interval": 50000
   },
   {
     "image": "public-images/slider-images/W2.jpg",
     "title": "Title 2",
     "subTitle": "Blue",
-    "interval": 4000
+    "interval": 40000
   },
   {
     "image": "public-images/slider-images/W3.jpg",
     "title": "Title 3",
     "subTitle": "Green",
-    "interval": 8000
+    "interval": 80000
   }
 ]

@@ -19,6 +19,13 @@
  * cors-heroku error: open https://cors-anywhere.herokuapp.com/corsdemo
  *
  *
+ * Debugger:
+ * launch.json should be set to Node.js versus chrome
+ *
+ *
+ * MongoDB Server:
+ * const dotenv = require("dotenv").config();
+ *
  * Watch out for:
  * In app, older syntax 'component', needs to be switched to 'element'
  * older syntax of 'Switch', need to be 'Router' surrounding 'Route'
@@ -33,10 +40,10 @@
  *     so frontend/package.json needs to show react-bootstrap
  *     ./package.json version not seen/used
  *
- * For image carousel, keep images 1920w x 800h to prevent page resizing
- *
  * If ever getting errors from using BrowserRouter, ensure that each level of package.json
  * is equipped with all the needed dependencies (check if some have what other don't)
+ *
+ * MongoDB - Compass GUI, used with online website tools
  */
 
 import React, { Component } from "react";
