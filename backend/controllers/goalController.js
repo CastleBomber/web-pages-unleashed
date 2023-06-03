@@ -3,29 +3,35 @@
  * Create - Post - Set
  * Read - Get - Get
  * Update - Put - Update
- * Delete - Delete -
+ * Delete - Delete - Delete
  *
- *
- * Post
+ * [Postman Goal Requests]
+ * Post: http://locoalhost:5000/api/goals/
+ * (Authorization, BearerToken: "")
  * (Body, x-www-form-urlencoded)
  * key: text
  * value: goal-1
  *
- * Put
+ * Put: http://locoalhost:5000/api/goals/
  * (Body, x-www-form-urlencoded)
  * key: text
  * value: goal-updated
+ * 
+ * Delete: http://locoalhost:5000/api/goals/"goal:id"
+
+ * 
  *
  */
 const asyncHandler = require("express-async-handler");
 
 const Goal = require("../models/goalModel");
+const User = require("../models/userModel");
 
 // @desc    Get goals
 // @route   GET /api/goals
 // @access  Private
 const getGoals = asyncHandler(async (req, res) => {
-  const goals = await Goal.find();
+  const goals = await Goal.find({ user: req.user.id });
 
   res.status(200).json(goals);
 });
@@ -41,6 +47,7 @@ const setGoal = asyncHandler(async (req, res) => {
 
   const goal = await Goal.create({
     text: req.body.text,
+    user: req.user.id,
   });
 
   res.status(200).json(goal);
@@ -57,17 +64,19 @@ const updateGoal = asyncHandler(async (req, res) => {
     throw new Error("Goal not found");
   }
 
-  // // Check for user
-  // if (!req.user) {
-  //   res.status(401);
-  //   throw new Error("User not found");
-  // }
+  const user = User.findById(req.user.id);
 
-  // // Make sure the logged in user matches the goal user
-  // if (goal.user.toString() !== req.user.id) {
-  //   res.status(401);
-  //   throw new Error("User not valid auhorized");
-  // }
+  // Check for user
+  if (!user) {
+    res.status(401);
+    throw new Error("User not found");
+  }
+
+  // Make sure the logged in user matches the goal user
+  if (goal.user.toString() !== user.id) {
+    res.status(401);
+    throw new Error("User not valid auhorized");
+  }
 
   const updatedGoal = await Goal.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
@@ -87,14 +96,22 @@ const deleteGoal = asyncHandler(async (req, res) => {
     throw new Error("Goal not found");
   }
 
+  const user = User.findById(req.user.id);
+
+  // Check for user
+  if (!user) {
+    res.status(401);
+    throw new Error("User not found");
+  }
+
+  // Make sure the logged in user matches the goal user
+  if (goal.user.toString() !== req.user.id) {
+    res.status(401);
+    throw new Error("User not valid auhorized");
+  }
+
+  // New function vs old goal.remove();
   await goal.deleteOne({ id: req.params.id });
-  // await goal.findByIdAndRemove(req.params.id, function (err, docs) {
-  //   if (err) {
-  //     console.log(err);
-  //   } else {
-  //     console.log("Removed user: ", docs);
-  //   }
-  // });
 
   res.status(200).json({ id: req.params.id });
 });
