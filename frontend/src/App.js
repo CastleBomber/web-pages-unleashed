@@ -48,10 +48,10 @@
 
 import React, { Component } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Home } from "./components/Home/Home";
-import Dashboard from "./pages/Dashboard";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+import Home from "./pages/Home/Home";
+import Dashboard from "./pages/Dashboard/Dashboard";
+import Login from "./pages/Login/Login";
+import Register from "./pages/Register/Register";
 import PageRed from "./pages/PageRed/PageRed";
 import PageGreen from "./pages/PageGreen/PageGreen";
 import PageBlue from "./pages/PageBlue/PageBlue";
