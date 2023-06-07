@@ -47,10 +47,14 @@
  */
 
 import React, { Component } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Home } from "./components/Home/Home";
-import { PageBlue } from "./components/PageBlue/PageBlue";
-import { PageRed } from "./components/PageRed/PageRed";
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import Dashboard from "./pages/Dashboard";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import PageRed from "./pages/PageRed/PageRed";
+import PageGreen from "./pages/PageGreen/PageGreen";
+import PageBlue from "./pages/PageBlue/PageBlue";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
@@ -63,6 +67,10 @@ class App extends Component {
             <Route path="/" element={<Home />} />
             <Route path="/PageRed" element={<PageRed />} />
             <Route path="/PageBlue" element={<PageBlue />} />
+            <Route path="/PageGreen" element={<PageGreen />} />
+            <Route path="/Dashboard" element={<Dashboard />} />
+            <Route path="/Login" element={<Login />} />
+            <Route path="/Register" element={<Register />} />
           </Routes>
         </div>
       </BrowserRouter>
