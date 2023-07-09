@@ -21,8 +21,6 @@
  * Authorization: Bearer Token
  * Token: ""
  *
- * Extra Users:
- * Draggy, d@b.com, hack123
  *
  */
 

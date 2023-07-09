@@ -11,8 +11,10 @@
  * npx create-react-app@latest frontend --template redux
  *
  * To get app running:
- * npm run client (for this project, run from root folder; starts frontend)
- * (same as using: npm run start  while in the 'frontend' folder)
+ * backend - npm run server, from root
+ * (login, register features)
+ * frontened - npm run client, from root
+ * (website)
  *
  * cmd+D will change opening and closing tag simultaneously
  * cmd+D (+ D..) change multiple nearby instances of a name
@@ -44,10 +46,14 @@
  * is equipped with all the needed dependencies (check if some have what other don't)
  *
  * MongoDB - Compass GUI, used with online website tools
+ *
+ * Database users - check backend/server.js
  */
 
 import React, { Component } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Home from "./pages/Home/Home";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Login from "./pages/Login/Login";
@@ -61,19 +67,22 @@ import "./App.css";
 class App extends Component {
   render() {
     return (
-      <BrowserRouter>
-        <div>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/PageRed" element={<PageRed />} />
-            <Route path="/PageBlue" element={<PageBlue />} />
-            <Route path="/PageGreen" element={<PageGreen />} />
-            <Route path="/Dashboard" element={<Dashboard />} />
-            <Route path="/Login" element={<Login />} />
-            <Route path="/Register" element={<Register />} />
-          </Routes>
-        </div>
-      </BrowserRouter>
+      <>
+        <BrowserRouter>
+          <div>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/PageRed" element={<PageRed />} />
+              <Route path="/PageBlue" element={<PageBlue />} />
+              <Route path="/PageGreen" element={<PageGreen />} />
+              <Route path="/Dashboard" element={<Dashboard />} />
+              <Route path="/Login" element={<Login />} />
+              <Route path="/Register" element={<Register />} />
+            </Routes>
+          </div>
+        </BrowserRouter>
+        <ToastContainer />
+      </>
     );
   }
 }

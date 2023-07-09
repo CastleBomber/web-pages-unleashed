@@ -11,7 +11,7 @@ const register = async (userData) => {
   }
 
   return response.data;
-};
+}; 
 
 // Login User
 const login = async (userData) => {

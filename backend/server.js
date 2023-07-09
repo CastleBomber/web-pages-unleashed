@@ -6,8 +6,11 @@
  * 
  * Database Users
  * CastleBomber, a@b.com, hack123
+ * Draggy, d@b.com, hack123
+ * Theo, theo@gg.com, red
  *
  */
+
 const express = require("express");
 const colors = require("colors");
 const dotenv = require("dotenv");
