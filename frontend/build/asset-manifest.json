@@ -1,0 +1,18 @@
+{
+  "files": {
+    "main.css": "/static/css/main.30dddaaa.css",
+    "main.js": "/static/js/main.f5555ae4.js",
+    "static/js/845.ae719316.chunk.js": "/static/js/845.ae719316.chunk.js",
+    "static/media/LaBouche-BeMyLover-Hypatan.mp3": "/static/media/LaBouche-BeMyLover-Hypatan.2842821c7a18d8ddbc1e.mp3",
+    "index.html": "/index.html",
+    "static/media/arrow-right-solid.svg": "/static/media/arrow-right-solid.570763fb06b0528a09d5.svg",
+    "static/media/arrow-left-solid.svg": "/static/media/arrow-left-solid.261fc5b9e874e6b41662.svg",
+    "main.30dddaaa.css.map": "/static/css/main.30dddaaa.css.map",
+    "main.f5555ae4.js.map": "/static/js/main.f5555ae4.js.map",
+    "845.ae719316.chunk.js.map": "/static/js/845.ae719316.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.30dddaaa.css",
+    "static/js/main.f5555ae4.js"
+  ]
+}

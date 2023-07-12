@@ -1,21 +1,27 @@
 /**
  * Author: CastleBomber
- * Project: Mern-Tutorial
- * Date: March 16th, 2023
+ * Project: Web-Pages-Unleashed
  *
  * Acknowledgements: Traversy Media's Youtube MERN stack series
+ * 
+ * Database users: (check backend/server.js)
+ * 
+ * To get app running:
+ * - Development mode (localhost:3000) -
+ * front & backend - npm run dev, from root
+ * or
+ * backend (login, register features) - npm run server, from root
+ * frontened (website) - npm run client, from root
+ *
+ * - Production mode (localhost:5000) -
+ * after a successful 'npm run build' in the frontend folder
+ * front & backend - npm run start, from root
  *
  *
  * Tips:
  * Creates a React app with the contents a folder called frontend
  * npx create-react-app@latest frontend --template redux
- *
- * To get app running:
- * backend - npm run server, from root
- * (login, register features)
- * frontened - npm run client, from root
- * (website)
- *
+ * 
  * cmd+D will change opening and closing tag simultaneously
  * cmd+D (+ D..) change multiple nearby instances of a name
  * cors-heroku error: open https://cors-anywhere.herokuapp.com/corsdemo
@@ -46,8 +52,6 @@
  * is equipped with all the needed dependencies (check if some have what other don't)
  *
  * MongoDB - Compass GUI, used with online website tools
- *
- * Database users - check backend/server.js
  */
 
 import React, { Component } from "react";

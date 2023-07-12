@@ -12,7 +12,7 @@ const initialState = {
 // Create new goal
 export const createGoal = createAsyncThunk(
   "goals/create",
-  async (goalData, thunkAPI) => {
+  async (goalData, thunkAPI) => {   
     try {
       const token = thunkAPI.getState().auth.user.token;
       return await goalService.createGoal(goalData, token);

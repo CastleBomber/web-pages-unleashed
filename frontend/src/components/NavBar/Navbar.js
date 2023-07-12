@@ -22,12 +22,12 @@ const NavigationBar = () => {
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
       <Container>
-        <Navbar.Brand href="#home">Web Pages Unleashed</Navbar.Brand>
+        <Navbar.Brand href="/">Web Pages Unleashed</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link className="link" href="/">
-              Home
+            <Nav.Link className="link" href="/Dashboard">
+              Dashboard
             </Nav.Link>
 
             <Nav.Link className="link" href="/PageRed">
