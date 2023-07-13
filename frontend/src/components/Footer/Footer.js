@@ -6,6 +6,7 @@ import "./footer.css";
 
 const Footer = () => {
   return (
+    <div className="bg-red-500">
     <div className="container">
       <Button variant="primary">
         <BsGithub />
@@ -16,6 +17,7 @@ const Footer = () => {
       <Button variant="success">
         <BsYoutube />
       </Button>
+      </div>
     </div>
   );
 };

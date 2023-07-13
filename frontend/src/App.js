@@ -3,9 +3,9 @@
  * Project: Web-Pages-Unleashed
  *
  * Acknowledgements: Traversy Media's Youtube MERN stack series
- * 
+ *
  * Database users: (check backend/server.js)
- * 
+ *
  * To get app running:
  * - Development mode (localhost:3000) -
  * front & backend - npm run dev, from root
@@ -21,7 +21,7 @@
  * Tips:
  * Creates a React app with the contents a folder called frontend
  * npx create-react-app@latest frontend --template redux
- * 
+ *
  * cmd+D will change opening and closing tag simultaneously
  * cmd+D (+ D..) change multiple nearby instances of a name
  * cors-heroku error: open https://cors-anywhere.herokuapp.com/corsdemo
@@ -34,7 +34,11 @@
  * MongoDB Server:
  * const dotenv = require("dotenv").config();
  *
+ * 
  * Watch out for:
+ * Program not running with a bunch of error after downloading packages?
+ * Then, delete package.json and node_modules. Run npm install after
+ * 
  * In app, older syntax 'component', needs to be switched to 'element'
  * older syntax of 'Switch', need to be 'Router' surrounding 'Route'
  *
@@ -66,7 +70,6 @@ import PageRed from "./pages/PageRed/PageRed";
 import PageGreen from "./pages/PageGreen/PageGreen";
 import PageBlue from "./pages/PageBlue/PageBlue";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./App.css";
 
 class App extends Component {
   render() {
