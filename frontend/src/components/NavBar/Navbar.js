@@ -1,12 +1,11 @@
-import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import { FaSignInAlt, FaSignOutAlt, FaUser } from "react-icons/fa";
-import "./navbar.css";
-
+import Container from "react-bootstrap/Container";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout, reset } from "../../features/auth/authSlice";
+import { FaSignInAlt, FaSignOutAlt, FaUser } from "react-icons/fa";
+import "./navbar.css";
 
 const NavigationBar = () => {
   const navigate = useNavigate();

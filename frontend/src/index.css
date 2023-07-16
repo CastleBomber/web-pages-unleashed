@@ -1,3 +1,98 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* All pages and components */
+body {
+  background-color: rgb(33, 53, 155);
+  font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+p {
+  color: white;
+}
+
+/* Home Page */
+.home {
+  display: grid;
+
+  grid-template-areas:
+    "nav nav nav"
+    "header header header"
+    "main main main"
+    "footer footer footer";
+
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+
+  width: 100vw;
+  height: 100vh;
+
+  max-width: 100%;
+  padding-right: 0px;
+  padding-left: 0px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+nav {
+  grid-area: nav;
+}
+
+header {
+  grid-area: header;
+}
+
+main {
+  grid-area: main;
+}
+
+footer {
+  grid-area: footer;
+}
+
+/* Login Page */
+.login {
+  display: grid;
+
+  grid-template-areas:
+    "nav nav nav"
+    "main main main"
+    "footer footer footer";
+
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+
+  width: 100vw;
+  height: 100vh;
+
+  max-width: 100%;
+  padding-right: 0px;
+  padding-left: 0px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+/* Form Component */
+Form {
+  margin: auto;
+  width: 80%;
+}
+
+label.form-label {
+  color: grey;
+}
+
+.sign-in-symbol {
+  color: white;
+}
+
+/* Dashboard Page */
+.goals {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.goal {
+  background-color: #f4f4f4;
+  margin: 10px 0;
+  padding: 20px 0 10px;
+  position: relative;
+}

@@ -4,7 +4,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { login, reset } from "../../features/auth/authSlice";
+import NavigationBar from "../../components/NavBar/Navbar";
+import Footer from "../../components/Footer/Footer";
 import Spinner from "../../components/Spinner/Spinner";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -57,46 +61,61 @@ function Login() {
 
   return (
     <>
-      <section className="heading">
-        <h1>
-          <FaSignInAlt />
-          Login
-        </h1>
-        <p>Login and start setting goals</p>
-      </section>
+      <div className="login">
+        <nav>
+          <NavigationBar className="navbar" />
+        </nav>
 
-      <section className="form">
-        <form onSubmit={onSubmit}>
-          <div className="form-group">
-            <input
-              type="email"
-              className="form-control"
-              id="email"
-              name="email"
-              value={email}
-              placeholder="Enter your email"
-              onChange={onChange}
-            />
-          </div>
-          <div className="form-group">
-            <input
-              type="password"
-              className="form-control"
-              id="password"
-              name="password"
-              value={password}
-              placeholder="Enter your password"
-              onChange={onChange}
-            />
-          </div>
+        <main>
+          <section className="heading ms-5">
+            <h1>
+              <p>
+                <span>
+                  <FaSignInAlt className="sign-in-symbol me-2" />
+                </span>
+                Login
+              </p>
+            </h1>
+            <p>Login and start setting goals</p>
+          </section>
 
-          <div className="form-group">
-            <button type="submit" className="btn btn-block">
+          <Form className="mt-3" onSubmit={onSubmit}>
+            <Form.Group className="mb-3">
+              <Form.Label size="lg">Email address</Form.Label>
+              <Form.Control
+                name="email"
+                id="email"
+                type="email"
+                placeholder="Enter email"
+                value={email}
+                onChange={onChange}
+                size="lg"
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                name="password"
+                id="password"
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={onChange}
+                size="lg"
+              />
+            </Form.Group>
+
+            <Button variant="primary" type="submit">
               Submit
-            </button>
-          </div>
-        </form>
-      </section>
+            </Button>
+          </Form>
+        </main>
+
+        <footer className="mt-5">
+          <Footer />
+        </footer>
+      </div>
     </>
   );
 }
