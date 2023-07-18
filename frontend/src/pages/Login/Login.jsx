@@ -31,7 +31,7 @@ function Login() {
     }
 
     if (isSuccess || user) {
-      navigate("/");
+      navigate("/Dashboard");
     }
 
     dispatch(reset());
@@ -67,17 +67,15 @@ function Login() {
         </nav>
 
         <main>
-          <section className="heading ms-5">
-            <h1>
-              <p>
-                <span>
-                  <FaSignInAlt className="sign-in-symbol me-2" />
-                </span>
-                Login
-              </p>
-            </h1>
+          <div className="ms-5">
+            <h2>
+              <span>
+                <FaSignInAlt className="sign-in-symbol me-2" />
+              </span>
+              Login
+            </h2>
             <p>Login and start setting goals</p>
-          </section>
+          </div>
 
           <Form className="mt-3" onSubmit={onSubmit}>
             <Form.Group className="mb-3">

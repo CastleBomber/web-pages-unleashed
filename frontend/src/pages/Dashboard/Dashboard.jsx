@@ -1,10 +1,12 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { getGoals, reset } from "../../features/goals/goalSlice";
 import GoalForm from "../../features/goals/GoalForm";
 import GoalItem from "../../features/goals/GoalItem";
 import Spinner from "../../components/Spinner/Spinner";
-import { getGoals, reset } from "../../features/goals/goalSlice";
+import NavigationBar from "../../components/NavBar/Navbar";
+import Footer from "../../components/Footer/Footer";
 
 // Accessed once logged in
 function Dashboard() {
@@ -42,24 +44,34 @@ function Dashboard() {
 
   return (
     <>
-      <section className="heading">
-        <h1>Welcome {user && user.name}</h1>
-        <p>Goals Dashboard</p>
-      </section>
+      <div className="dashboard">
+        <nav>
+          <NavigationBar className="navbar" />
+        </nav>
 
-      <GoalForm />
+        <main>
+          <h1 className="mt-5 mb-3">Goals Dashboard</h1>
+          <h2>Welcome {user && user.name}!</h2>
 
-      <section className="content">
-        {goals.length > 0 ? (
-          <div className="goals">
-            {goals.map((goal) => (
-              <GoalItem key={goal._id} goal={goal} />
-            ))}
-          </div>
-        ) : (
-          <h3>You have not set any goals</h3>
-        )}
-      </section>
+          <GoalForm />
+
+          <section className="content mt-3">
+            {goals.length > 0 ? (
+              <div className="goals">
+                {goals.map((goal) => (
+                  <GoalItem key={goal._id} goal={goal} />
+                ))}
+              </div>
+            ) : (
+              <h3>You have not set any goals</h3>
+            )}
+          </section>
+        </main>
+
+        <footer className="mt-5">
+          <Footer />
+        </footer>
+      </div>
     </>
   );
 }

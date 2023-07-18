@@ -1,16 +1,22 @@
 import { useDispatch } from "react-redux";
 import { deleteGoal } from "./goalSlice";
+import Button from "react-bootstrap/Button";
 
 function GoalItem({ goal }) {
   const dispatch = useDispatch();
 
   return (
-    <div className="goal">
-      <div>{new Date(goal.createdAt).toLocaleString("en-US")}</div>
-      <h2>{goal.text}</h2>
-      <button onClick={() => dispatch(deleteGoal(goal._id))} className="close">
-        X
-      </button>
+    <div className="goal-box">
+      <div className="goal-text mb-3">{goal.text}</div>
+      <div className="goal-remove-button me-3">
+        <Button
+          variant="outline-secondary"
+          size="sm"
+          onClick={() => dispatch(deleteGoal(goal._id))}
+        >
+          x
+        </Button>
+      </div>
     </div>
   );
 }

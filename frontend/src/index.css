@@ -4,6 +4,19 @@ body {
   font-family: Georgia, "Times New Roman", Times, serif;
 }
 
+h1 {
+  font-size: 40px;
+  color: white;
+  text-align: center;
+  text-decoration: underline;
+}
+
+h2 {
+  font-size: 20px;
+  color: white;
+  text-align: center;
+}
+
 p {
   color: white;
 }
@@ -83,16 +96,56 @@ label.form-label {
   color: white;
 }
 
-/* Dashboard Page */
+/* Dashboard Page and Goal Feature */
+.dashboard {
+  display: grid;
+
+  grid-template-areas:
+    "nav"
+    "main"
+    "footer";
+
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+
+  width: 100vw;
+  height: 100vh;
+
+  max-width: 100%;
+  padding-right: 0px;
+  padding-left: 0px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
 .goals {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
 }
 
-.goal {
-  background-color: #f4f4f4;
-  margin: 10px 0;
-  padding: 20px 0 10px;
-  position: relative;
+.goal-box {
+  display: flex;
+  background-color: #139d5afa;
+  border-radius: 25px;
+  padding-top: 20px;
+  padding-bottom: 10px;
+}
+
+.goal-text {
+  justify-content: center;
+  margin-right: auto;
+  margin-left: auto;
+  font-size: 35px;
+  color: white;
+}
+
+.goal-submit-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.goal-remove-button {
+  align-self: flex-end;
 }
