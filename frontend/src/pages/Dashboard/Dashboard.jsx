@@ -63,12 +63,14 @@ function Dashboard() {
                 ))}
               </div>
             ) : (
-              <h3>You have not set any goals</h3>
+              <div className="mt-5">
+                <h2>You have not set any goals</h2>
+              </div>
             )}
           </section>
         </main>
 
-        <footer className="mt-5">
+        <footer className="p-10">
           <Footer />
         </footer>
       </div>

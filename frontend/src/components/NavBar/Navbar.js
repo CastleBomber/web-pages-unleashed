@@ -5,7 +5,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout, reset } from "../../features/auth/authSlice";
 import { FaSignInAlt, FaSignOutAlt, FaUser } from "react-icons/fa";
-import "./navbar.css";
 
 const NavigationBar = () => {
   const navigate = useNavigate();
@@ -43,20 +42,20 @@ const NavigationBar = () => {
 
             {user ? (
               <Nav.Link className="link" href="/" onClick={onLogout}>
-                <FaSignOutAlt />
+                <FaSignOutAlt className="me-2" />
                 Logout
               </Nav.Link>
             ) : (
               <>
                 <li>
                   <Nav.Link className="link" href="/Login">
-                    <FaSignInAlt />
+                    <FaSignInAlt className="me-2" />
                     Login
                   </Nav.Link>
                 </li>
                 <li>
                   <Nav.Link className="link" href="/Register">
-                    <FaUser />
+                    <FaUser className="me-2" />
                     Register
                   </Nav.Link>
                 </li>

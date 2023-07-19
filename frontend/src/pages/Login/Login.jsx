@@ -68,13 +68,11 @@ function Login() {
 
         <main>
           <div className="ms-5">
-            <h2>
-              <span>
-                <FaSignInAlt className="sign-in-symbol me-2" />
-              </span>
+            <h1 className="mt-5 mb-3">
+              <FaSignInAlt className="sign-in-symbol me-2" />
               Login
-            </h2>
-            <p>Login and start setting goals</p>
+            </h1>
+            <h2>Login and start setting goals</h2>
           </div>
 
           <Form className="mt-3" onSubmit={onSubmit}>
@@ -104,9 +102,11 @@ function Login() {
               />
             </Form.Group>
 
-            <Button variant="primary" type="submit">
-              Submit
-            </Button>
+            <div className="register-button">
+              <Button variant="primary" type="submit">
+                Submit
+              </Button>
+            </div>
           </Form>
         </main>
 

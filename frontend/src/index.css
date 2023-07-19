@@ -65,21 +65,36 @@ footer {
   display: grid;
 
   grid-template-areas:
-    "nav nav nav"
-    "main main main"
-    "footer footer footer";
+    "nav"
+    "main"
+    "footer";
 
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
-
-  width: 100vw;
-  height: 100vh;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
 
   max-width: 100%;
   padding-right: 0px;
   padding-left: 0px;
   margin-right: auto;
   margin-left: auto;
+}
+
+.login-button {
+  display: flex;
+  justify-content: right;
+  align-items: right;
+}
+
+/* NavBar Component */
+.navbar {
+  max-width: auto;
+
+  padding-right: 0px;
+  padding-left: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  margin-right: 0;
+  margin-left: 0;
 }
 
 /* Form Component */
@@ -107,9 +122,6 @@ label.form-label {
 
   grid-template-columns: 1fr;
   grid-template-rows: 1fr;
-
-  width: 100vw;
-  height: 100vh;
 
   max-width: 100%;
   padding-right: 0px;
@@ -148,4 +160,36 @@ label.form-label {
 
 .goal-remove-button {
   align-self: flex-end;
+}
+
+/* Register Page */
+.register {
+  display: grid;
+
+  grid-template-areas:
+    "nav"
+    "main"
+    "footer";
+
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+
+  /* width: 100vw;
+  height: 100vh; */
+
+  max-width: 100%;
+  padding-right: 0px;
+  padding-left: 0px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.register-symbol {
+  color: white;
+}
+
+.register-button {
+  display: flex;
+  justify-content: right;
+  align-items: right;
 }
