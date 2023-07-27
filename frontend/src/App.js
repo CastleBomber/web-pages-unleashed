@@ -35,10 +35,16 @@
  * const dotenv = require("dotenv").config();
  *
  * 
+ * Web3:
+ * smart-contract - npm init -y
+ * npx hardhat (toolbox option) vs
+ * npm install --save-dev hardhat @nomiclabs/hardhat-waffle ethereum-waffle chai @nomiclabs/hardhat-ethers ethers
+ *
+ *
  * Watch out for:
  * Program not running with a bunch of error after downloading packages?
  * Then, delete package.json and node_modules. Run npm install after
- * 
+ *
  * In app, older syntax 'component', needs to be switched to 'element'
  * older syntax of 'Switch', need to be 'Router' surrounding 'Route'
  *
