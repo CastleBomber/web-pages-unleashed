@@ -26,6 +26,25 @@
  * cmd+D (+ D..) change multiple nearby instances of a name
  * cors-heroku error: open https://cors-anywhere.herokuapp.com/corsdemo
  *
+ * 
+ * Shortcuts:
+ *  VS Code:
+ *      code folding: cmd+k, cmd+2
+ *      code expanding: cmd+k, release, cmd+j
+ * 	    c++ VS Code clang-formatter: shift+alt+f
+ *      Go to definition - F12
+ *      Command pallete - shtift+cmd+p
+ * 
+ *
+ *  Visual Studio:
+ *      code folding: select region, ctrl+m+m
+ *      full screen: shift+alt+enter
+ *      solution explorer: ctrl+alt+L
+ *      (start debugger to access watchlist)
+ *      watchlist: ctrl+alt+W,1
+ *      add to watchlist: shift+F9
+ *		  terminal: ctrl + `
+ * 
  *
  * Debugger:
  * launch.json should be set to Node.js versus chrome

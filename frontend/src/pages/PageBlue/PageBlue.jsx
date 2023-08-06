@@ -5,7 +5,6 @@ import tiles from "../../components/Card/card-info.json";
 import NavigationBar from "../../components/NavBar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import "../../components/Slider/slider.css";
-import "../../components/Card/card.css";
 import "./PageBlue.css";
 
 // AI art or music page
