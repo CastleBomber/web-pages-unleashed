@@ -26,7 +26,7 @@
  * cmd+D (+ D..) change multiple nearby instances of a name
  * cors-heroku error: open https://cors-anywhere.herokuapp.com/corsdemo
  *
- * 
+ *
  * Shortcuts:
  *  VS Code:
  *      code folding: cmd+k, cmd+2
@@ -34,7 +34,7 @@
  * 	    c++ VS Code clang-formatter: shift+alt+f
  *      Go to definition - F12
  *      Command pallete - shtift+cmd+p
- * 
+ *
  *
  *  Visual Studio:
  *      code folding: select region, ctrl+m+m
@@ -44,7 +44,7 @@
  *      watchlist: ctrl+alt+W,1
  *      add to watchlist: shift+F9
  *		  terminal: ctrl + `
- * 
+ *
  *
  * Debugger:
  * launch.json should be set to Node.js versus chrome
@@ -53,7 +53,7 @@
  * MongoDB Server:
  * const dotenv = require("dotenv").config();
  *
- * 
+ *
  * Web3:
  * smart-contract - npm init -y
  * npx hardhat (toolbox option) vs
@@ -87,13 +87,13 @@ import React, { Component } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Home from "./pages/Home/Home";
-import Dashboard from "./pages/Dashboard/Dashboard";
-import Login from "./pages/Login/Login";
-import Register from "./pages/Register/Register";
-import PageRed from "./pages/PageRed/PageRed";
-import PageGreen from "./pages/PageGreen/PageGreen";
-import PageBlue from "./pages/PageBlue/PageBlue";
+import Home from "./pages/Home";
+import Dashboard from "./pages/Dashboard";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import PageRed from "./pages/PageRed";
+import PageGreen from "./pages/PageGreen";
+import PageBlue from "./pages/PageBlue";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 class App extends Component {

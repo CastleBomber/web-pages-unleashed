@@ -44,6 +44,50 @@ p {
   margin-left: auto;
 }
 
+/* Page Red */
+.page-red {
+  display: grid;
+
+  grid-template-areas:
+    "nav"
+    "main"
+    "footer";
+
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+
+  width: 100vw;
+  height: 100vh;
+
+  max-width: 100%;
+  padding-right: 0px;
+  padding-left: 0px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+/* Page Blue */
+.page-blue {
+  display: grid;
+
+  grid-template-areas:
+    "nav"
+    "main"
+    "footer";
+
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+
+  width: 100vw;
+  height: 100vh;
+
+  max-width: 100%;
+  padding-right: 0px;
+  padding-left: 0px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
 nav {
   grid-area: nav;
 }
@@ -95,6 +139,19 @@ footer {
   padding-bottom: 0px;
   margin-right: 0;
   margin-left: 0;
+}
+
+/* Footer Component */
+.footer {
+  display: flex;
+  gap: 10px;
+
+  /* text-align: center;
+  align-items: center; */
+  justify-content: center;
+
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 /* Form Component */
@@ -214,3 +271,23 @@ label.form-label {
 .card__header {
   color: #383;
 }
+
+/* Slider Component */
+.carousel {
+  font-family: "Barlow Semi Condensed", sans-serif;
+}
+
+.carousel .carousel-indicators button {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+
+.carousel .carousel-control-next-icon.changed {
+  background-image: url("./utils/arrow-right-solid.svg");
+}
+
+.carousel .carousel-control-prev-icon.changed {
+  background-image: url("./utils/arrow-left-solid.svg");
+}
+

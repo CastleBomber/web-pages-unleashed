@@ -1,12 +1,12 @@
+import GoalForm from "../features/goals/GoalForm";
+import GoalItem from "../features/goals/GoalItem";
+import Spinner from "../components/Spinner";
+import NavigationBar from "../components/Navbar";
+import Footer from "../components/Footer";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { getGoals, reset } from "../../features/goals/goalSlice";
-import GoalForm from "../../features/goals/GoalForm";
-import GoalItem from "../../features/goals/GoalItem";
-import Spinner from "../../components/Spinner/Spinner";
-import NavigationBar from "../../components/NavBar/Navbar";
-import Footer from "../../components/Footer/Footer";
+import { getGoals, reset } from "../features/goals/goalSlice";
 
 // Accessed once logged in
 function Dashboard() {

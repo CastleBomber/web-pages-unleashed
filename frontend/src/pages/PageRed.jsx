@@ -1,8 +1,7 @@
-import NavigationBar from "../../components/NavBar/Navbar";
-import CardTileGroup from "../../components/Card/Card";
-import tiles from "../../components/Card/card-info.json";
-import Footer from "../../components/Footer/Footer";
-import "./PageRed.css";
+import NavigationBar from "../components/Navbar";
+import CardTileGroup from "../components/Card";
+import tiles from "../utils/card-info.json";
+import Footer from "../components/Footer";
 
 // music page
 export const PageRed = () => {

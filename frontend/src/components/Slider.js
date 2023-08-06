@@ -5,7 +5,6 @@
  */
 import React, { useState } from "react";
 import Carousel from "react-bootstrap/Carousel";
-import "./slider.css";
 
 function Slider({ slides }) {
   const [index, setIndex] = useState(0);

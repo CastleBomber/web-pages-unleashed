@@ -1,24 +1,22 @@
+import NavigationBar from "../components/Navbar";
+import Footer from "../components/Footer";
+import Spinner from "../components/Spinner";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 import { useEffect, useState } from "react";
+import { FaSignInAlt } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { FaUser } from "react-icons/fa";
-import { register, reset } from "../../features/auth/authSlice";
-import NavigationBar from "../../components/NavBar/Navbar";
-import Footer from "../../components/Footer/Footer";
-import Spinner from "../../components/Spinner/Spinner";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
+import { login, reset } from "../features/auth/authSlice";
 
-function Register() {
+function Login() {
   const [formData, setFormData] = useState({
-    name: "",
     email: "",
     password: "",
-    password2: "",
   });
 
-  const { name, email, password, password2 } = formData;
+  const { email, password } = formData;
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -33,8 +31,9 @@ function Register() {
     }
 
     if (isSuccess || user) {
-      navigate("/");
+      navigate("/Dashboard");
     }
+
     dispatch(reset());
   }, [user, isError, isSuccess, message, navigate, dispatch]);
 
@@ -48,17 +47,12 @@ function Register() {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    if (password !== password2) {
-      toast.error("Passwords do not match");
-    } else {
-      const userData = {
-        name,
-        email,
-        password,
-      };
+    const userData = {
+      email,
+      password,
+    };
 
-      dispatch(register(userData));
-    }
+    dispatch(login(userData));
   };
 
   if (isLoading) {
@@ -67,39 +61,28 @@ function Register() {
 
   return (
     <>
-      <div className="register">
+      <div className="login">
         <nav>
           <NavigationBar className="navbar" />
         </nav>
 
         <main>
-          <h1 className="mt-5 mb-3">
-            <FaUser className="sign-in-symbol me-2" />
-            Register
-          </h1>
-          <h2>Please create an account</h2>
+          <div className="ms-5">
+            <h1 className="mt-5 mb-3">
+              <FaSignInAlt className="sign-in-symbol me-2" />
+              Login
+            </h1>
+            <h2>Login and start setting goals</h2>
+          </div>
 
           <Form className="mt-3" onSubmit={onSubmit}>
-            <Form.Group className="mb-3">
-              <Form.Label size="lg">Name</Form.Label>
-              <Form.Control
-                name="name"
-                id="name"
-                type="name"
-                placeholder="Enter your name"
-                value={name}
-                onChange={onChange}
-                size="lg"
-              />
-            </Form.Group>
-
             <Form.Group className="mb-3">
               <Form.Label size="lg">Email address</Form.Label>
               <Form.Control
                 name="email"
                 id="email"
                 type="email"
-                placeholder="Enter your email"
+                placeholder="Enter email"
                 value={email}
                 onChange={onChange}
                 size="lg"
@@ -112,21 +95,8 @@ function Register() {
                 name="password"
                 id="password"
                 type="password"
-                placeholder="Enter your password"
+                placeholder="Password"
                 value={password}
-                onChange={onChange}
-                size="lg"
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>Confirm Password</Form.Label>
-              <Form.Control
-                name="password2"
-                id="password2"
-                type="password2"
-                placeholder="Confirm your password"
-                value={password2}
                 onChange={onChange}
                 size="lg"
               />
@@ -148,4 +118,4 @@ function Register() {
   );
 }
 
-export default Register;
+export default Login;

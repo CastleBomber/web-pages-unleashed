@@ -2,8 +2,8 @@ import Card from "react-bootstrap/Card";
 import CardGroup from "react-bootstrap/CardGroup";
 import Button from "react-bootstrap/Button";
 import useSound from "use-sound";
-import mySong from "./Songs/LaBouche-BeMyLover-Hypatan.mp3";
-import "./card-info.json";
+import mySong from "../utils/LaBouche-BeMyLover-Hypatan.mp3";
+import "../utils/card-info.json";
 
 function CardTileGroup({ tiles }) {
   const [playSound] = useSound(mySong, { volume: 0.3 });
