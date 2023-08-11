@@ -1,7 +1,7 @@
-import Slider from "../components/Slider";
-import slides from "../utils/mock.json";
 import NavigationBar from "../components/Navbar";
 import Footer from "../components/Footer";
+import Slider from "../components/Slider";
+import slides from "../utils/mock.json";
 
 // AI art or music page
 export const PageBlue = () => {

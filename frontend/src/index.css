@@ -141,15 +141,26 @@ footer {
   margin-left: 0;
 }
 
+/* Balance Component */
+.balance {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.crypto-card {
+  border: solid;
+  background-color: #383;
+  width: 360px;
+  height: 200px;
+}
+
 /* Footer Component */
 .footer {
   display: flex;
   gap: 10px;
-
-  /* text-align: center;
-  align-items: center; */
   justify-content: center;
-
   padding-top: 20px;
   padding-bottom: 20px;
 }
@@ -290,4 +301,3 @@ label.form-label {
 .carousel .carousel-control-prev-icon.changed {
   background-image: url("./utils/arrow-left-solid.svg");
 }
-

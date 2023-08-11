@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
-import { TransactionContext } from "../context/TransactionContext";
 import useFetch from "../hooks/useFetch";
 import dummyData from "../utils/dummyData";
+import { TransactionContext } from "../context/TransactionContext";
 import { shortenAddress } from "../utils/shortenAddress";
 
 const TransactionCard = ({

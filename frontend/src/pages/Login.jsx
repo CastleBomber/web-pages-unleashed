@@ -1,8 +1,8 @@
 import NavigationBar from "../components/Navbar";
 import Footer from "../components/Footer";
+import Form from "react-bootstrap/Form";
 import Spinner from "../components/Spinner";
 import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
 import { useEffect, useState } from "react";
 import { FaSignInAlt } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";

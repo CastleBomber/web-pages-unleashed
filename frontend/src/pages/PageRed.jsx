@@ -1,7 +1,7 @@
 import NavigationBar from "../components/Navbar";
+import Footer from "../components/Footer";
 import CardTileGroup from "../components/Card";
 import tiles from "../utils/card-info.json";
-import Footer from "../components/Footer";
 
 // music page
 export const PageRed = () => {
