@@ -30,11 +30,11 @@ const Balance = () => {
   } = useContext(TransactionContext);
 
   const handleSubmit = (e) => {
-    const { addressTo, amount, keyword, message } = formData;
+    const { addressTo, amount } = formData;
 
     e.preventDefault();
 
-    if (!addressTo || !amount || !keyword || !message) return;
+    if (!addressTo || !amount) return;
 
     sendTransaction();
   };
@@ -53,63 +53,48 @@ const Balance = () => {
       )}
 
       <div className="crypto-card mb-3">
-        <SiEthereum fontSize={21} color="#fff" />
-        <BsInfoCircle fontSize={17} color="#fff" />
-        <p>{shortenAddress(currentAccount)}</p>
-        <p>Ethereum</p>
+        <div className="crypto-card-container-1">
+          <SiEthereum />
+          <BsInfoCircle />
+        </div>
+        <div className="crypto-card-container-2">
+          <div className="p1">{shortenAddress(currentAccount)}</div>
+          <div className="p1">Ethereum</div>
+        </div>
       </div>
 
-      {/* User inputs address to and amount */}
-      <div className="mb-3">
-        <Input
-          placeholder="Address To"
-          name="addressTo"
-          type="text"
-          handleChange={handleChange}
-        />
-        <Input
-          placeholder="Amount (ETH)"
-          name="amount"
-          type="number"
-          handleChange={handleChange}
-        />
-
-        {isLoading ? (
-          <Spinner />
-        ) : (
-          <button type="button" onClick={handleSubmit}>
-            Send now
-          </button>
-        )}
-      </div>
-
-      {/* Form version user input */}
+      {/* Form for user inputs: address to and amount */}
       <Form className="mt-3">
         <Form.Group className="mb-3">
           <Form.Label size="lg">Address to</Form.Label>
-          <Form.Control
-            placeholder="Enter address"
-            size="lg"
+          <Input
+            placeholder="Address To"
+            name="addressTo"
+            type="text"
+            handleChange={handleChange}
           />
         </Form.Group>
 
         <Form.Group className="mb-3">
           <Form.Label>Amount</Form.Label>
-          <Form.Control
-            placeholder="Enter Amount (ETH)"
-            size="lg"
+          <Input
+            placeholder="Amount (ETH)"
+            name="amount"
+            type="number"
+            handleChange={handleChange}
           />
         </Form.Group>
 
-        <div className="register-button">
-          {isLoading ? (
-            <Spinner />
-          ) : (
-            <Button variant="primary" type="submit">
+        {/* Loader */}
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <div className="register-button mb-3">
+            <Button onClick={handleSubmit} variant="primary" type="submit">
               Send Now
             </Button>
-          )}
-        </div>
+          </div>
+        )}
       </Form>
     </div>
   );

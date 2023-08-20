@@ -21,8 +21,6 @@ export const TransactionProvider = ({ children }) => {
   const [formData, setFormData] = useState({
     addressTo: "",
     amount: "",
-    keyword: "",
-    message: "",
   });
   const [isLoading, setIsLoading] = useState(false);
   const [transactionCount, setTransactionCount] = useState(
@@ -52,8 +50,6 @@ export const TransactionProvider = ({ children }) => {
           timestamp: new Date(
             transaction.timestamp.toNumber() * 1000
           ).toLocaleString(),
-          message: transaction.message,
-          keyword: transaction.keyword,
           amount: parseInt(transaction.amount._hex) / 10 ** 18,
         })
       );
@@ -122,7 +118,7 @@ export const TransactionProvider = ({ children }) => {
     try {
       if (!ethereum) return alert("please install metamask");
 
-      const { addressTo, amount, keyword, message } = formData;
+      const { addressTo, amount } = formData;
       const transactionContract = getEthereumContract();
       const parsedAmount = ethers.utils.parseEther(amount); // decimal to GWEI
 
@@ -141,8 +137,6 @@ export const TransactionProvider = ({ children }) => {
       const transactionHash = await transactionContract.addToBlockchain(
         addressTo,
         parsedAmount,
-        message,
-        keyword
       );
 
       setIsLoading(true);

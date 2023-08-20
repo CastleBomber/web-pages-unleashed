@@ -2,8 +2,9 @@ import React, { useContext } from "react";
 import Footer from "../components/Footer";
 import Balance from "../components/Balance";
 import NavigationBar from "../components/Navbar";
-import Slider from "../components/Slider";
-import slides from "../utils/mock.json";
+import Card from "../components/Card";
+import tiles from "../utils/card-info.json";
+import "../utils/card-info.json";
 import { TransactionContext } from "../context/TransactionContext";
 import { AiFillPlayCircle } from "react-icons/ai";
 
@@ -29,7 +30,7 @@ export const Home = () => {
       </header>
 
       <main>
-        <Slider slides={slides} className="carousel" />
+        <Card tiles={tiles} className="card-tile-group" />
       </main>
       <footer>
         <Footer />
