@@ -120,7 +120,9 @@ export const TransactionProvider = ({ children }) => {
 
       const { addressTo, amount } = formData;
       const transactionContract = getEthereumContract();
-      const parsedAmount = ethers.utils.parseEther(amount); // decimal to GWEI
+      const parsedAmount = ethers.utils.parseEther(amount); // Decimal to GWEI
+
+      console.log(`Loading - A`);
 
       await ethereum.request({
         method: "eth_sendTransaction",
@@ -134,10 +136,14 @@ export const TransactionProvider = ({ children }) => {
         ],
       });
 
+      console.log(`Loading - B`);
+
       const transactionHash = await transactionContract.addToBlockchain(
         addressTo,
-        parsedAmount,
+        parsedAmount
       );
+
+      console.log(`Loading - C`);
 
       setIsLoading(true);
       console.log(`Loading - ${transactionHash.hash}`);

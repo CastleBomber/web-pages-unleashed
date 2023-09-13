@@ -27,6 +27,13 @@
  * cors-heroku error: open https://cors-anywhere.herokuapp.com/corsdemo
  *
  *
+ * Web3:
+ * smart-contract - npm init -y
+ * npx hardhat (toolbox option) vs
+ * npm install --save-dev hardhat @nomiclabs/hardhat-waffle ethereum-waffle chai @nomiclabs/hardhat-ethers ethers
+ * npx hardhat run scripts/deploy.js --network sepolia
+ * 
+ *
  * Shortcuts:
  *  VS Code:
  *      code folding: cmd+k, cmd+2
@@ -52,12 +59,6 @@
  *
  * MongoDB Server:
  * const dotenv = require("dotenv").config();
- *
- *
- * Web3:
- * smart-contract - npm init -y
- * npx hardhat (toolbox option) vs
- * npm install --save-dev hardhat @nomiclabs/hardhat-waffle ethereum-waffle chai @nomiclabs/hardhat-ethers ethers
  *
  *
  * Watch out for:
