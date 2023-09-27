@@ -136,14 +136,15 @@ export const TransactionProvider = ({ children }) => {
         ],
       });
 
-      console.log(`Loading - B`);
+      console.log(`Loading - Before transactionHash = await transactionContract.addToBlockChain()`);
 
       const transactionHash = await transactionContract.addToBlockchain(
         addressTo,
         parsedAmount
       );
 
-      console.log(`Loading - C`);
+      // TypeError: transactionContract.addToBlockchain is not a function at sendTransaction
+      console.log(`Loading - After transactionHash = await transactionContract.addToBlockChain()`);
 
       setIsLoading(true);
       console.log(`Loading - ${transactionHash.hash}`);
@@ -164,7 +165,7 @@ export const TransactionProvider = ({ children }) => {
 
   useEffect(() => {
     checkIfWalletIsConnected();
-    //checkIfTransactionsExist();
+    checkIfTransactionsExist();
   }, [transactionCount]);
 
   return (
