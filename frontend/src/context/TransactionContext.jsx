@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
+
 import { contractABI, contractAddress } from "../utils/constants";
 const { ethereum } = window;
+//const ethers = require("ethers");
 export const TransactionContext = React.createContext();
 
 const getEthereumContract = () => {
@@ -136,15 +138,19 @@ export const TransactionProvider = ({ children }) => {
         ],
       });
 
-      console.log(`Loading - Before transactionHash = await transactionContract.addToBlockChain()`);
+      console.log(
+        `Loading - Before transactionHash = await transactionContract.addToBlockChain()`
+      );
 
+      // No ETH Obj, TypeError: transactionContract.addToBlockchain is not a function at sendTransaction
       const transactionHash = await transactionContract.addToBlockchain(
         addressTo,
         parsedAmount
       );
 
-      // TypeError: transactionContract.addToBlockchain is not a function at sendTransaction
-      console.log(`Loading - After transactionHash = await transactionContract.addToBlockChain()`);
+      console.log(
+        `Loading - After transactionHash = await transactionContract.addToBlockChain()`
+      );
 
       setIsLoading(true);
       console.log(`Loading - ${transactionHash.hash}`);
@@ -159,13 +165,13 @@ export const TransactionProvider = ({ children }) => {
     } catch (error) {
       console.log(error);
 
-      throw new Error("No ethereum object to sendTransaction()");
+      //throw new Error("No ethereum object to sendTransaction()");
     }
   };
 
   useEffect(() => {
     checkIfWalletIsConnected();
-    checkIfTransactionsExist();
+    //checkIfTransactionsExist();
   }, [transactionCount]);
 
   return (
