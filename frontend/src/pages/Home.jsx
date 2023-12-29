@@ -2,11 +2,8 @@ import React, { useContext } from "react";
 import Footer from "../components/Footer";
 import Balance from "../components/Balance";
 import NavigationBar from "../components/Navbar";
-import Card from "../components/Card";
-import tiles from "../utils/card-info.json";
 import "../utils/card-info.json";
 import { TransactionContext } from "../context/TransactionContext";
-import { AiFillPlayCircle } from "react-icons/ai";
 
 export const Home = () => {
   const {
@@ -29,9 +26,7 @@ export const Home = () => {
         <Balance />
       </header>
 
-      <main>
-        <Card tiles={tiles} className="card-tile-group" />
-      </main>
+      <main></main>
       <footer>
         <Footer />
       </footer>

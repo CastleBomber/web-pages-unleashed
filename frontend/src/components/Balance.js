@@ -10,6 +10,7 @@ import { AiFillPlayCircle } from "react-icons/ai";
 
 const Input = ({ placeholder, name, type, value, handleChange }) => (
   <input
+    className="input"
     placeholder={placeholder}
     type={type}
     step="0.0001"
@@ -34,7 +35,10 @@ const Balance = () => {
 
     e.preventDefault();
 
-    if (!addressTo || !amount) return;
+    if (!addressTo || !amount) {
+      console.log("handleSubmit error: addressTo || amount");
+      return;
+    }
 
     sendTransaction();
   };
@@ -42,7 +46,7 @@ const Balance = () => {
   return (
     <div className="balance">
       <h1>Send Crypto</h1>
-      <h2>Account Balance</h2>
+      <h2>Account Balance: 1,000,000 BTC</h2>
 
       {/* Sign in to crypto wallet */}
       {!currentAccount && (
@@ -73,6 +77,16 @@ const Balance = () => {
             type="text"
             handleChange={handleChange}
           />
+          {/* <Form.Control
+            placeholder="Address To"
+            name="addressTo"
+            type="text"
+            className="input"
+            step="0.0001"
+            value={value}
+            onChange={(e) => handleChange(e)}
+            size="lg"
+          /> */}
         </Form.Group>
 
         <Form.Group className="mb-3">
@@ -83,6 +97,16 @@ const Balance = () => {
             type="number"
             handleChange={handleChange}
           />
+          {/* <Form.Control
+            placeholder="Amount (ETH)"
+            name="amount"
+            type="number"
+            className="input"
+            step="0.0001"
+            value={amount}
+            onChange={(e) => handleChange(e)}
+            size="lg"
+          /> */}
         </Form.Group>
 
         {/* Loader */}

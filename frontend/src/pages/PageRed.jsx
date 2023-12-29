@@ -3,7 +3,7 @@ import Footer from "../components/Footer";
 import CardTileGroup from "../components/Card";
 import tiles from "../utils/card-info.json";
 
-// music page
+// Music page
 export const PageRed = () => {
   return (
     <div className="page-red">

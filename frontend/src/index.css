@@ -71,6 +71,28 @@ p {
   margin-left: auto;
 }
 
+/* Page Green */
+.page-green {
+  display: grid;
+
+  grid-template-areas:
+    "nav"
+    "main"
+    "footer";
+
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+
+  width: 100vw;
+  height: 100vh;
+
+  max-width: 100%;
+  padding-right: 0px;
+  padding-left: 0px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
 /* Page Blue */
 .page-blue {
   display: grid;
@@ -152,6 +174,13 @@ footer {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.input {
+  display: flex;
+  max-width: 100%;
+  padding-right: 0px;
+  padding-left: 0px;
 }
 
 .crypto-card {
