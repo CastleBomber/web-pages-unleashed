@@ -178,9 +178,16 @@ footer {
 
 .input {
   display: flex;
+
+  width: 100%;
+  border-radius: 7px;
+
+  max-width: 100%;
   max-width: 100%;
   padding-right: 0px;
   padding-left: 0px;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 .crypto-card {
@@ -297,9 +304,6 @@ label.form-label {
 
   grid-template-columns: 1fr;
   grid-template-rows: 1fr;
-
-  /* width: 100vw;
-  height: 100vh; */
 
   max-width: 100%;
   padding-right: 0px;
