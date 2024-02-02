@@ -15,6 +15,11 @@ const userSchema = mongoose.Schema(
       type: String,
       required: [true, "Please add a password"],
     },
+    // walletAddress: {
+    //   type: String,
+    //   required: false,
+    //   unique: true,
+    // },
   },
   { timestamps: true }
 );

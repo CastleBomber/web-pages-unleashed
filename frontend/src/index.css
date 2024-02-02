@@ -179,8 +179,9 @@ footer {
 .input {
   display: flex;
 
+  height: 50px;
   width: 100%;
-  border-radius: 7px;
+  border-radius: 10px;
 
   max-width: 100%;
   max-width: 100%;

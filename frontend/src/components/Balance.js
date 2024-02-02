@@ -6,7 +6,21 @@ import { TransactionContext } from "../context/TransactionContext";
 import { SiEthereum } from "react-icons/si";
 import { BsInfoCircle } from "react-icons/bs";
 import { shortenAddress } from "../utils/shortenAddress";
+//import { displayAddress } from "../utils/displayAddress";
 import { AiFillPlayCircle } from "react-icons/ai";
+import Web3 from "web3";
+
+// Display SepoliaEth
+const tokenAddresses = [
+  {
+    address: "0xaA818a5E2D0AD7cE68Ab983EE28b227782D21C7c",
+    token: "SepoliaETH",
+  },
+];
+
+// Other Tutorial
+//const displayAddress = async (address) => await ethers.provider.getBalance(address);
+//web3.eth.getBalance("").then(console.log);
 
 const Input = ({ placeholder, name, type, value, handleChange }) => (
   <input
@@ -30,6 +44,9 @@ const Balance = () => {
     isLoading,
   } = useContext(TransactionContext);
 
+  // Empty Web3 instance
+let web3 = new Web3();
+
   const handleSubmit = (e) => {
     const { addressTo, amount } = formData;
 
@@ -43,10 +60,27 @@ const Balance = () => {
     sendTransaction();
   };
 
+  const ethEnabled = async () => {
+    if (typeof window.ethereum !== "undefined") {
+      // Instance web3 with the provided informaton
+      web3 = new Web3(window.ethereum);
+      try {
+        // Request account access
+        await window.ethreum.enable();
+        return true;
+      } catch (e) {
+        // User denied access
+        return false;
+      }
+    }
+  
+    return false;
+  };
+
   return (
     <div className="balance">
       <h1>Send Crypto</h1>
-      <h2>Account Balance: 1,000,000 BTC</h2>
+      <h2>Account Balance: 0.1906 SepoliaETH</h2>
 
       {/* Sign in to crypto wallet */}
       {!currentAccount && (
@@ -77,16 +111,6 @@ const Balance = () => {
             type="text"
             handleChange={handleChange}
           />
-          {/* <Form.Control
-            placeholder="Address To"
-            name="addressTo"
-            type="text"
-            className="input"
-            step="0.0001"
-            value={value}
-            onChange={(e) => handleChange(e)}
-            size="lg"
-          /> */}
         </Form.Group>
 
         <Form.Group className="mb-3">
@@ -97,16 +121,6 @@ const Balance = () => {
             type="number"
             handleChange={handleChange}
           />
-          {/* <Form.Control
-            placeholder="Amount (ETH)"
-            name="amount"
-            type="number"
-            className="input"
-            step="0.0001"
-            value={amount}
-            onChange={(e) => handleChange(e)}
-            size="lg"
-          /> */}
         </Form.Group>
 
         {/* Loader */}
