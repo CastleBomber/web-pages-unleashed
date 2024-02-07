@@ -9,6 +9,7 @@ import { shortenAddress } from "../utils/shortenAddress";
 //import { displayAddress } from "../utils/displayAddress";
 import { AiFillPlayCircle } from "react-icons/ai";
 import Web3 from "web3";
+import tokenABI from "../utils/tokenABI";
 
 // Display SepoliaEth
 const tokenAddresses = [
@@ -45,7 +46,7 @@ const Balance = () => {
   } = useContext(TransactionContext);
 
   // Empty Web3 instance
-let web3 = new Web3();
+  let web3 = new Web3();
 
   const handleSubmit = (e) => {
     const { addressTo, amount } = formData;
@@ -73,8 +74,14 @@ let web3 = new Web3();
         return false;
       }
     }
-  
+
     return false;
+  };
+
+  const onClickConnect = async () => {
+    var accounts = await web3.eth.getAccounts();
+    //const balance = await web3.eth.getBalance(address);
+    //web3.utils.fromWei(balance, "ether");
   };
 
   return (
