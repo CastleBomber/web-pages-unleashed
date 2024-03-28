@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Spinner from "../components/Spinner";
@@ -10,18 +10,15 @@ import { shortenAddress } from "../utils/shortenAddress";
 import { AiFillPlayCircle } from "react-icons/ai";
 import Web3 from "web3";
 import tokenABI from "../utils/tokenABI";
+//import Account from '../components/Account';
 
-// Display SepoliaEth
+// Token Contract Addresses (not MetaMask Account Address)
 const tokenAddresses = [
   {
-    address: "0xaA818a5E2D0AD7cE68Ab983EE28b227782D21C7c",
+    address: "0x1b44F3514812d835EB1BDB0acB33d3fA3351Ee43",  // From Etherscan
     token: "SepoliaETH",
   },
 ];
-
-// Other Tutorial
-//const displayAddress = async (address) => await ethers.provider.getBalance(address);
-//web3.eth.getBalance("").then(console.log);
 
 const Input = ({ placeholder, name, type, value, handleChange }) => (
   <input
@@ -45,21 +42,11 @@ const Balance = () => {
     isLoading,
   } = useContext(TransactionContext);
 
+  const [accounts, setAccounts] = useState<AccountType[]>([]);
+  const [web3Enabled, setWeb3Enabled] = useState(false);
+
   // Empty Web3 instance
   let web3 = new Web3();
-
-  const handleSubmit = (e) => {
-    const { addressTo, amount } = formData;
-
-    e.preventDefault();
-
-    if (!addressTo || !amount) {
-      console.log("handleSubmit error: addressTo || amount");
-      return;
-    }
-
-    sendTransaction();
-  };
 
   const ethEnabled = async () => {
     if (typeof window.ethereum !== "undefined") {
@@ -79,9 +66,44 @@ const Balance = () => {
   };
 
   const onClickConnect = async () => {
-    var accounts = await web3.eth.getAccounts();
-    //const balance = await web3.eth.getBalance(address);
-    //web3.utils.fromWei(balance, "ether");
+    if(await !ethEnabled()){
+      alert("Please install Metamask before using the DApp");
+    }
+
+    setWeb3Enabled(true);
+
+    // List of wallet account addresses
+    var accs = await web3.eth.getAccounts();
+
+    const newAccounts = await Promise.all(accs.map(async (address) => {
+      const balance = await web3.eth.getBalance(address);
+
+      const tokenBalances = await Promise.all(tokenAddress.map(async(token) => {
+        const tokenInstant = new web3.eth.Contract(tokenABI, token.address);
+
+        const balance = await tokenInstant.methods.balanceOf(address).call();
+
+        return {
+          token: token.token,
+          balance
+        }
+      }))
+    }))
+
+    web3.utils.fromWei(balance, "ether");
+  };
+
+  const handleSubmit = (e) => {
+    const { addressTo, amount } = formData;
+
+    e.preventDefault();
+
+    if (!addressTo || !amount) {
+      console.log("handleSubmit error: addressTo || amount");
+      return;
+    }
+
+    sendTransaction();
   };
 
   return (
