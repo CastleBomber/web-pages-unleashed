@@ -10,12 +10,12 @@ import { shortenAddress } from "../utils/shortenAddress";
 import { AiFillPlayCircle } from "react-icons/ai";
 import Web3 from "web3";
 import tokenABI from "../utils/tokenABI";
-//import Account from '../components/Account';
+import Account from "../components/Account";
 
 // Token Contract Addresses (not MetaMask Account Address)
 const tokenAddresses = [
   {
-    address: "0x1b44F3514812d835EB1BDB0acB33d3fA3351Ee43",  // From Etherscan
+    address: "0x1b44F3514812d835EB1BDB0acB33d3fA3351Ee43", // From Etherscan
     token: "SepoliaETH",
   },
 ];
@@ -42,8 +42,16 @@ const Balance = () => {
     isLoading,
   } = useContext(TransactionContext);
 
-  const [accounts, setAccounts] = useState<AccountType[]>([]);
+  //const [accounts, setAccounts] = useState<AccountType[]>([]); // Typescript syntax
+  const [accounts, setAccounts] = useState([]); // Javascript Syntax, AI help
   const [web3Enabled, setWeb3Enabled] = useState(false);
+
+  // AI line for mapping accounts
+  {
+    accounts.map((account) => (
+      <Account key={account.address} account={account} />
+    ));
+  }
 
   // Empty Web3 instance
   let web3 = new Web3();
@@ -66,29 +74,35 @@ const Balance = () => {
   };
 
   const onClickConnect = async () => {
-    if(await !ethEnabled()){
+    if (await !ethEnabled()) {
       alert("Please install Metamask before using the DApp");
     }
 
     setWeb3Enabled(true);
 
     // List of wallet account addresses
-    var accs = await web3.eth.getAccounts();
+    var accs = await web3.eth.getAccounts(); // ?
 
-    const newAccounts = await Promise.all(accs.map(async (address) => {
-      const balance = await web3.eth.getBalance(address);
+    const newAccounts = await Promise.all(
+      accs.map(async (address) => {
+        const balance = await web3.eth.getBalance(address);
 
-      const tokenBalances = await Promise.all(tokenAddress.map(async(token) => {
-        const tokenInstant = new web3.eth.Contract(tokenABI, token.address);
+        const tokenBalances = await Promise.all(
+          tokenAddress.map(async (token) => {
+            const tokenInstant = new web3.eth.Contract(tokenABI, token.address);
 
-        const balance = await tokenInstant.methods.balanceOf(address).call();
+            const balance = await tokenInstant.methods
+              .balanceOf(address)
+              .call();
 
-        return {
-          token: token.token,
-          balance
-        }
-      }))
-    }))
+            return {
+              token: token.token,
+              balance,
+            };
+          })
+        );
+      })
+    );
 
     web3.utils.fromWei(balance, "ether");
   };

@@ -4,7 +4,7 @@ type ProtoTypes = {
   account: AccountType,
 };
 
-export default function Account({ acount }: ProtoTypes) {
+export default function Account({ account }: ProtoTypes) {
   return (
     <>
       <div className="account">
@@ -17,20 +17,16 @@ export default function Account({ acount }: ProtoTypes) {
           <div className="balance-value">{account.balance}</div>
         </div>
         <div className="tokens">
-            {account.tokens.map(token => {
-                return (
-                    <div className="token" key={token.token}>
-                        <div className="balance">
-                            <div className="token-logo">
-                                {token.token}
-                            </div>
-                            <div className="balace-value">
-                                {token.balance}
-                            </div>
-                        </div>
-                    </div>
-                )
-            })}
+          {account.tokens.map((token) => {
+            return (
+              <div className="token" key={token.token}>
+                <div className="balance">
+                  <div className="token-logo">{token.token}</div>
+                  <div className="balace-value">{token.balance}</div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </>
