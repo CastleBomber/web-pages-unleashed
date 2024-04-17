@@ -81,14 +81,14 @@ const Balance = () => {
     setWeb3Enabled(true);
 
     // List of wallet account addresses
-    var accs = await web3.eth.getAccounts(); // ?
+    var accs = await web3.eth.getAccounts();
 
     const newAccounts = await Promise.all(
       accs.map(async (address) => {
         const balance = await web3.eth.getBalance(address);
 
         const tokenBalances = await Promise.all(
-          tokenAddress.map(async (token) => {
+          tokenAddresses.map(async (token) => {
             const tokenInstant = new web3.eth.Contract(tokenABI, token.address);
 
             const balance = await tokenInstant.methods
@@ -97,14 +97,14 @@ const Balance = () => {
 
             return {
               token: token.token,
-              balance,
+              balance: web3.utils.fromWei(balance, "ether"),
+              tokens: tokenBalances,
             };
           })
         );
       })
     );
-
-    web3.utils.fromWei(balance, "ether");
+    setAccounts(newAccounts);
   };
 
   const handleSubmit = (e) => {
@@ -124,6 +124,22 @@ const Balance = () => {
     <div className="balance">
       <h1>Send Crypto</h1>
       <h2>Account Balance: 0.1906 SepoliaETH</h2>
+
+      <div>
+        {!web3Enabled && <button onClick={onClickConnect}>Connect</button>}
+      </div>
+
+      {accounts && accounts.length > 0 && (
+        <div className="accounts">
+          {accounts.map((account) => {
+            return (
+              <div className="account" key={account.address}>
+                <Account account={account} />
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       {/* Sign in to crypto wallet */}
       {!currentAccount && (
