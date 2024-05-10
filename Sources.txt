@@ -1,0 +1,14 @@
+Tutorial: Build and Deploy a Modern Web 3.0 Blockchain App | Solidity, Smart Contracts, Crypto by JavaScript Mastery
+https://www.youtube.com/watch?v=Wn_Kb3MR_cU&ab_channel=JavaScriptMastery
+
+Tutorial: Learn The MERN Stack - Express & MongoDB Rest API by Traversy Media
+https://www.youtube.com/watch?v=-0exw-9YJBo&list=PLillGF-RfqbbQeVSccR9PGKHzPJSWqcsm&ab_channel=TraversyMedia
+
+Tutorial: Connection MetaMask to a ReactJS Web App by Rishab Kattimani
+https://www.youtube.com/watch?v=be6zW0yVS18&ab_channel=RishabKattimani
+
+Tutorial: How to read the balance of your MetaMask wallet with web3.js
+https://blog.etereo.io/how-to-read-the-balance-of-your-metamask-wallet-with-web3-js-6d4c4c364225
+
+Stackoverflow: "utils" has been deprecated. Use this: ethers.formatEther(balance);  
+https://stackoverflow.com/questions/75363398/export-utils-imported-as-utils-was-not-found-in-ethers

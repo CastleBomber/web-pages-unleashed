@@ -1,3 +1,3 @@
 # Website-Demo
-MERN database
+Web3 App with MERN database
 

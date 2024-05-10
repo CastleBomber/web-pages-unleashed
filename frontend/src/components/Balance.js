@@ -1,3 +1,4 @@
+// This may be an original class I created, probably morphed from another script
 import React, { useContext, useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
@@ -6,11 +7,10 @@ import { TransactionContext } from "../context/TransactionContext";
 import { SiEthereum } from "react-icons/si";
 import { BsInfoCircle } from "react-icons/bs";
 import { shortenAddress } from "../utils/shortenAddress";
-//import { displayAddress } from "../utils/displayAddress";
 import { AiFillPlayCircle } from "react-icons/ai";
 import Web3 from "web3";
-import tokenABI from "../utils/tokenABI";
-import Account from "../components/Account";
+import tokenABI from "../utils/tokenABI"; // x
+import Account from "../components/Account";  // x
 
 // Token Contract Addresses (not MetaMask Account Address)
 const tokenAddresses = [
@@ -18,7 +18,7 @@ const tokenAddresses = [
     address: "0x1b44F3514812d835EB1BDB0acB33d3fA3351Ee43", // From Etherscan
     token: "SepoliaETH",
   },
-];
+]; // x
 
 const Input = ({ placeholder, name, type, value, handleChange }) => (
   <input
@@ -42,19 +42,11 @@ const Balance = () => {
     isLoading,
   } = useContext(TransactionContext);
 
-  //const [accounts, setAccounts] = useState<AccountType[]>([]); // Typescript syntax
-  const [accounts, setAccounts] = useState([]); // Javascript Syntax, AI help
+  const [accounts, setAccounts] = useState([]);
   const [web3Enabled, setWeb3Enabled] = useState(false);
 
-  // AI line for mapping accounts
-  {
-    accounts.map((account) => (
-      <Account key={account.address} account={account} />
-    ));
-  }
-
   // Empty Web3 instance
-  let web3 = new Web3();
+  let web3 = new Web3(window.ethereum); // x
 
   const ethEnabled = async () => {
     if (typeof window.ethereum !== "undefined") {
@@ -62,7 +54,7 @@ const Balance = () => {
       web3 = new Web3(window.ethereum);
       try {
         // Request account access
-        await window.ethreum.enable();
+        await window.ethereum.requestAccounts();
         return true;
       } catch (e) {
         // User denied access
@@ -71,7 +63,7 @@ const Balance = () => {
     }
 
     return false;
-  };
+  }; // x
 
   const onClickConnect = async () => {
     if (await !ethEnabled()) {
@@ -97,11 +89,16 @@ const Balance = () => {
 
             return {
               token: token.token,
-              balance: web3.utils.fromWei(balance, "ether"),
-              tokens: tokenBalances,
+              balance,
             };
           })
         );
+
+        return {
+          address,
+          balance: web3.utils.fromWei(balance, "ether"),
+          tokens: tokenBalances,
+        };
       })
     );
     setAccounts(newAccounts);

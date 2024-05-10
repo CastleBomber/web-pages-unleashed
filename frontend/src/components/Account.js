@@ -1,10 +1,6 @@
 import React from "react";
 
-type ProtoTypes = {
-  account: AccountType,
-};
-
-export default function Account({ account }: ProtoTypes) {
+export default function Account({ account }) {
   return (
     <>
       <div className="account">
