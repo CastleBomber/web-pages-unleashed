@@ -1,4 +1,6 @@
-// This may be an original class I created, probably morphed from another script
+/**
+ * current: ethers.utils.formatEther(balance) vs previous solution: ethers.formatEther(balance)
+ */
 import React, { useContext, useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
@@ -8,6 +10,7 @@ import { SiEthereum } from "react-icons/si";
 import { BsInfoCircle } from "react-icons/bs";
 import { shortenAddress } from "../utils/shortenAddress";
 import { AiFillPlayCircle } from "react-icons/ai";
+import { ethers } from "ethers";
 
 const Input = ({ placeholder, name, type, value, handleChange }) => (
   <input
@@ -30,6 +33,25 @@ const Balance = () => {
     handleChange,
     isLoading,
   } = useContext(TransactionContext);
+
+  const [defaultAccount, setDefaultAccount] = useState(null);
+  const [userBalance, setUserBalance] = useState(null);
+
+  const accountChanged = (accountName) => {
+    setDefaultAccount(accountName);
+    getUserBalance(accountName);
+  };
+
+  const getUserBalance = (accountAddress) => {
+    window.ethereum
+      .request({
+        method: "eth_getBalance",
+        param: [String(accountAddress), "latest"],
+      })
+      .then((balance) => {
+        setUserBalance(ethers.utils.formatEther(balance));
+      });
+  };
 
   const handleSubmit = (e) => {
     const { addressTo, amount } = formData;
@@ -64,7 +86,8 @@ const Balance = () => {
         </div>
         <div className="crypto-card-container-2">
           <div className="p1">{shortenAddress(currentAccount)}</div>
-          <div className="p1">BAL SepoliaETH</div>
+          <div className="p1">Balance:{userBalance}</div>
+          <div className="p1">SepoliaETH</div>
         </div>
       </div>
 
