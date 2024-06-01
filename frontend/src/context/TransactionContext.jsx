@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
+import {parseEther, Contract, formatEther} from "ethers";
 import { contractABI, contractAddress } from "../utils/constants";
 const { ethereum } = window;
 export const TransactionContext = React.createContext();
 
 const getEthereumContract = () => {
-  const provider = new ethers.providers.Web3Provider(ethereum);
+  const provider = new ethers.BrowserProvider(ethereum);
   const signer = provider.getSigner();
-  const transactionContract = new ethers.Contract(
+  const transactionContract = new Contract(
     contractAddress,
     contractABI,
     signer
@@ -122,7 +123,7 @@ export const TransactionProvider = ({ children }) => {
 
       const { addressTo, amount } = formData;
       const transactionContract = getEthereumContract();
-      const parsedAmount = ethers.utils.parseEther(amount); // Decimal to GWEI
+      const parsedAmount = parseEther(amount); // Decimal to GWEI
 
       console.log(`Loading - A`);
 
@@ -181,7 +182,7 @@ export const TransactionProvider = ({ children }) => {
         param: [String(accountAddress), "latest"],
       })
       .then((balance) => {
-        setUserBalance(ethers.utils.formatEther(balance));
+        setUserBalance(formatEther(balance));
       });
   };
 
