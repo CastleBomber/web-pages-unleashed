@@ -17,7 +17,8 @@ const getEthereumContract = () => {
 };
 
 export const TransactionProvider = ({ children }) => {
-  const [currentAccount, setCurrentAccount] = useState("");
+  const [currentAccount, setCurrentAccount] = useState(""); // defaultAccount, setDefaultAccount
+  const [userBalance, setUserBalance] = useState("");
   const [formData, setFormData] = useState({
     addressTo: "",
     amount: "",
@@ -106,7 +107,7 @@ export const TransactionProvider = ({ children }) => {
       });
 
       setCurrentAccount(accounts[0]);
-      //
+      accountChanged(accounts[0]); // BAL
       window.location.reload();
     } catch (error) {
       console.log(error);
@@ -168,6 +169,22 @@ export const TransactionProvider = ({ children }) => {
     }
   };
 
+  const accountChanged = (accountName) => {
+    setCurrentAccount(accountName);
+    getUserBalance(accountName);
+  };
+
+  const getUserBalance = (accountAddress) => {
+    window.ethereum
+      .request({
+        method: "eth_getBalance",
+        param: [String(accountAddress), "latest"],
+      })
+      .then((balance) => {
+        setUserBalance(ethers.utils.formatEther(balance));
+      });
+  };
+
   useEffect(() => {
     checkIfWalletIsConnected();
     //checkIfTransactionsExist();
@@ -178,6 +195,7 @@ export const TransactionProvider = ({ children }) => {
       value={{
         connectWallet,
         currentAccount,
+        userBalance,
         formData,
         setFormData,
         handleChange,

@@ -28,30 +28,12 @@ const Balance = () => {
   const {
     connectWallet,
     currentAccount,
+    userBalance,
     formData,
     sendTransaction,
     handleChange,
     isLoading,
   } = useContext(TransactionContext);
-
-  const [defaultAccount, setDefaultAccount] = useState(null);
-  const [userBalance, setUserBalance] = useState(null);
-
-  const accountChanged = (accountName) => {
-    setDefaultAccount(accountName);
-    getUserBalance(accountName);
-  };
-
-  const getUserBalance = (accountAddress) => {
-    window.ethereum
-      .request({
-        method: "eth_getBalance",
-        param: [String(accountAddress), "latest"],
-      })
-      .then((balance) => {
-        setUserBalance(ethers.utils.formatEther(balance));
-      });
-  };
 
   const handleSubmit = (e) => {
     const { addressTo, amount } = formData;
