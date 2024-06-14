@@ -175,15 +175,29 @@ export const TransactionProvider = ({ children }) => {
     getUserBalance(accountName);
   };
 
-  const getUserBalance = (accountAddress) => {
-    window.ethereum
-      .request({
+  // const getUserBalance = (accountAddress) => {
+  //   window.ethereum
+  //     .request({
+  //       method: "eth_getBalance",
+  //       params: [String(accountAddress), "latest"],
+  //     })
+  //     .then((balance) => {
+  //       setUserBalance(formatEther(balance));
+  //     });
+  // };
+
+  const getUserBalance = async (accountAddress) => {
+    try {
+      const balance = await ethereum.request({
         method: "eth_getBalance",
-        params: [String(accountAddress), "latest"],
-      })
-      .then((balance) => {
-        setUserBalance(formatEther(balance));
+
+        params: [accountAddress, "latest"],
       });
+
+      setUserBalance(formatEther(balance));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
