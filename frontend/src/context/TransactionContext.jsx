@@ -108,8 +108,7 @@ export const TransactionProvider = ({ children }) => {
       });
 
       setCurrentAccount(accounts[0]);
-      accountChanged(accounts[0]); // BAL
-      //window.location.reload();
+      getUserBalance(accounts[0]);
     } catch (error) {
       console.log(error);
 
