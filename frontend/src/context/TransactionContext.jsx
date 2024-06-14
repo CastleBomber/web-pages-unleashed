@@ -74,7 +74,7 @@ export const TransactionProvider = ({ children }) => {
 
       if (accounts.length) {
         setCurrentAccount(accounts[0]);
-        //getUserBalance(accounts[0]);
+        getUserBalance(accounts[0]);
         getAllTransactions();
       } else {
         console.log("No accounts found");
@@ -165,8 +165,6 @@ export const TransactionProvider = ({ children }) => {
       window.location.reload();
     } catch (error) {
       console.log(error);
-
-      //throw new Error("No ethereum object to sendTransaction()");
     }
   };
 
@@ -175,16 +173,6 @@ export const TransactionProvider = ({ children }) => {
     getUserBalance(accountName);
   };
 
-  // const getUserBalance = (accountAddress) => {
-  //   window.ethereum
-  //     .request({
-  //       method: "eth_getBalance",
-  //       params: [String(accountAddress), "latest"],
-  //     })
-  //     .then((balance) => {
-  //       setUserBalance(formatEther(balance));
-  //     });
-  // };
 
   const getUserBalance = async (accountAddress) => {
     try {
