@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
-import {parseEther, Contract, formatEther} from "ethers";
+import { parseEther, Contract, formatEther } from "ethers";
 import { contractABI, contractAddress } from "../utils/constants";
 const { ethereum } = window;
 export const TransactionContext = React.createContext();
@@ -74,7 +74,7 @@ export const TransactionProvider = ({ children }) => {
 
       if (accounts.length) {
         setCurrentAccount(accounts[0]);
-
+        //getUserBalance(accounts[0]);
         getAllTransactions();
       } else {
         console.log("No accounts found");
@@ -109,7 +109,7 @@ export const TransactionProvider = ({ children }) => {
 
       setCurrentAccount(accounts[0]);
       accountChanged(accounts[0]); // BAL
-      window.location.reload();
+      //window.location.reload();
     } catch (error) {
       console.log(error);
 
@@ -179,7 +179,7 @@ export const TransactionProvider = ({ children }) => {
     window.ethereum
       .request({
         method: "eth_getBalance",
-        param: [String(accountAddress), "latest"],
+        params: [String(accountAddress), "latest"],
       })
       .then((balance) => {
         setUserBalance(formatEther(balance));
