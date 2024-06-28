@@ -172,7 +172,6 @@ export const TransactionProvider = ({ children }) => {
     getUserBalance(accountName);
   };
 
-
   const getUserBalance = async (accountAddress) => {
     try {
       const balance = await ethereum.request({

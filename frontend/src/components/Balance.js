@@ -1,7 +1,7 @@
 /**
  * current: ethers.utils.formatEther(balance) vs previous solution: ethers.formatEther(balance)
  */
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Spinner from "../components/Spinner";
@@ -10,7 +10,6 @@ import { SiEthereum } from "react-icons/si";
 import { BsInfoCircle } from "react-icons/bs";
 import { shortenAddress } from "../utils/shortenAddress";
 import { AiFillPlayCircle } from "react-icons/ai";
-import { ethers } from "ethers";
 
 const Input = ({ placeholder, name, type, value, handleChange }) => (
   <input
@@ -68,19 +67,20 @@ const Balance = () => {
         </div>
         <div className="crypto-card-container-2">
           <div className="p1">{shortenAddress(currentAccount)}</div>
-          <div className="p1">Balance:{userBalance}</div>
+          <div className="p1">Balance: {userBalance}</div>
           <div className="p1">SepoliaETH</div>
         </div>
       </div>
 
       {/* Form for user inputs: address to and amount */}
-      <Form className="mt-3">
+      <Form className="mt-3" onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
           <Form.Label size="lg">Address to</Form.Label>
           <Input
             placeholder="Address To"
             name="addressTo"
             type="text"
+            value={formData.addressTo}
             handleChange={handleChange}
           />
         </Form.Group>
@@ -91,6 +91,7 @@ const Balance = () => {
             placeholder="Amount (ETH)"
             name="amount"
             type="number"
+            value={formData.amount}
             handleChange={handleChange}
           />
         </Form.Group>
@@ -100,7 +101,7 @@ const Balance = () => {
           <Spinner />
         ) : (
           <div className="register-button mb-3">
-            <Button onClick={handleSubmit} variant="primary" type="submit">
+            <Button variant="primary" type="submit">
               Send Now
             </Button>
           </div>
