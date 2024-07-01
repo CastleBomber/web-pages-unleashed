@@ -32,7 +32,7 @@
  * npx hardhat (toolbox option) vs
  * npm install --save-dev hardhat @nomiclabs/hardhat-waffle ethereum-waffle chai @nomiclabs/hardhat-ethers ethers
  * npx hardhat run scripts/deploy.js --network sepolia
- * 
+ *
  *
  * Shortcuts:
  *  VS Code:
@@ -62,8 +62,14 @@
  *
  *
  * Quick Fix:
- * Program not running with a bunch of error after downloading packages?
- * Then, delete package-lock.json and node_modules. Run 'npm install' after
+ * Program not running with a bunch of error after downloading packages? Or
+ * just downloaded old version of project fresh from github?
+ * Ensure you have .env folder (mongoDB project)
+ * Then, delete package-lock.json and node_modules abd run 'npm install' after
+ * for each folder:
+ * - root folder
+ * - frontend
+ * - smart contract
  *
  * In app, older syntax 'component', needs to be switched to 'element'
  * older syntax of 'Switch', need to be 'Router' surrounding 'Route'
