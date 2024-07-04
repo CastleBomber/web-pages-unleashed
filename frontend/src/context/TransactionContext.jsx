@@ -133,9 +133,8 @@ export const TransactionProvider = ({ children }) => {
             from: currentAccount,
             to: addressTo,
             gas: "0x5208", // 21000 GWEI
-            //value: parsedAmount,
-            value: parsedAmount._hex, // 0.00001
-            //value: ethers.parseUnits('0.001', 'ether'),
+            //value: parsedAmount._hex, // 0.00001
+            value: parsedAmount.toString(),
           },
         ],
       });
