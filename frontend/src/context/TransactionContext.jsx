@@ -122,44 +122,45 @@ export const TransactionProvider = ({ children }) => {
 
       const { addressTo, amount } = formData;
       const transactionContract = getEthereumContract();
-      const parsedAmount = parseEther(amount); // Decimal to GWEI
+      const parsedAmount = parseEther(amount); // Converts (Decimal) amount to wei
 
-      console.log(`Loading - A`);
+      console.log(`Parsed Amount in wei: ${parsedAmount.toString()}`);
 
-      await ethereum.request({
+      const txParams = {
+        from: currentAccount,
+        to: addressTo,
+        gas: "0x5208", // 21000 GWEI
+        value: parsedAmount.toString(), // value in wei
+      };
+
+      console.log(`Transaction Parameters:`, txParams);
+
+      const txHash = await ethereum.request({
         method: "eth_sendTransaction",
-        params: [
-          {
-            from: currentAccount,
-            to: addressTo,
-            gas: "0x5208", // 21000 GWEI
-            //value: parsedAmount._hex, // 0.00001
-            value: parsedAmount.toString(),
-          },
-        ],
+        params: [txParams],
       });
+
+      console.log(`Transaction Hash from eth_sendTransaction: ${txHash}`);
 
       console.log(
         `Loading - Before transactionHash = await transactionContract.addToBlockChain()`
       );
-
-      // No ETH Obj, TypeError: transactionContract.addToBlockchain is not a function at sendTransaction
-      const transactionHash = await transactionContract.addToBlockchain(
+      const transactionHash = await transactionContract.addToBlockChain(
         addressTo,
         parsedAmount
       );
-
       console.log(
         `Loading - After transactionHash = await transactionContract.addToBlockChain()`
       );
 
       setIsLoading(true);
-      console.log(`Loading - ${transactionHash.hash}`);
+      console.log(`Loading - Transaction Hash: ${transactionHash.hash}`);
       await transactionHash.wait();
-      console.log(`Success - ${transactionHash.hash}`);
+      console.log(`Success - Transaction Hash: ${transactionHash.hash}`);
       setIsLoading(false);
 
       const transactionCount = await transactionContract.getTransactionCount();
+      console.log(`Transaction Count: ${transactionCount.toNumber()}`);
       setTransactionCount(transactionCount.toNumber());
 
       window.location.reload();
