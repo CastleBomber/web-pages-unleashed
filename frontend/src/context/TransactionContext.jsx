@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ethers } from "ethers";
+import { ethers, parseUnits } from "ethers";
 import { parseEther, Contract, formatEther } from "ethers";
 import { contractABI, contractAddress } from "../utils/constants";
 const { ethereum } = window;
@@ -122,7 +122,8 @@ export const TransactionProvider = ({ children }) => {
 
       const { addressTo, amount } = formData;
       const transactionContract = getEthereumContract();
-      const parsedAmount = parseEther(amount); // Converts (Decimal) amount to wei
+      const parsedAmount = parseEther(amount); // Converts user provided decimal strings to amount in wei
+      //const parsedAmount = parseUnits(amount, "ether");
 
       console.log(`Parsed Amount in wei: ${parsedAmount.toString()}`);
 
@@ -130,7 +131,7 @@ export const TransactionProvider = ({ children }) => {
         from: currentAccount,
         to: addressTo,
         gas: "0x5208", // 21000 GWEI
-        value: parsedAmount.toString(), // value in wei
+        value: parsedAmount.toString(),
       };
 
       console.log(`Transaction Parameters:`, txParams);
