@@ -18,14 +18,19 @@ const getEthereumContract = () => {
 
 export const TransactionProvider = ({ children }) => {
   const [currentAccount, setCurrentAccount] = useState("");
+  const [userBalance, setUserBalance] = useState("");
+
   const [formData, setFormData] = useState({
     addressTo: "",
     amount: "",
   });
+
   const [isLoading, setIsLoading] = useState(false);
+
   const [transactionCount, setTransactionCount] = useState(
     localStorage.getItem("transactionCount")
   );
+
   const [transactions, setTransactions] = useState([]);
 
   const handleChange = (e, name) => {
@@ -84,19 +89,6 @@ export const TransactionProvider = ({ children }) => {
     }
   };
 
-  const checkIfTransactionsExist = async () => {
-    try {
-      const transactionContract = getEthereumContract();
-      const transactionCount = await transactionContract.getTransactionCount();
-
-      window.localStorage.setItem("transactionCount", transactionCount);
-    } catch (error) {
-      console.log(error);
-
-      throw new Error("No ethereum object in checkIfTransactionsExist()");
-    }
-  };
-
   const connectWallet = async () => {
     try {
       if (!ethereum) return alert("please install metamask");
@@ -111,6 +103,16 @@ export const TransactionProvider = ({ children }) => {
       console.log(error);
 
       throw new Error("No ethereum object");
+    }
+  };
+
+  const getUserBalance = async (account) => {
+    try {
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const balance = await provider.getBalance(account);
+      setUserBalance(ethers.utils.formatEther(balance));
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -169,14 +171,17 @@ export const TransactionProvider = ({ children }) => {
 
   useEffect(() => {
     checkIfWalletIsConnected();
-    //checkIfTransactionsExist();
-  }, [transactionCount]);
+    if(currentAccount){
+      getUserBalance(currentAccount);
+    }
+  }, [currentAccount, transactionCount]);
 
   return (
     <TransactionContext.Provider
       value={{
         connectWallet,
         currentAccount,
+        userBalance,
         formData,
         setFormData,
         handleChange,
