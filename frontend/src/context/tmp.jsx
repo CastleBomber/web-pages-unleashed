@@ -1,4 +1,3 @@
-// This may be an original class I created, probably morphed from another script
 import React, { useContext, useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
@@ -8,7 +7,7 @@ import { SiEthereum } from "react-icons/si";
 import { BsInfoCircle } from "react-icons/bs";
 import { shortenAddress, shortenBalance } from "../utils/shortenAddress";
 import { AiFillPlayCircle } from "react-icons/ai";
-import Account from "../components/Account"; // x
+import Account from "../components/Account";
 
 const Input = ({ placeholder, name, type, value, handleChange }) => (
   <input
@@ -21,7 +20,6 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
   />
 );
 
-// Display Crytpo balances
 const Balance = () => {
   const {
     connectWallet,
@@ -33,8 +31,7 @@ const Balance = () => {
     isLoading,
   } = useContext(TransactionContext);
 
-  //const [accounts, setAccounts] = useState([]);
-  const [accounts] = useState([]);
+  const [accounts, setAccounts] = useState([]);
 
   const handleSubmit = (e) => {
     const { addressTo, amount } = formData;
@@ -47,27 +44,22 @@ const Balance = () => {
     }
 
     sendTransaction();
-
-    // reload()
   };
 
   return (
     <div className="balance">
       <h1>Send Crypto</h1>
 
-      {/* {accounts && accounts.length > 0 && (
+      {accounts && accounts.length > 0 && (
         <div className="accounts">
-          {accounts.map((account) => {
-            return (
-              <div className="account" key={account.address}>
-                <Account account={account} />
-              </div>
-            );
-          })}
+          {accounts.map((account) => (
+            <div className="account" key={account.address}>
+              <Account account={account} />
+            </div>
+          ))}
         </div>
-      )} */}
+      )}
 
-      {/* Sign in to crypto wallet */}
       {!currentAccount && (
         <Button onClick={connectWallet} className="mt-3 mb-3">
           <AiFillPlayCircle />
@@ -87,7 +79,6 @@ const Balance = () => {
         </div>
       </div>
 
-      {/* Form for user inputs: address to and amount */}
       <Form className="mt-3">
         <Form.Group className="mb-3">
           <Form.Label size="lg">Address to</Form.Label>
@@ -109,7 +100,6 @@ const Balance = () => {
           />
         </Form.Group>
 
-        {/* Loader */}
         {isLoading ? (
           <Spinner />
         ) : (

@@ -77,7 +77,7 @@ export const TransactionProvider = ({ children }) => {
 
       if (accounts.length) {
         setCurrentAccount(accounts[0]);
-
+        getUserBalance(accounts[0]);
         getAllTransactions();
       } else {
         console.log("No accounts found");
@@ -98,7 +98,8 @@ export const TransactionProvider = ({ children }) => {
       });
 
       setCurrentAccount(accounts[0]);
-      window.location.reload();
+      getUserBalance(accounts[0]);
+      getAllTransactions();
     } catch (error) {
       console.log(error);
 
@@ -142,7 +143,6 @@ export const TransactionProvider = ({ children }) => {
         `Loading - Before transactionHash = await transactionContract.addToBlockChain()`
       );
 
-      // No ETH Obj, TypeError: transactionContract.addToBlockchain is not a function at sendTransaction
       const transactionHash = await transactionContract.addToBlockchain(
         addressTo,
         parsedAmount
@@ -161,11 +161,11 @@ export const TransactionProvider = ({ children }) => {
       const transactionCount = await transactionContract.getTransactionCount();
       setTransactionCount(transactionCount.toNumber());
 
-      window.location.reload();
+      // Fetch updated transactions and balance
+      getAllTransactions();
+      getUserBalance(currentAccount);
     } catch (error) {
       console.log(error);
-
-      //throw new Error("No ethereum object to sendTransaction()");
     }
   };
 
@@ -173,6 +173,7 @@ export const TransactionProvider = ({ children }) => {
     checkIfWalletIsConnected();
     if(currentAccount){
       getUserBalance(currentAccount);
+      getAllTransactions();
     }
   }, [currentAccount, transactionCount]);
 
