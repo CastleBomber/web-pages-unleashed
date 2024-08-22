@@ -19,6 +19,7 @@ const getEthereumContract = () => {
 export const TransactionProvider = ({ children }) => {
   const [currentAccount, setCurrentAccount] = useState("");
   const [userBalance, setUserBalance] = useState("");
+  const [lastCheckedBalance, setLastCheckedBalance] = useState("");
 
   const [formData, setFormData] = useState({
     addressTo: "",
@@ -164,10 +165,24 @@ export const TransactionProvider = ({ children }) => {
       // Fetch updated transactions and balance
       getAllTransactions();
       getUserBalance(currentAccount);
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }
   };
+
+  // Polling mechanism to check balance changes
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      const currentBalance = await getUserBalance(currentAccount);
+      if (lastCheckedBalance && currentBalance !== lastCheckedBalance) {
+        window.location.reload(); // Reload page if balance has changed
+      }
+      setLastCheckedBalance(currentBalance);
+    }, 5000); // Check every 5 seconds
+    
+    return () => clearInterval(interval); // Cleanup interval on component unmount
+  }, [currentAccount, lastCheckedBalance]);
 
   useEffect(() => {
     checkIfWalletIsConnected();
@@ -182,6 +197,7 @@ export const TransactionProvider = ({ children }) => {
       value={{
         connectWallet,
         currentAccount,
+        getUserBalance,
         userBalance,
         formData,
         setFormData,

@@ -26,15 +26,13 @@ const Balance = () => {
   const {
     connectWallet,
     currentAccount,
+    getUserBalance,
     userBalance,
     formData,
     sendTransaction,
     handleChange,
     isLoading,
   } = useContext(TransactionContext);
-
-  //const [accounts, setAccounts] = useState([]);
-  const [accounts] = useState([]);
 
   const handleSubmit = (e) => {
     const { addressTo, amount } = formData;
@@ -48,24 +46,15 @@ const Balance = () => {
 
     sendTransaction();
 
-    // reload()
+    // reload 
+    //getUserBalance(userBalance); 
   };
+
+
 
   return (
     <div className="balance">
       <h1>Send Crypto</h1>
-
-      {/* {accounts && accounts.length > 0 && (
-        <div className="accounts">
-          {accounts.map((account) => {
-            return (
-              <div className="account" key={account.address}>
-                <Account account={account} />
-              </div>
-            );
-          })}
-        </div>
-      )} */}
 
       {/* Sign in to crypto wallet */}
       {!currentAccount && (
