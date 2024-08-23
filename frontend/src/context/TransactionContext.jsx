@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { ethers } from "ethers";
 import { contractABI, contractAddress } from "../utils/constants";
 const { ethereum } = window;
@@ -68,7 +68,7 @@ export const TransactionProvider = ({ children }) => {
     }
   };
 
-  const checkIfWalletIsConnected = async () => {
+  const checkIfWalletIsConnected = useCallback(async () => {
     try {
       if (!ethereum) {
         return alert("Please install metamask");
@@ -88,7 +88,7 @@ export const TransactionProvider = ({ children }) => {
 
       throw new Error("No ethereum object in checkIfWalletIsConnected()");
     }
-  };
+  }, []);
 
   const connectWallet = async () => {
     try {
@@ -162,10 +162,6 @@ export const TransactionProvider = ({ children }) => {
       const transactionCount = await transactionContract.getTransactionCount();
       setTransactionCount(transactionCount.toNumber());
 
-      // Fetch updated transactions and balance
-      getAllTransactions();
-      getUserBalance(currentAccount);
-      window.location.reload();
     } catch (error) {
       console.log(error);
     }
@@ -179,8 +175,8 @@ export const TransactionProvider = ({ children }) => {
         window.location.reload(); // Reload page if balance has changed
       }
       setLastCheckedBalance(currentBalance);
-    }, 5000); // Check every 5 seconds
-    
+    }, 3000); // Check every 3 seconds
+
     return () => clearInterval(interval); // Cleanup interval on component unmount
   }, [currentAccount, lastCheckedBalance]);
 
@@ -190,14 +186,14 @@ export const TransactionProvider = ({ children }) => {
       getUserBalance(currentAccount);
       getAllTransactions();
     }
-  }, [currentAccount, transactionCount]);
+  }, [currentAccount, transactionCount, checkIfWalletIsConnected]);
+  
 
   return (
     <TransactionContext.Provider
       value={{
         connectWallet,
         currentAccount,
-        getUserBalance,
         userBalance,
         formData,
         setFormData,

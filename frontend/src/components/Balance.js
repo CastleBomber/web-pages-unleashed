@@ -1,5 +1,5 @@
 // This may be an original class I created, probably morphed from another script
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Spinner from "../components/Spinner";
@@ -8,7 +8,9 @@ import { SiEthereum } from "react-icons/si";
 import { BsInfoCircle } from "react-icons/bs";
 import { shortenAddress, shortenBalance } from "../utils/shortenAddress";
 import { AiFillPlayCircle } from "react-icons/ai";
-import Account from "../components/Account"; // x
+//import Account from "../components/Account"; // x
+import {ToastContainer, toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Input = ({ placeholder, name, type, value, handleChange }) => (
   <input
@@ -26,7 +28,6 @@ const Balance = () => {
   const {
     connectWallet,
     currentAccount,
-    getUserBalance,
     userBalance,
     formData,
     sendTransaction,
@@ -45,9 +46,6 @@ const Balance = () => {
     }
 
     sendTransaction();
-
-    // reload 
-    //getUserBalance(userBalance); 
   };
 
 
