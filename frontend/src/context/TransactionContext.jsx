@@ -1,8 +1,10 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { ethers } from "ethers";
 import { contractABI, contractAddress } from "../utils/constants";
+import { toast } from 'react-toastify';
 const { ethereum } = window;
 export const TransactionContext = React.createContext();
+
 
 const getEthereumContract = () => {
   const provider = new ethers.providers.Web3Provider(ethereum);
@@ -173,6 +175,7 @@ export const TransactionProvider = ({ children }) => {
       const currentBalance = await getUserBalance(currentAccount);
       if (lastCheckedBalance && currentBalance !== lastCheckedBalance) {
         window.location.reload(); // Reload page if balance has changed
+        toast.success('Balance updated');
       }
       setLastCheckedBalance(currentBalance);
     }, 3000); // Check every 3 seconds

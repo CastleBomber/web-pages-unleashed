@@ -8,7 +8,6 @@ import { SiEthereum } from "react-icons/si";
 import { BsInfoCircle } from "react-icons/bs";
 import { shortenAddress, shortenBalance } from "../utils/shortenAddress";
 import { AiFillPlayCircle } from "react-icons/ai";
-//import Account from "../components/Account"; // x
 import {ToastContainer, toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -73,6 +72,8 @@ const Balance = () => {
           <div className="p1">SepoliaETH</div>
         </div>
       </div>
+
+      <ToastContainer />
 
       {/* Form for user inputs: address to and amount */}
       <Form className="mt-3">
