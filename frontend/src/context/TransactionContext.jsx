@@ -1,10 +1,9 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { ethers } from "ethers";
 import { contractABI, contractAddress } from "../utils/constants";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 const { ethereum } = window;
 export const TransactionContext = React.createContext();
-
 
 const getEthereumContract = () => {
   const provider = new ethers.providers.Web3Provider(ethereum);
@@ -114,9 +113,12 @@ export const TransactionProvider = ({ children }) => {
     try {
       const provider = new ethers.providers.Web3Provider(ethereum);
       const balance = await provider.getBalance(account);
-      setUserBalance(ethers.utils.formatEther(balance));
+      const formattedBalance = ethers.utils.formatEther(balance);
+      setUserBalance(formattedBalance); // Update the state as needed
+      return formattedBalance; // Return the balance for other uses
     } catch (error) {
       console.error(error);
+      return null;
     }
   };
 
@@ -163,7 +165,6 @@ export const TransactionProvider = ({ children }) => {
 
       const transactionCount = await transactionContract.getTransactionCount();
       setTransactionCount(transactionCount.toNumber());
-
     } catch (error) {
       console.log(error);
     }
@@ -173,9 +174,16 @@ export const TransactionProvider = ({ children }) => {
   useEffect(() => {
     const interval = setInterval(async () => {
       const currentBalance = await getUserBalance(currentAccount);
+
+      // Keep comparision logic (initially lastCheckedBalance will be undefined)
       if (lastCheckedBalance && currentBalance !== lastCheckedBalance) {
-        window.location.reload(); // Reload page if balance has changed
-        toast.success('Balance updated');
+        //window.location.reload();
+        toast.success("Balance updated", {
+          position: "top-center",
+          autoClose: 5000,
+          pauseOnHover: true,
+          theme: "colored",
+        });
       }
       setLastCheckedBalance(currentBalance);
     }, 3000); // Check every 3 seconds
@@ -185,12 +193,11 @@ export const TransactionProvider = ({ children }) => {
 
   useEffect(() => {
     checkIfWalletIsConnected();
-    if(currentAccount){
+    if (currentAccount) {
       getUserBalance(currentAccount);
       getAllTransactions();
     }
   }, [currentAccount, transactionCount, checkIfWalletIsConnected]);
-  
 
   return (
     <TransactionContext.Provider

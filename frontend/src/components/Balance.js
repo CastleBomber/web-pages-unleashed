@@ -47,8 +47,6 @@ const Balance = () => {
     sendTransaction();
   };
 
-
-
   return (
     <div className="balance">
       <h1>Send Crypto</h1>
