@@ -110,14 +110,20 @@ export const TransactionProvider = ({ children }) => {
   };
 
   const getUserBalance = async (account) => {
+    // Validate that account is not empty or undefined
+    if (!account || account.trim() === "") {
+      console.error("Invalid account address provided to getUserBalance()");
+      return null;
+    }
     try {
       const provider = new ethers.providers.Web3Provider(ethereum);
       const balance = await provider.getBalance(account);
       const formattedBalance = ethers.utils.formatEther(balance);
       setUserBalance(formattedBalance); // Update the state as needed
       return formattedBalance; // Return the balance for other uses
+      
     } catch (error) {
-      console.error(error);
+      console.error("Error in getUserBalance():", error);
       return null;
     }
   };
@@ -172,12 +178,20 @@ export const TransactionProvider = ({ children }) => {
 
   // Polling mechanism to check balance changes
   useEffect(() => {
+    if(!currentAccount){
+      return;
+    }
+
     const interval = setInterval(async () => {
+      // if(!currentAccount || currentAccount.trim() == ""){
+      //   console.log("No account found for balance check.")
+      //   return;
+      // }
+
       const currentBalance = await getUserBalance(currentAccount);
 
       // Keep comparision logic (initially lastCheckedBalance will be undefined)
       if (lastCheckedBalance && currentBalance !== lastCheckedBalance) {
-        //window.location.reload();
         toast.success("Balance updated", {
           position: "top-center",
           autoClose: 5000,
@@ -185,6 +199,7 @@ export const TransactionProvider = ({ children }) => {
           theme: "colored",
         });
       }
+
       setLastCheckedBalance(currentBalance);
     }, 3000); // Check every 3 seconds
 
