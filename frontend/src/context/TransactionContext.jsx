@@ -121,7 +121,6 @@ export const TransactionProvider = ({ children }) => {
       const formattedBalance = ethers.utils.formatEther(balance);
       setUserBalance(formattedBalance); // Update the state as needed
       return formattedBalance; // Return the balance for other uses
-      
     } catch (error) {
       console.error("Error in getUserBalance():", error);
       return null;
@@ -178,16 +177,11 @@ export const TransactionProvider = ({ children }) => {
 
   // Polling mechanism to check balance changes
   useEffect(() => {
-    if(!currentAccount){
+    if (!currentAccount) {
       return;
     }
 
     const interval = setInterval(async () => {
-      // if(!currentAccount || currentAccount.trim() == ""){
-      //   console.log("No account found for balance check.")
-      //   return;
-      // }
-
       const currentBalance = await getUserBalance(currentAccount);
 
       // Keep comparision logic (initially lastCheckedBalance will be undefined)
@@ -202,6 +196,10 @@ export const TransactionProvider = ({ children }) => {
 
       setLastCheckedBalance(currentBalance);
     }, 3000); // Check every 3 seconds
+
+    // Suppress console warnings (Timer [Violation] X handlers)
+    // Chrome Dev Filter Box: -[Violation]
+    console.warn = () => {};
 
     return () => clearInterval(interval); // Cleanup interval on component unmount
   }, [currentAccount, lastCheckedBalance]);

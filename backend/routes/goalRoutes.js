@@ -1,4 +1,4 @@
- /**
+/**
  * Route  - Database - HTTP
  * Set    - Create   - Post
  * Get    - Read     - Get
@@ -8,6 +8,7 @@
 
 const express = require("express");
 const router = express.Router();
+
 const {
   getGoals,
   setGoal,
