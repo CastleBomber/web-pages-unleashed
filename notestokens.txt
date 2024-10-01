@@ -1,0 +1,8 @@
+Native tokens vs ERC20 tokens
+
+Native tokens:
+-ETH, BTC, BNB
+-SepoliaEth is a native token on Seplia testnet
+
+ERC20 tokens:
+-USDC, Chainlink, Uniswap

@@ -1,0 +1,19 @@
+Postman
+
+BearerToken
+Learn The MERN Stack - JWT Authentication, Video 2 (39:02)
+1st, 
+POST http://localhost:5000/api/users/login 
+Body (> Params)
+x-www-url-encoded 
+key/value: for name, email, and password
+press send
+copy the token 
+
+(must be logged in)
+GET http://localhost:5000/api/goals
+GET http://localhost:5000/api/users/me 
+Authorization Type: BearerToken
+past the token
+press send
+will display protected output 
