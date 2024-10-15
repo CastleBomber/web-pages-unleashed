@@ -14,11 +14,12 @@ function Register() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    walletAddress: "",
     password: "",
     password2: "",
   });
 
-  const { name, email, password, password2 } = formData;
+  const { name, email, walletAddress, password, password2 } = formData;
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -54,6 +55,7 @@ function Register() {
       const userData = {
         name,
         email,
+        walletAddress,
         password,
       };
 
@@ -101,6 +103,19 @@ function Register() {
                 type="email"
                 placeholder="Enter your email"
                 value={email}
+                onChange={onChange}
+                size="lg"
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Wallet address</Form.Label>
+              <Form.Control
+                name="walletAddress"
+                id="walletAddress"
+                type="walletAddress"
+                placeholder="Enter your wallet address"
+                value={walletAddress}
                 onChange={onChange}
                 size="lg"
               />

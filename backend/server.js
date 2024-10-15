@@ -4,12 +4,6 @@
  * Acknowledgements:
  * Traversy Media's MERN Stack youtube series
  *
- * Database Users
- * CastleBomber, a@b.com, hack123
- * Draggy, d@b.com, hack123
- * Theo, theo@gg.com, red
- * Moon, moon@gg.com, moon
- *
  */
 
 const path = require("path");

@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getGoals, reset } from "../features/goals/goalSlice";
+import Balance from "../components/Balance";
 
 // Accessed once logged in
 function Dashboard() {
@@ -52,7 +53,7 @@ function Dashboard() {
         <main>
           <h1 className="mt-5 mb-3">Goals Dashboard</h1>
           <h2>Welcome {user && user.name}!</h2>
-
+          <Balance />
           <GoalForm />
 
           <section className="content mt-3">

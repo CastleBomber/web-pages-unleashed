@@ -3,3 +3,10 @@ CastleBomber, a@b.com, hack123
 Draggy, d@b.com, hack123
 Theo, theo@gg.com, red
 Moon, moon@gg.com, moon
+CBombs, b@c.com, Account 1, hack123
+
+
+Account 1
+0x3f71352e49fdF152f16B2092e3edfC51A2e0eD68
+Account 2
+0xaA818a5E2D0AD7cE68Ab983EE28b227782D21C7c
