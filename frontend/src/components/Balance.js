@@ -8,8 +8,10 @@ import { SiEthereum } from "react-icons/si";
 import { BsInfoCircle } from "react-icons/bs";
 import { shortenAddress, shortenBalance } from "../utils/shortenAddress";
 import { AiFillPlayCircle } from "react-icons/ai";
-import {ToastContainer, toast} from 'react-toastify';
+import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useSelector } from "react-redux";
+
 
 const Input = ({ placeholder, name, type, value, handleChange }) => (
   <input
@@ -33,6 +35,8 @@ const Balance = () => {
     handleChange,
     isLoading,
   } = useContext(TransactionContext);
+
+  const { user } = useSelector((state) => state.auth);
 
   const handleSubmit = (e) => {
     const { addressTo, amount } = formData;
@@ -65,6 +69,7 @@ const Balance = () => {
           <BsInfoCircle />
         </div>
         <div className="crypto-card-container-2">
+          <div className="p1">{user && user.name}</div>
           <div className="p1">{shortenAddress(currentAccount)}</div>
           <div className="p1">Balance: {shortenBalance(userBalance)}</div>
           <div className="p1">SepoliaETH</div>

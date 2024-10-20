@@ -25,14 +25,12 @@ function Dashboard() {
     }
 
     if (!user) {
-      // If user is not signed in, go to login page
+      // If user is not signed in, navigates to login page
       navigate("/login");
     } else {
       // User is signed in, show goals
       dispatch(getGoals()); // resolves goals crashing, video 4 @33:30
     }
-
-    //dispatch(getGoals()); // error: if user not signed in, should not dispatch goals
 
     return () => {
       dispatch(reset());
@@ -51,11 +49,12 @@ function Dashboard() {
         </nav>
 
         <main>
-          <h1 className="mt-5 mb-3">Goals Dashboard</h1>
-          <h2>Welcome {user && user.name}!</h2>
+          
+          {/* <h1>Welcome {user && user.name}!</h1> */}
           <Balance />
           <GoalForm />
 
+          <h1 className="mt-5 mb-3">Goals</h1>
           <section className="content mt-3">
             {goals.length > 0 ? (
               <div className="goals">

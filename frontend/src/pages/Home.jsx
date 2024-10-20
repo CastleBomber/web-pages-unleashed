@@ -1,19 +1,10 @@
-import React, { useContext } from "react";
+import React from "react";
 import Footer from "../components/Footer";
 import Balance from "../components/Balance";
 import NavigationBar from "../components/Navbar";
 import "../utils/card-info.json";
-import { TransactionContext } from "../context/TransactionContext";
 
 export const Home = () => {
-  const {
-    connectWallet,
-    currentAccount,
-    formData,
-    sendTransaction,
-    handleChange,
-    isLoading,
-  } = useContext(TransactionContext);
 
   return (
     <div className="home">
