@@ -19,6 +19,8 @@ export const Home = () => {
 
       <main></main>
       <footer>
+        <h3>*Log into WPU account and use the Dashboard to view past transactions*</h3>
+        <h3>*This page will display past the six transactions of users</h3>
         <Footer />
       </footer>
     </div>

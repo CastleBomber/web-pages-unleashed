@@ -47,6 +47,8 @@ export const login = createAsyncThunk("auth/login", async (user, thunkAPI) => {
 
 export const logout = createAsyncThunk("auth/logout", async () => {
   await authService.logout();
+
+  // Ask MetaMask to logout
 });
 
 export const authSlice = createSlice({

@@ -1,11 +1,13 @@
-Database Users
+Old Database Users
 CastleBomber, a@b.com, hack123
 Draggy, d@b.com, hack123
 Theo, theo@gg.com, red
 Moon, moon@gg.com, moon
+
+New Database Users
 CBombs, b@c.com, Account 1, hack123
 
-
+MetaMask Wallet Addresses
 Account 1
 0x3f71352e49fdF152f16B2092e3edfC51A2e0eD68
 Account 2
