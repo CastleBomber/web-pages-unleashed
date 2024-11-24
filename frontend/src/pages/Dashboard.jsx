@@ -52,9 +52,10 @@ function Dashboard() {
           <h1>Welcome {user && user.name}!</h1>
           <GoalForm />
 
-          <h1 className="mt-5 mb-3">Goals/ Past Transactions</h1>
+          <h1 className="mt-5 mb-3">Goals/ Logged Transactions</h1>
           <section className="content mt-3">
             {goals.length > 0 ? (
+              // For each goal, we will create a goal item to display
               <div className="goals">
                 {goals.map((goal) => (
                   <GoalItem key={goal._id} goal={goal} />

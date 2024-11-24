@@ -83,7 +83,7 @@ export const goalSlice = createSlice({
       .addCase(createGoal.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.goals.push(action.payload);
+        state.goals.push(action.payload); // push new goal created
       })
       .addCase(createGoal.rejected, (state, action) => {
         state.isLoading = false;
@@ -111,7 +111,7 @@ export const goalSlice = createSlice({
         state.isSuccess = true;
         state.goals = state.goals.filter(
           (goal) => goal._id !== action.payload.id
-        );
+        ); // Filter out the deleted goal from the UI
       })
       .addCase(deleteGoal.rejected, (state, action) => {
         state.isLoading = false;

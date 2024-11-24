@@ -47,8 +47,6 @@ export const login = createAsyncThunk("auth/login", async (user, thunkAPI) => {
 
 export const logout = createAsyncThunk("auth/logout", async () => {
   await authService.logout();
-
-  // Ask MetaMask to logout
 });
 
 export const authSlice = createSlice({
@@ -89,7 +87,7 @@ export const authSlice = createSlice({
       .addCase(login.rejected, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.message = action.payload; 
+        state.message = action.payload;
         state.user = null;
       })
       .addCase(logout.fulfilled, (state) => {

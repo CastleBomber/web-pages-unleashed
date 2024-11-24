@@ -137,11 +137,11 @@ export const TransactionProvider = ({ children }) => {
 
       console.log(`Loading - A`);
 
-      await ethereum.request({
+      const tx = await ethereum.request({
         method: "eth_sendTransaction",
         params: [
           {
-            from: currentAccount,
+            from: currentAccount, // MetaMask account
             to: addressTo,
             gas: "0x5208", // 21000 GWEI
             value: parsedAmount._hex, // 0.00001
@@ -162,18 +162,45 @@ export const TransactionProvider = ({ children }) => {
         `Loading - After transactionHash = await transactionContract.addToBlockChain()`
       );
 
+      // Wait for confirmation
       setIsLoading(true);
       console.log(`Loading - ${transactionHash.hash}`);
-      await transactionHash.wait();
+      const receipt = await transactionHash.wait();
       console.log(`Success - ${transactionHash.hash}`);
       setIsLoading(false);
 
       const transactionCount = await transactionContract.getTransactionCount();
       setTransactionCount(transactionCount.toNumber());
+
+      // Log the transaction to backend
+      //logTransactionToDB(tx, receipt);
     } catch (error) {
       console.log(error);
     }
   };
+
+  async function logTransactionToDB(tx, receipt) {
+    const response = await fetch("/api/transactions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        walletAddress: tx.from, // Sender's address
+        recipient: tx.to,       // Recipient's address
+        amount: ethers.utils.formatEther(tx.value), // Amount in Ether
+        transactionHash: tx.hash,
+        status: receipt.status, // Transaction status (1 = success)
+        timestamp: new Date().toISOString(),
+      }),
+    });
+  
+    if (response.ok) {
+      console.log("Transaction logged successfully");
+    } else {
+      console.error("Failed to log transaction");
+    }
+  }  
 
   // Polling mechanism to check balance changes
   useEffect(() => {

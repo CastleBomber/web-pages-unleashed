@@ -1,5 +1,5 @@
 // This may be an original class I created, probably morphed from another script
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Spinner from "../components/Spinner";
@@ -10,7 +10,6 @@ import { shortenAddress, shortenBalance } from "../utils/shortenAddress";
 import { AiFillPlayCircle } from "react-icons/ai";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useSelector } from "react-redux";
 
 const Input = ({ placeholder, name, type, value, handleChange }) => (
   <input
@@ -23,7 +22,7 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
   />
 );
 
-// Display Crytpo balances on Home page
+// Display Crypto balances on Home page
 const Balance = () => {
   const {
     connectWallet,
@@ -35,7 +34,33 @@ const Balance = () => {
     isLoading,
   } = useContext(TransactionContext);
 
-  const { user } = useSelector((state) => state.auth);
+  const [displayName, setDisplayName] = useState("");
+
+  // Fetch user data based on currentAccount
+  useEffect(() => {
+    const fetchUserName = async () => {
+      if (!currentAccount) {
+        setDisplayName(""); // Blank when not signed in
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/wallets/address/${currentAccount}`);
+        const data = await response.json();
+
+        if (response.ok && data.user?.name) {
+          setDisplayName(data.user.name); // User name if found
+        } else {
+          setDisplayName("Guest User"); // Fallback to Guest User
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        setDisplayName("Guest User XXX"); // Handle API errors
+      }
+    };
+
+    fetchUserName();
+  }, [currentAccount]);
 
   const handleSubmit = (e) => {
     const { addressTo, amount } = formData;
@@ -62,12 +87,14 @@ const Balance = () => {
         </Button>
       )}
 
-      <div className="crypto-card mb-3">
+      {/* Crypto card */}
+      <div className="crypto-card mb-3 mt-3">
         <div className="crypto-card-container-1">
           <SiEthereum />
           <BsInfoCircle />
         </div>
         <div className="crypto-card-container-2">
+          <div className="p1">{displayName}</div>
           <div className="p1">{shortenAddress(currentAccount)}</div>
           <div className="p1">Balance: {shortenBalance(userBalance)}</div>
           <div className="p1">SepoliaETH</div>

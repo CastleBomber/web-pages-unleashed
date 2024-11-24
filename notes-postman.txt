@@ -1,12 +1,15 @@
 Postman
 
 BearerToken
-Learn The MERN Stack - JWT Authentication, Video 2 (39:02)
+Learn The MERN Stack - JWT Authentication, Video 2 (37:34/39:02)
 1st, 
 POST http://localhost:5000/api/users/login 
 Body (> Params)
 x-www-url-encoded 
-key/value: for name, email, and password
+Key / Value: 
+email / ...
+password / ...
+'npm run dev'
 press send
 copy the token 
 
