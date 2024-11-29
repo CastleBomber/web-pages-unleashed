@@ -9,6 +9,7 @@ const {
 
 const { protect } = require("../middleware/authMiddleware");
 
+// Route start off with "/api/users"
 router.post("/", registerUser);
 router.post("/login", loginUser);
 router.get("/me", protect, getMe);

@@ -22,11 +22,11 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// Routes
 app.use("/api/goals", require("./routes/goalRoutes"));
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/wallets", require("./routes/walletRoutes"));
-//app.use("/api/users", require("./routes/walletRoutes"));
-
+app.use("/api/transactions", require("./routes/transactionRoutes"));
 
 // Serve frontend (development vs production)
 if (process.env.NODE_ENV === "production") {

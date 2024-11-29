@@ -173,34 +173,37 @@ export const TransactionProvider = ({ children }) => {
       setTransactionCount(transactionCount.toNumber());
 
       // Log the transaction to backend
-      //logTransactionToDB(tx, receipt);
+      logTransactionToDB(tx, receipt);
     } catch (error) {
       console.log(error);
     }
   };
 
+  // Creates the POST request
   async function logTransactionToDB(tx, receipt) {
-    const response = await fetch("/api/transactions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        walletAddress: tx.from, // Sender's address
-        recipient: tx.to,       // Recipient's address
-        amount: ethers.utils.formatEther(tx.value), // Amount in Ether
-        transactionHash: tx.hash,
-        status: receipt.status, // Transaction status (1 = success)
-        timestamp: new Date().toISOString(),
-      }),
-    });
-  
-    if (response.ok) {
+    try {
+      const response = await fetch("/api/transactions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          walletAddress: tx.from, // Sender's address
+          recipient: tx.to, // Recipient's address
+          amount: ethers.utils.formatEther(tx.value), // Amount in Ether
+          transactionHash: tx.hash,
+          status: receipt.status, // Transaction status (1 = success)
+          timestamp: new Date().toISOString(),
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(`Failed to log transaction: ${response.statusText}`);
+      }
       console.log("Transaction logged successfully");
-    } else {
-      console.error("Failed to log transaction");
+    } catch (error) {
+      console.error("Error logging transaction:", error);
     }
-  }  
+  }
 
   // Polling mechanism to check balance changes
   useEffect(() => {

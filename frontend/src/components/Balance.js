@@ -48,8 +48,8 @@ const Balance = () => {
         const response = await fetch(`/api/wallets/address/${currentAccount}`);
         const data = await response.json();
 
-        if (response.ok && data.user?.name) {
-          setDisplayName(data.user.name); // User name if found
+        if (response.ok && data.name) {
+          setDisplayName(data.name); // User name if found
         } else {
           setDisplayName("Guest User"); // Fallback to Guest User
         }

@@ -1,9 +1,10 @@
+import React, { useEffect } from "react";
 import GoalForm from "../features/goals/GoalForm";
 import GoalItem from "../features/goals/GoalItem";
 import Spinner from "../components/Spinner";
 import NavigationBar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { useEffect } from "react";
+import TransactionsDashboard from "../components/TransactionsDashboard";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getGoals, reset } from "../features/goals/goalSlice";
@@ -48,11 +49,10 @@ function Dashboard() {
         </nav>
 
         <main>
-          
           <h1>Welcome {user && user.name}!</h1>
           <GoalForm />
 
-          <h1 className="mt-5 mb-3">Goals/ Logged Transactions</h1>
+          <h1 className="mt-5 mb-3">Goals</h1>
           <section className="content mt-3">
             {goals.length > 0 ? (
               // For each goal, we will create a goal item to display
@@ -67,6 +67,8 @@ function Dashboard() {
               </div>
             )}
           </section>
+
+          <TransactionsDashboard loggedInUser={user} />
         </main>
 
         <footer className="p-10">
