@@ -1,0 +1,11 @@
+Solidity smart contract address, video: @1:32:33
+run this in smart-contract folder:
+
+npx hardhat run scripts/deploy.js --network sepolia
+
+command will create a contractAddress that we shall store in: 
+frontend/src/utils/constants.js
+and
+command will create folder/file: 
+smart-contract/artifacts/contract/Transactions.sol/Transactions.json
+we call this an ABI
