@@ -1,0 +1,15 @@
+# Show Local ethers version (directory)
+npm ls ethers
+
+# Latest version published to the npm registry, not the version installed locally
+npm show ethers version
+
+npm list ethers
+rm -rf node_modules package-lock.json
+npm install
+
+Gas Fees
+very sporadic results. spike after tinkering with ethers. better results with gas limit
+November 16th, 2024 Low  0.000032 SepoliaETH (hard coded gas)      Base fee (GWEI) 0.000620249
+December 13th, 2024 Low  0.000539 SepoliaETH (gas limit optimized) Base fee (GWEI) 24.156391059
+December 13th, 2024 High 0.00899 SepoliaETH (hard coded gas)       Base fee (GWEI) 426.615899634

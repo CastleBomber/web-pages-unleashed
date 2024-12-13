@@ -8,6 +8,7 @@ const transactionSchema = new mongoose.Schema(
     transactionHash: { type: String, required: true },
     status: {
       type: String,
+      required: true,
       enum: ["pending", "completed", "failed"],
       default: "pending",
     },

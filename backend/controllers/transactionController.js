@@ -1,15 +1,20 @@
 const asyncHandler = require("express-async-handler");
 const Transaction = require("../models/transactionModel");
 
-// Create a new transaction, handles the POST request
+// @desc    Log a transaction
+// @route   POST /api/transactions
+// @access  Public
 const createTransaction = asyncHandler(async (req, res) => {
   const { recipient, amount, status, transactionHash, walletAddress } =
     req.body;
 
-  if (!recipient || !amount || !walletAddress) {
+  if (!recipient || !amount || !walletAddress || !transactionHash || !status) {
     res.status(400);
     throw new Error("Please include all required fields");
   }
+
+  console.log("xxx");
+  console.log("Data to save:", req.body);
 
   const transaction = await Transaction.create({
     recipient,
@@ -18,6 +23,8 @@ const createTransaction = asyncHandler(async (req, res) => {
     transactionHash,
     walletAddress,
   });
+
+  console.log("Saved transaction:", transaction);
 
   res.status(201).json(transaction);
 });

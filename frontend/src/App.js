@@ -63,7 +63,10 @@
  *
  * Quick Fix:
  * Program not running with a bunch of error after downloading packages?
- * Then, delete package-lock.json and node_modules. Run 'npm install' after
+ * Then, delete package-lock.json and node_modules with:
+ * rm -rf node_modules package-lock.json
+ * Run:
+ *  'npm install' after
  *
  * In app, older syntax 'component', needs to be switched to 'element'
  * older syntax of 'Switch', need to be 'Router' surrounding 'Route'

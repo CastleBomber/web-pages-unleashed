@@ -4,6 +4,7 @@ import { contractABI, contractAddress } from "../utils/constants";
 import { toast } from "react-toastify";
 const { ethereum } = window;
 export const TransactionContext = React.createContext();
+const Big = require("big.js");
 
 const getEthereumContract = () => {
   const provider = new ethers.providers.Web3Provider(ethereum);
@@ -133,9 +134,24 @@ export const TransactionProvider = ({ children }) => {
 
       const { addressTo, amount } = formData;
       const transactionContract = getEthereumContract();
-      const parsedAmount = ethers.utils.parseEther(amount); // Decimal to GWEI
+      //const parsedAmount = ethers.utils.parseEther(amount); // Decimal to GWEI
+      const parsedAmount = new Big(amount).times(1e18).toFixed(0); // Convert to Wei (e.g., Ether to Wei)
+      const hexValue = `0x${parseInt(parsedAmount, 10).toString(16)}`; // Convert to hex
 
       console.log(`Loading - A`);
+
+      // Dynamically estimates gas to use
+      const gasLimit = await ethereum.request({
+        method: "eth_estimateGas",
+        params: [
+          {
+            from: currentAccount,
+            to: addressTo,
+            //value: parsedAmount._hex,
+            value: hexValue,
+          },
+        ],
+      });
 
       const tx = await ethereum.request({
         method: "eth_sendTransaction",
@@ -143,8 +159,10 @@ export const TransactionProvider = ({ children }) => {
           {
             from: currentAccount, // MetaMask account
             to: addressTo,
-            gas: "0x5208", // 21000 GWEI
-            value: parsedAmount._hex, // 0.00001
+            //gas: "0x5208", // 21000 GWEI
+            gas: gasLimit, 
+            //value: parsedAmount._hex, // 0.00001
+            value: hexValue,
           },
         ],
       });

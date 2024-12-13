@@ -21,6 +21,7 @@
   "homepage": "https://github.com/CastleBomber/Website-Demo#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "big.js": "^6.2.2",
     "bootstrap": "^5.3.0-alpha2",
     "colors": "^1.4.0",
     "dotenv": "^16.0.3",
