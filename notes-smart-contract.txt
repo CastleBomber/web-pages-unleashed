@@ -1,4 +1,10 @@
-Solidity smart contract address, video: @1:32:33
+npm install --save-dev hardhat
+npx hardhat init
+npx hardhat compile
+npx hardhat test
+
+
+Solidity smart contract address, video: @1:31:35
 run this in smart-contract folder:
 
 npx hardhat run scripts/deploy.js --network sepolia
@@ -8,4 +14,5 @@ frontend/src/utils/constants.js
 and
 command will create folder/file: 
 smart-contract/artifacts/contract/Transactions.sol/Transactions.json
-we call this an ABI
+we call this an ABI. we will copy this file and store it in:
+frontend/src/utils/Transactions.json

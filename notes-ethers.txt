@@ -8,8 +8,21 @@ npm list ethers
 rm -rf node_modules package-lock.json
 npm install
 
-Gas Fees
+Transaction Gas Fees
 very sporadic results. spike after tinkering with ethers. better results with gas limit
 November 16th, 2024 Low  0.000032 SepoliaETH (hard coded gas)      Base fee (GWEI) 0.000620249
 December 13th, 2024 Low  0.000539 SepoliaETH (gas limit optimized) Base fee (GWEI) 24.156391059
-December 13th, 2024 High 0.00899 SepoliaETH (hard coded gas)       Base fee (GWEI) 426.615899634
+December 13th, 2024 High 0.008990 SepoliaETH (hard coded gas)      Base fee (GWEI) 426.615899634
+December 14th, 2024 Low  0.000032 SepoliaETH                       Base fee (GWEI) 0.002437624
+December 26th, 2024 Low  0.000601 SepoliaETH                       Base fee (GWEI) 27.126665489
+December 28th, 2024 Low  0.000168 SepoliaETH                       Base fee (GWEI) 6.498140613
+December 29th, 2024 Low  0.000093 SepoliaETH                       Base fee (GWEI) 2.931444829
+
+
+Contract Build Fees (gas * price + value)
+December 26th, 2024 Low  0.0071 SepoliaETH              
+December 26th, 2024 Low  0.0031 SepoliaETH          
+
+
+Transaction Contract BlockChain Fees
+December 29th, 2024 Low  0.000542 SepoliaETH                       Base fee (GWEI) 2.873542817

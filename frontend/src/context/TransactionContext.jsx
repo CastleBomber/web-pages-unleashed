@@ -134,7 +134,6 @@ export const TransactionProvider = ({ children }) => {
 
       const { addressTo, amount } = formData;
       const transactionContract = getEthereumContract();
-      //const parsedAmount = ethers.utils.parseEther(amount); // Decimal to GWEI
       const parsedAmount = new Big(amount).times(1e18).toFixed(0); // Convert to Wei (e.g., Ether to Wei)
       const hexValue = `0x${parseInt(parsedAmount, 10).toString(16)}`; // Convert to hex
 
@@ -147,7 +146,6 @@ export const TransactionProvider = ({ children }) => {
           {
             from: currentAccount,
             to: addressTo,
-            //value: parsedAmount._hex,
             value: hexValue,
           },
         ],
@@ -159,9 +157,7 @@ export const TransactionProvider = ({ children }) => {
           {
             from: currentAccount, // MetaMask account
             to: addressTo,
-            //gas: "0x5208", // 21000 GWEI
-            gas: gasLimit, 
-            //value: parsedAmount._hex, // 0.00001
+            gas: gasLimit,
             value: hexValue,
           },
         ],
@@ -171,7 +167,7 @@ export const TransactionProvider = ({ children }) => {
         `Loading - Before transactionHash = await transactionContract.addToBlockChain()`
       );
 
-      const transactionHash = await transactionContract.addToBlockchain(
+      const transactionHash = await transactionContract.addToBlockChain(
         addressTo,
         parsedAmount
       );

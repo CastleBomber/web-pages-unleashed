@@ -6,3 +6,7 @@ Native tokens:
 
 ERC20 tokens:
 -USDC, Chainlink, Uniswap
+
+
+SepoliaETH Faucet:
+https://cloud.google.com/application/web3/faucet/ethereum/sepolia

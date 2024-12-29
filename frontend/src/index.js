@@ -9,9 +9,9 @@ import "./index.css";
 const container = document.getElementById("root");
 const root = createRoot(container);
 
-// index.js ~ main.js
+// index.js ~ main.js ~ main.jsx
 root.render(
-  <TransactionProvider>
+  <TransactionProvider> 
     <React.StrictMode>
       <Provider store={store}>
         <App />
