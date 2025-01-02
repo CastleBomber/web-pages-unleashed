@@ -1,0 +1,2 @@
+"TokenExpiredError: jwt expired" error
+User has been logged in too long, so log out and log back in
