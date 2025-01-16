@@ -33,10 +33,12 @@ const TransactionsDashboard = ({ loggedInUser }) => {
         <ul>
           {transactions.map((txn) => (
             <li key={txn._id}>
-              <p>Recipient: {txn.recipient}</p>
+              <p>From: </p>
+              <p>To: {txn.recipient}</p>
               <p>Amount: {txn.amount}</p>
-              <p>Status: {txn.status}</p>
-              <p>Transaction Hash: {txn.transactionHash}</p>
+              <p>Date: </p>
+              {/* <p>Status: {txn.status}</p>
+              <p>Transaction Hash: {txn.transactionHash}</p> */}
             </li>
           ))}
         </ul>

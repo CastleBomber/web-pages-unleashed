@@ -1,10 +1,11 @@
 const mongoose = require("mongoose");
+const { StringDecoder } = require("node:string_decoder");
 
 const transactionSchema = new mongoose.Schema(
   {
     walletAddress: { type: String, required: true },
     recipient: { type: String, required: true },
-    amount: { type: Number, required: true },
+    amount: { type: String, required: true },
     transactionHash: { type: String, required: true },
     status: {
       type: String,

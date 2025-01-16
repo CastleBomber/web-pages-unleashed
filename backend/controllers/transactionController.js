@@ -13,8 +13,7 @@ const createTransaction = asyncHandler(async (req, res) => {
     throw new Error("Please include all required fields");
   }
 
-  console.log("xxx");
-  console.log("Data to save:", req.body);
+  console.log("transactionController.js createTransaction(), Data to save:", req.body);
 
   const transaction = await Transaction.create({
     recipient,

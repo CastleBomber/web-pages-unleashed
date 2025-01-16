@@ -62,6 +62,7 @@ export const TransactionProvider = ({ children }) => {
         })
       );
 
+      console.log("Structured Transactions");
       console.log(structuredTransactions);
 
       setTransactions(structuredTransactions);
@@ -134,7 +135,7 @@ export const TransactionProvider = ({ children }) => {
 
       const { addressTo, amount } = formData;
       const transactionContract = getEthereumContract();
-      const parsedAmount = new Big(amount).times(1e18).toFixed(0); // Convert to Wei (e.g., Ether to Wei)
+      const parsedAmount = new Big(amount).times(1e18).toFixed(0); // Convert Ether to Wei
       const hexValue = `0x${parseInt(parsedAmount, 10).toString(16)}`; // Convert to hex
 
       console.log(`Loading - A`);
@@ -164,7 +165,7 @@ export const TransactionProvider = ({ children }) => {
       });
 
       console.log(
-        `Loading - Before transactionHash = await transactionContract.addToBlockChain()`
+        `Loading - Before: transactionHash = await transactionContract.addToBlockChain()`
       );
 
       const transactionHash = await transactionContract.addToBlockChain(
@@ -173,7 +174,7 @@ export const TransactionProvider = ({ children }) => {
       );
 
       console.log(
-        `Loading - After transactionHash = await transactionContract.addToBlockChain()`
+        `Loading - After: transactionHash = await transactionContract.addToBlockChain()`
       );
 
       // Wait for confirmation
@@ -187,29 +188,34 @@ export const TransactionProvider = ({ children }) => {
       setTransactionCount(transactionCount.toNumber());
 
       // Log the transaction to backend
-      logTransactionToDB(tx, receipt);
+      logTransactionToDB(currentAccount, addressTo, amount, transactionHash.hash);
     } catch (error) {
       console.log(error);
     }
   };
 
   // Creates the POST request
-  async function logTransactionToDB(tx, receipt) {
+  async function logTransactionToDB(walletAddress, recipient, amount, transactionHash) {
     try {
+      // Construct the POST request body
+      const requestBody = {
+        walletAddress,
+        recipient,
+        amount,
+        transactionHash,
+        status: "1",
+        timestamp: new Date().toISOString(),
+      };
+
+      // Send the POST request
       const response = await fetch("/api/transactions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          walletAddress: tx.from, // Sender's address
-          recipient: tx.to, // Recipient's address
-          amount: ethers.utils.formatEther(tx.value), // Amount in Ether
-          transactionHash: tx.hash,
-          status: receipt.status, // Transaction status (1 = success)
-          timestamp: new Date().toISOString(),
-        }),
+        body: JSON.stringify(requestBody), // Convert requestBody to JSON
       });
+
       if (!response.ok) {
         throw new Error(`Failed to log transaction: ${response.statusText}`);
       }
