@@ -10,7 +10,7 @@ const TransactionsDashboard = ({ loggedInUser }) => {
     if (loggedInUser?.walletAddress) {
       axios
         .get(`/api/transactions`, {
-          params: { walletAddress: loggedInUser.walletAddress },
+          params: { walletAddress: loggedInUser.walletAddress.toLowerCase() },
         })
         .then((response) => {
           setTransactions(response.data);

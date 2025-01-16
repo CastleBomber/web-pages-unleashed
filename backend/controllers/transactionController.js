@@ -13,7 +13,10 @@ const createTransaction = asyncHandler(async (req, res) => {
     throw new Error("Please include all required fields");
   }
 
-  console.log("transactionController.js createTransaction(), Data to save:", req.body);
+  console.log(
+    "transactionController.js createTransaction(), Data to save:",
+    req.body
+  );
 
   const transaction = await Transaction.create({
     recipient,
@@ -23,7 +26,7 @@ const createTransaction = asyncHandler(async (req, res) => {
     walletAddress,
   });
 
-  console.log("Saved transaction:", transaction);
+  console.log("✅ Transaction saved:", transaction);
 
   res.status(201).json(transaction);
 });
@@ -36,7 +39,9 @@ const getTransactions = asyncHandler(async (req, res) => {
     throw new Error("Wallet address is required");
   }
 
-  const transactions = await Transaction.find({ walletAddress });
+  const transactions = await Transaction.find({
+    walletAddress: walletAddress.toLowerCase(),
+  });
   res.status(200).json(transactions);
 });
 

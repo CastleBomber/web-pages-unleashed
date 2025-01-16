@@ -203,7 +203,7 @@ export const TransactionProvider = ({ children }) => {
         recipient,
         amount,
         transactionHash,
-        status: "1",
+        status: "completed",
         timestamp: new Date().toISOString(),
       };
 
