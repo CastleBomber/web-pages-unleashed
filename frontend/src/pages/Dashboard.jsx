@@ -67,9 +67,11 @@ function Dashboard() {
               </div>
             )}
           </section>
-
-          <TransactionsDashboard loggedInUser={user} />
         </main>
+
+        <article className="article">
+          <TransactionsDashboard loggedInUser={user} />
+        </article>
 
         <footer className="p-10">
           <Footer />

@@ -19,8 +19,7 @@ export const Home = () => {
 
       <main></main>
       <footer>
-        <h3>*Log into WPU account and use the Dashboard to view past transactions*</h3>
-        <h3>*the past six transactions from users via the blockchain</h3>
+        <h3>Latest Blockchain Transaction from Users</h3>
         <Footer />
       </footer>
     </div>

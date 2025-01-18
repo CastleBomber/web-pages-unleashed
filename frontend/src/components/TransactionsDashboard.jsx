@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { shortenAddress, shortenDateFormat } from "../utils/shortenAddress";
 import axios from "axios";
 
 const TransactionsDashboard = ({ loggedInUser }) => {
@@ -28,22 +29,26 @@ const TransactionsDashboard = ({ loggedInUser }) => {
 
   return (
     <div>
-      <h2>Wallet Transactions</h2>
+      <h2 style={{ color: "#fff", textAlign: "center", marginBottom: "20px" }}>
+        Latest Database Transactions from User
+      </h2>
       {transactions.length > 0 ? (
-        <ul>
-          {transactions.map((txn) => (
-            <li key={txn._id}>
-              <p>From: </p>
-              <p>To: {txn.recipient}</p>
-              <p>Amount: {txn.amount}</p>
-              <p>Date: </p>
-              {/* <p>Status: {txn.status}</p>
-              <p>Transaction Hash: {txn.transactionHash}</p> */}
-            </li>
+        <div className="transactions-grid">
+          {transactions.slice(0, 6).map((txn) => (
+            <div key={txn._id} className="transaction-card">
+              <p className="from-address">
+                From: {shortenAddress(txn.walletAddress)}
+              </p>
+              <p className="to-address">To: {shortenAddress(txn.recipient)}</p>
+              <p className="amount">Amount: {txn.amount}</p>
+              <p className="date">Date: {shortenDateFormat(txn.timestamp)}</p>
+            </div>
           ))}
-        </ul>
+        </div>
       ) : (
-        <p>No transactions found.</p>
+        <p style={{ color: "#fff", textAlign: "center" }}>
+          No transactions found.
+        </p>
       )}
     </div>
   );
