@@ -6,6 +6,7 @@ Moon, moon@gg.com, moon
 
 New Database Users
 CBombs, b@c.com, Account 1, hack123
+Angel, a@a.com, Account 2, hack123
 
 MetaMask Wallet Addresses
 Account 1

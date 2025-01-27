@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { shortenAddress, shortenDateFormat } from "../utils/shortenAddress";
 import axios from "axios";
 
+// Transactions pulled from database
 const TransactionsDashboard = ({ loggedInUser }) => {
   const [transactions, setTransactions] = useState([]);
   const [error, setError] = useState("");
@@ -14,7 +15,11 @@ const TransactionsDashboard = ({ loggedInUser }) => {
           params: { walletAddress: loggedInUser.walletAddress.toLowerCase() },
         })
         .then((response) => {
-          setTransactions(response.data);
+          // Sort the transactions by timestamp (newest first) and set the state
+          const sortedTransactions = response.data.sort(
+            (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+          );
+          setTransactions(sortedTransactions);
         })
         .catch((err) => {
           console.error(err);
@@ -25,7 +30,7 @@ const TransactionsDashboard = ({ loggedInUser }) => {
     }
   }, [loggedInUser]);
 
-  if (error) return <p>{error}</p>;
+  if (error) return <p className="error-message">{error}</p>;
 
   return (
     <div>

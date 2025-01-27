@@ -1,83 +1,83 @@
-// // No longer used
-// import React, { useContext } from "react";
-// import useFetch from "../hooks/useFetch";
-// import dummyData from "../utils/dummyData";
-// import { TransactionContext } from "../context/TransactionContext";
-// import { shortenAddress } from "../utils/shortenAddress";
+// No longer used
+import React, { useContext } from "react";
+import useFetch from "../hooks/useFetch";
+import dummyData from "../utils/dummyData";
+import { TransactionContext } from "../context/TransactionContext";
+import { shortenAddress } from "../utils/shortenAddress";
 
-// const TransactionCard = ({
-//   addressTo,
-//   addressFrom,
-//   timestamp,
-//   message,
-//   keyword,
-//   amount,
-//   url,
-// }) => {
-//   const gifURL = useFetch({ keyword });
+const TransactionCard = ({
+  addressTo,
+  addressFrom,
+  timestamp,
+  message,
+  keyword,
+  amount,
+  url,
+}) => {
+  const gifURL = useFetch({ keyword });
 
-//   return (
-//     <div>
-//       <div className="flex flex-col items-center w-full mt-3">
-//         <div className="display-flex justify-start w-full mb-6 p-2">
-//           <a
-//             href={`https://${addressFrom}`}
-//             target="_blank"
-//             rel="noopener noreferrer"
-//           >
-//             <p className="text-white text-base">
-//               From: {shortenAddress(addressFrom)}
-//             </p>
-//           </a>
-//           <a
-//             href={`https://${addressTo}`}
-//             target="_blank"
-//             rel="noopener noreferrer"
-//           >
-//             <p className="text-white text-base">
-//               To: {shortenAddress(addressTo)}
-//             </p>
-//           </a>
-//           <p className="text-white text-base">Amount: {amount} ETH</p>
-//           {message && (
-//             <>
-//               <br />
-//               <p className="text-white text-base">Message: {message}</p>
-//             </>
-//           )}
-//         </div>
+  return (
+    <div>
+      <div className="flex flex-col items-center w-full mt-3">
+        <div className="display-flex justify-start w-full mb-6 p-2">
+          <a
+            href={`https://${addressFrom}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <p className="text-white text-base">
+              From: {shortenAddress(addressFrom)}
+            </p>
+          </a>
+          <a
+            href={`https://${addressTo}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <p className="text-white text-base">
+              To: {shortenAddress(addressTo)}
+            </p>
+          </a>
+          <p className="text-white text-base">Amount: {amount} ETH</p>
+          {message && (
+            <>
+              <br />
+              <p className="text-white text-base">Message: {message}</p>
+            </>
+          )}
+        </div>
 
-//         <img
-//           src={gifURL || url}
-//           alt="nature"
-//           className="w-full h-64 2xl:h-96 rounded-md shadow-lg object-cover"
-//         />
-//         <div className="bg-black p-3 px-5 w-max rounded-3xl -mt-5 shadow-2xl">
-//           <p className="text-[#37c7da] font-bold">{timestamp}</p>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
+        <img
+          src={gifURL || url}
+          alt="nature"
+          className="w-full h-64 2xl:h-96 rounded-md shadow-lg object-cover"
+        />
+        <div className="bg-black p-3 px-5 w-max rounded-3xl -mt-5 shadow-2xl">
+          <p className="text-[#37c7da] font-bold">{timestamp}</p>
+        </div>
+      </div>
+    </div>
+  );
+};
 
-// const Transactions = () => {
-//   const { transactions, currentAccount } = useContext(TransactionContext);
+const Transactions = () => {
+  const { transactions, currentAccount } = useContext(TransactionContext);
 
-//   return (
-//     <div className="flex w-full justify-center items-center 2xl:px-20 gradient-bg-transactions">
-//       <div className="flex flex-col md:p-12 py-12 px-4">
-//         {currentAccount ? (
-//           <h3 className="text-white text-3xl text-center my-2">
-//             Latest Transactions
-//           </h3>
-//         ) : (
-//           <h3 className="text-white text-3xl text-center my-2">
-//             Connect your account to see the latest transactions
-//           </h3>
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
+  return (
+    <div className="flex w-full justify-center items-center 2xl:px-20 gradient-bg-transactions">
+      <div className="flex flex-col md:p-12 py-12 px-4">
+        {currentAccount ? (
+          <h3 className="text-white text-3xl text-center my-2">
+            Latest Transactions
+          </h3>
+        ) : (
+          <h3 className="text-white text-3xl text-center my-2">
+            Connect your account to see the latest transactions
+          </h3>
+        )}
+      </div>
+    </div>
+  );
+};
 
-// export default Transactions;
+export default Transactions;

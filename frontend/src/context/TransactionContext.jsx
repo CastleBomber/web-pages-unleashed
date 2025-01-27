@@ -40,6 +40,7 @@ export const TransactionProvider = ({ children }) => {
     setFormData((prevState) => ({ ...prevState, [name]: e.target.value }));
   };
 
+  // Transactions from the Blockchain
   const getAllTransactions = async () => {
     try {
       if (!ethereum) {
@@ -62,8 +63,8 @@ export const TransactionProvider = ({ children }) => {
         })
       );
 
-      console.log("Structured Transactions");
-      console.log(structuredTransactions);
+      //console.log("Structured Transactions");
+      //console.log(structuredTransactions);
 
       setTransactions(structuredTransactions);
     } catch (error) {
@@ -194,7 +195,7 @@ export const TransactionProvider = ({ children }) => {
     }
   };
 
-  // Creates the POST request
+  // Creates the POST request to MongoDB
   async function logTransactionToDB(walletAddress, recipient, amount, transactionHash) {
     try {
       // Construct the POST request body
@@ -275,6 +276,7 @@ export const TransactionProvider = ({ children }) => {
         transactions,
         isLoading,
         transactionCount,
+        getAllTransactions
       }}
     >
       {children}

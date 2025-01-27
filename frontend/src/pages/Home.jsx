@@ -2,10 +2,9 @@ import React from "react";
 import Footer from "../components/Footer";
 import Balance from "../components/Balance";
 import NavigationBar from "../components/Navbar";
-import "../utils/card-info.json";
+import TransactionsHome from "../components/TransactionsHome";
 
 export const Home = () => {
-
   return (
     <div className="home">
       <nav>
@@ -17,9 +16,11 @@ export const Home = () => {
         <Balance />
       </header>
 
-      <main></main>
+      <main>
+        <TransactionsHome />
+      </main>
+
       <footer>
-        <h3>Latest Blockchain Transaction from Users</h3>
         <Footer />
       </footer>
     </div>
