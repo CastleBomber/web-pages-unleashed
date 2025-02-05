@@ -91,7 +91,7 @@ const Balance = () => {
       <div className="crypto-card mb-3 mt-3">
         <div className="crypto-card-container-1">
           <SiEthereum />
-          <BsInfoCircle />
+          {/* <BsInfoCircle /> */}
         </div>
         <div className="crypto-card-container-2">
           <div className="p1">{displayName}</div>

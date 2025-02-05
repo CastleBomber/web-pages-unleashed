@@ -34,7 +34,7 @@ function Register() {
     }
 
     if (isSuccess || user) {
-      navigate("/");
+      navigate("/Dashboard");
     }
     dispatch(reset());
   }, [user, isError, isSuccess, message, navigate, dispatch]);
