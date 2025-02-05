@@ -33,11 +33,9 @@ Uses a full-stack JWT authentication system, enabling: create, read, update and 
 ## Highlights
 
 <p align = "center">
-<img alt="UML-LS-v1" src="https://github.com/CastleBomber/web-pages-unleashed/blob/main/frontend/src/images/home-page.jpg">
+<img alt="UML-LS-v1" src="https://github.com/CastleBomber/web-pages-unleashed/blob/main/frontend/src/images/home-page.jpg" style="margin-bottom: 20px;">
 
-<br />
-
-<img width="441" alt="UML-LS-v1" src="https://github.com/CastleBomber/web-pages-unleashed/blob/main/frontend/src/images/dashboard.jpg">
+<img alt="UML-LS-v1" src="https://github.com/CastleBomber/web-pages-unleashed/blob/main/frontend/src/images/dashboard.jpg">
 
 </p>
 
