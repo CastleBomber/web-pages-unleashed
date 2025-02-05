@@ -32,7 +32,7 @@
  * npx hardhat (toolbox option) vs
  * npm install --save-dev hardhat @nomiclabs/hardhat-waffle ethereum-waffle chai @nomiclabs/hardhat-ethers ethers
  * npx hardhat run scripts/deploy.js --network sepolia
- * 
+ *
  *
  * Shortcuts:
  *  VS Code:
@@ -104,7 +104,9 @@ class App extends Component {
   render() {
     return (
       <>
-        <BrowserRouter>
+        <BrowserRouter
+          future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+        >
           <div>
             <Routes>
               <Route path="/" element={<Home />} />
