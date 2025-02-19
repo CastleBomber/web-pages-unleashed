@@ -4,7 +4,7 @@ npx hardhat compile
 npx hardhat test
 
 
-Solidity smart contract address, video: @1:31:35
+Solidity smart contract address, video: @1:31:30
 run this in smart-contract folder:
 
 npx hardhat run scripts/deploy.js --network sepolia
@@ -15,4 +15,4 @@ and
 command will create folder/file: 
 smart-contract/artifacts/contract/Transactions.sol/Transactions.json
 we call this an ABI. we will copy this file and store it in:
-frontend/src/utils/Transactions.json
+frontend/src/utils/Transactions.json 
