@@ -125,6 +125,26 @@ const Balance = () => {
           />
         </Form.Group>
 
+        <Form.Group className="mb-3">
+          <Form.Label>Keyword</Form.Label>
+          <Input
+            placeholder="Keyword (GIF)"
+            name="keyword"
+            type="text"
+            handleChange={handleChange}
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>Enter Message</Form.Label>
+          <Input
+            placeholder="Enter Message"
+            name="message"
+            type="text"
+            handleChange={handleChange}
+          />
+        </Form.Group>
+
         {/* Loader */}
         {isLoading ? (
           <Spinner />

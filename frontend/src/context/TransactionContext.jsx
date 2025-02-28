@@ -26,6 +26,8 @@ export const TransactionProvider = ({ children }) => {
   const [formData, setFormData] = useState({
     addressTo: "",
     amount: "",
+    keyword: "",
+    message: "",
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -59,6 +61,8 @@ export const TransactionProvider = ({ children }) => {
           timestamp: new Date(
             transaction.timestamp.toNumber() * 1000
           ).toLocaleString(),
+          message: transaction.message,
+          keyword: transaction.keyword,
           amount: parseInt(transaction.amount._hex) / 10 ** 18,
         })
       );
@@ -131,7 +135,7 @@ export const TransactionProvider = ({ children }) => {
     try {
       if (!ethereum) return alert("please install metamask");
 
-      const { addressTo, amount } = formData;
+      const { addressTo, amount, keyword, message } = formData;
       const transactionContract = getEthereumContract();
       const parsedAmount = new Big(amount).times(1e18).toFixed(0); // Convert Ether to Wei
       const hexValue = `0x${parseInt(parsedAmount, 10).toString(16)}`; // Convert to hex
@@ -168,7 +172,9 @@ export const TransactionProvider = ({ children }) => {
 
       const transactionHash = await transactionContract.addToBlockChain(
         addressTo,
-        parsedAmount
+        parsedAmount,
+        message,
+        keyword
       );
 
       console.log(
@@ -186,14 +192,24 @@ export const TransactionProvider = ({ children }) => {
       setTransactionCount(transactionCount.toNumber());
 
       // Log the transaction to backend
-      logTransactionToDB(currentAccount, addressTo, amount, transactionHash.hash);
+      logTransactionToDB(
+        currentAccount,
+        addressTo,
+        amount,
+        transactionHash.hash
+      );
     } catch (error) {
       console.log(error);
     }
   };
 
   // Creates the POST request to MongoDB
-  async function logTransactionToDB(walletAddress, recipient, amount, transactionHash) {
+  async function logTransactionToDB(
+    walletAddress,
+    recipient,
+    amount,
+    transactionHash
+  ) {
     try {
       // Construct the POST request body
       const requestBody = {
@@ -273,7 +289,7 @@ export const TransactionProvider = ({ children }) => {
         transactions,
         isLoading,
         transactionCount,
-        getAllTransactions
+        getAllTransactions,
       }}
     >
       {children}

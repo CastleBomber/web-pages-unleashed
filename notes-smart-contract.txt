@@ -3,6 +3,9 @@ npx hardhat init
 npx hardhat compile
 npx hardhat test
 
+Do we need to clean up folder beforehand? Probably not
+rm -rf artifacts cache node_modules package-lock.json
+npm install
 
 Solidity smart contract address, video: @1:31:30
 run this in smart-contract folder:
@@ -16,3 +19,6 @@ command will create folder/file:
 smart-contract/artifacts/contract/Transactions.sol/Transactions.json
 we call this an ABI. we will copy this file and store it in:
 frontend/src/utils/Transactions.json 
+
+When making solidity code adjustments
+TransactionContext.jsx will need to be updated to reflect proper usage

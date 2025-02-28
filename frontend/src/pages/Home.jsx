@@ -18,8 +18,9 @@ export const Home = () => {
       </header>
 
       <main>
-        <TransactionsHome />
+        
         <TransactionGifCards />
+        <TransactionsHome />
       </main>
 
       <footer>
