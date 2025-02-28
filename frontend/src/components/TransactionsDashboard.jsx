@@ -34,9 +34,7 @@ const TransactionsDashboard = ({ loggedInUser }) => {
 
   return (
     <div>
-      <h2 style={{ color: "#fff", textAlign: "center", marginBottom: "20px" }}>
-        Latest Database Transactions from User
-      </h2>
+      <h2>Latest Database Transactions from User</h2>
       {transactions.length > 0 ? (
         <div className="transactions-grid">
           {transactions.slice(0, 6).map((txn) => (
@@ -51,9 +49,7 @@ const TransactionsDashboard = ({ loggedInUser }) => {
           ))}
         </div>
       ) : (
-        <p style={{ color: "#fff", textAlign: "center" }}>
-          No transactions found.
-        </p>
+        <p className="error-message">No transactions found.</p>
       )}
     </div>
   );

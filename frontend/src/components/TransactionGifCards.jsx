@@ -19,42 +19,32 @@ const TransactionGifCard = ({
 
   return (
     <div>
-      <div className="flex flex-col items-center w-full mt-3">
-        <div className="display-flex justify-start w-full mb-6 p-2">
-          <a
-            href={`https://${addressFrom}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <p className="text-white text-base">
-              From: {shortenAddress(addressFrom)}
-            </p>
-          </a>
-          <a
-            href={`https://${addressTo}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <p className="text-white text-base">
-              To: {shortenAddress(addressTo)}
-            </p>
-          </a>
-          <p className="text-white text-base">Amount: {amount} ETH</p>
-          {message && (
-            <>
-              <br />
-              <p className="text-white text-base">Message: {message}</p>
-            </>
-          )}
-        </div>
-
+      <div className="transaction-card">
         <img
           src={gifURL || url}
           alt="nature"
           className="w-full h-64 2xl:h-96 rounded-md shadow-lg object-cover"
         />
-        <div className="bg-black p-3 px-5 w-max rounded-3xl -mt-5 shadow-2xl">
-          <p className="text-[#37c7da] font-bold">{timestamp}</p>
+
+        <p className="amount">Amount: {amount} ETH</p>
+        {message && (
+          <>
+            <br />
+            <p>Message: {message}</p>
+          </>
+        )}
+
+        <div className="display-flex justify-start w-full mb-6 p-2">
+          <p className="from-address">
+            From: {shortenAddress(addressFrom)}
+          </p>
+          <p className="to-address">
+              To: {shortenAddress(addressTo)}
+            </p>
+        </div>
+
+        <div>
+          <p className="date">{timestamp}</p>
         </div>
       </div>
     </div>
@@ -65,19 +55,22 @@ const TransactionGifCards = () => {
   const { transactions, currentAccount } = useContext(TransactionContext);
 
   return (
-    <div className="transactions-grid">
+    <div>
+      <h2>Latest Blockchain Transactions with GIFs</h2>
       {currentAccount ? (
-        <h2>Latest Transactions</h2>
+        <div className="transactions-grid">
+          <div>
+            {/* {[...dummyData, ...transactions].reverse().map((transaction, i) => ( */}
+            {transactions.reverse().map((transaction, i) => (
+              <TransactionGifCard key={i} {...transaction} />
+            ))}
+          </div>
+        </div>
       ) : (
-        <h2>Connect your account to see the latest transactions</h2>
+        <p className="error-message">
+          Connect your account to see the latest transactions
+        </p>
       )}
-
-      <div className="transaction-card">
-        {/* {[...dummyData, ...transactions].reverse().map((transaction, i) => ( */}
-        {transactions.reverse().map((transaction, i) => (
-          <TransactionGifCard key={i} {...transaction} />
-        ))}
-      </div>
     </div>
   );
 };

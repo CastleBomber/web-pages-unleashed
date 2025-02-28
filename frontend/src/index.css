@@ -1,6 +1,6 @@
 /* All pages and components */
 body {
-  background-color:  #1e1e2f;
+  background-color: #1e1e2f;
   font-family: Georgia, "Times New Roman", Times, serif;
 }
 
@@ -217,13 +217,64 @@ footer {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border: solid;
   border-radius: 25px;
-  background-color: #383;
+  background: linear-gradient(
+    135deg,
+    #006400,
+    #228b22,
+    #32cd32
+  ); /* Green shades */
   width: 360px;
   height: 200px;
+  position: relative;
+  overflow: hidden;
+  padding: 6px; /* Prevents inner green from misaligning */
+  box-shadow: 0 0 10px gold;
 }
 
+/* Fixing Gold Metallic Border */
+.crypto-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit; /* Ensures rounded corners match */
+  padding: 6px;
+  background: linear-gradient(45deg, #ffd700, #ffecb3, #c0b283, #ffd700);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Shimmering Effect */
+.crypto-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.6) 50%,
+    transparent 60%
+  );
+  animation: shimmer 3s infinite linear;
+  opacity: 0.3;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Inner card components */
 .crypto-card-container-1 {
   display: flex;
   justify-content: space-between;
@@ -285,7 +336,6 @@ label.form-label {
   margin-right: auto;
   margin-left: auto;
 }
-
 
 /* Goals, Page Green */
 .goals {
