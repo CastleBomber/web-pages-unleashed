@@ -32,7 +32,7 @@ const TransactionsHome = () => {
             ))}
           </div>
         ) : (
-          <p style={{ color: "#fff", textAlign: "center" }}>
+          <p className="error-message">
             No transactions found.
           </p>
         )
