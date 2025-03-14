@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import useFetch from "../hooks/useFetch";
 import { TransactionContext } from "../context/TransactionContext";
-import { shortenAddress } from "../utils/shortenAddress";
+import { shortenAddress, shortenDateFormat } from "../utils/shortenAddress";
 import { SiEthereum } from "react-icons/si";
 
 const TransactionGifCard = ({
@@ -25,18 +25,23 @@ const TransactionGifCard = ({
         </p>
         {message && (
           <>
-            <br />
-            <p>Message: {message}</p>
+            <p className="message">{message}</p>
           </>
         )}
 
         <div>
-          <p className="from-address">From: {shortenAddress(addressFrom)}</p>
-          <p className="to-address">To: {shortenAddress(addressTo)}</p>
+          <p className="address-title">
+            <span className="from-label">From</span>
+            <span className="to-label">To</span>
+          </p>
+
+          <p className="from-address">
+            {shortenAddress(addressFrom)} → {shortenAddress(addressTo)}
+          </p>
         </div>
 
         <div>
-          <p className="date">{timestamp}</p>
+          <p className="date">{shortenDateFormat(timestamp)}</p>
         </div>
       </div>
     </div>
@@ -53,7 +58,7 @@ const TransactionGifCards = () => {
 
   return (
     <div>
-      <h2>Latest Blockchain Transactions with GIFs</h2>
+      <h2>Latest Transactions</h2>
       {currentAccount ? (
         transactions?.length > 0 ? (
           <div className="transactions-grid">

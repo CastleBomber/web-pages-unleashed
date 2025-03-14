@@ -1,26 +1,17 @@
 // This may be an original class I created, probably morphed from another script
 import React, { useContext, useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
+import InputGroup from "react-bootstrap/InputGroup";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Spinner from "../components/Spinner";
 import { TransactionContext } from "../context/TransactionContext";
 import { SiEthereum } from "react-icons/si";
-import { BsInfoCircle } from "react-icons/bs";
 import { shortenAddress, shortenBalance } from "../utils/shortenAddress";
 import { AiFillPlayCircle } from "react-icons/ai";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-const Input = ({ placeholder, name, type, value, handleChange }) => (
-  <input
-    className="input"
-    placeholder={placeholder}
-    type={type}
-    step="0.0001"
-    value={value}
-    onChange={(e) => handleChange(e, name)}
-  />
-);
 
 // Display Crypto balances on Home page
 const Balance = () => {
@@ -91,7 +82,6 @@ const Balance = () => {
       <div className="crypto-card mb-3 mt-3">
         <div className="crypto-card-container-1">
           <SiEthereum />
-          {/* <BsInfoCircle /> */}
         </div>
         <div className="crypto-card-container-2">
           <div className="p1">{displayName}</div>
@@ -105,45 +95,58 @@ const Balance = () => {
 
       {/* Form for user inputs: address to and amount */}
       <Form className="mt-3">
-        <Form.Group className="mb-3">
-          <Form.Label size="lg">Address to</Form.Label>
-          <Input
-            placeholder="Address To"
-            name="addressTo"
-            type="text"
-            handleChange={handleChange}
-          />
-        </Form.Group>
+        <Row>
+          <Col xs={7}>
+            <InputGroup className="mb-3">
+              <InputGroup.Text>Address To</InputGroup.Text>
+              <Form.Control
+                placeholder="0x1234"
+                name="addresTo"
+                type="text"
+                value={formData.addressTo}
+                onChange={(e) => handleChange(e, "addressTo")}
+              />
+            </InputGroup>
+          </Col>
 
-        <Form.Group className="mb-3">
-          <Form.Label>Amount</Form.Label>
-          <Input
-            placeholder="Amount (ETH)"
-            name="amount"
-            type="number"
-            handleChange={handleChange}
-          />
-        </Form.Group>
+          <Col>
+            <InputGroup className="mb-3">
+              <InputGroup.Text>Amount</InputGroup.Text>
+              <Form.Control
+                placeholder="♦ 1.000"
+                name="amount"
+                type="number"
+                value={formData.amount}
+                onChange={(e) => handleChange(e, "amount")}
+              />
+            </InputGroup>
+          </Col>
+        </Row>
 
-        <Form.Group className="mb-3">
-          <Form.Label>Keyword</Form.Label>
-          <Input
-            placeholder="Keyword (GIF)"
-            name="keyword"
-            type="text"
-            handleChange={handleChange}
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>Enter Message</Form.Label>
-          <Input
-            placeholder="Enter Message"
-            name="message"
-            type="text"
-            handleChange={handleChange}
-          />
-        </Form.Group>
+        <Row>
+          <Col xs={7}>
+            <InputGroup className="mb-3">
+              <InputGroup.Text>Message</InputGroup.Text>
+              <Form.Control
+                placeholder="Message"
+                name="message"
+                type="text"
+                onChange={(e) => handleChange(e, "message")}
+              />
+            </InputGroup>
+          </Col>
+          <Col>
+            <InputGroup className="mb-3">
+              <InputGroup.Text>GIF Keyword</InputGroup.Text>
+              <Form.Control
+                placeholder="Keyword"
+                name="keyword"
+                type="text"
+                onChange={(e) => handleChange(e, "keyword")}
+              />
+            </InputGroup>
+          </Col>
+        </Row>
 
         {/* Loader */}
         {isLoading ? (
