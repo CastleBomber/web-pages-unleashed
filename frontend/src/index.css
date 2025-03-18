@@ -401,14 +401,8 @@ label.form-label {
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.7);
 }
 
-.transaction-card .amount {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #00e676;
-}
-
 /* Combines the amount into the gif image */
-.transaction-card .gif-amount {
+.transaction-card .home-amount {
   background-color: black;
   padding: 12px 20px;
   border-radius: 25px;
@@ -418,9 +412,29 @@ label.form-label {
   position: relative;
   margin-top: -30px; /* Moves it up slightly over the image */
   z-index: 1;
+  text-align: center;
 }
 
-.gif-amount svg {
+.home-amount svg {
+  margin-right: 5px; /* Add spacing between Ethereum icon and amount */
+}
+
+.transaction-card .dashboard-amount {
+  background-color: black;
+  padding: 8px 16px;
+  border-radius: 25px;
+  color: #00e676;
+  font-weight: bold;
+  box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.1);
+  position: relative;
+  margin-top: 10px; /* Add space above/below amount */
+  margin-bottom: 10px;
+  z-index: 1;
+  display: inline-block;
+  text-align: center;
+}
+
+.dashboard-amount svg {
   margin-right: 5px;
 }
 
@@ -430,7 +444,7 @@ label.form-label {
   font-weight: bold;
 }
 
-.transaction-card .address-title {
+.transaction-card .address-labels {
   display: flex;
   justify-content: space-between;
   padding: 0 30px;
@@ -440,21 +454,20 @@ label.form-label {
   margin: 0;
 }
 
-.transaction-card .from-label,
-.transaction-card .to-label {
+.transaction-card .address-from-label,
+.transaction-card .address-to-label {
   flex: 1;
 }
 
-.transaction-card .from-label {
+.transaction-card .address-from-label {
   text-align: left;
 }
 
-.transaction-card .to-label {
+.transaction-card .adress-to-label {
   text-align: right;
 }
 
-.transaction-card .from-address,
-.transaction-card .to-address {
+.transaction-card .addresses {
   text-align: center;
   font-size: 0.9rem;
   color: #90caf9;

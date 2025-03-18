@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { shortenAddress, shortenDateFormat } from "../utils/shortenAddress";
 import axios from "axios";
+import { SiEthereum } from "react-icons/si";
 
-// Transactions pulled from database
-const TransactionsDashboard = ({ loggedInUser }) => {
+// [Dashboard] Transactions pulled from database
+const TransactionsDBCards = ({ loggedInUser }) => {
   const [transactions, setTransactions] = useState([]);
   const [error, setError] = useState("");
 
@@ -39,12 +40,22 @@ const TransactionsDashboard = ({ loggedInUser }) => {
         <div className="transactions-grid">
           {transactions.slice(0, 6).map((txn) => (
             <div key={txn._id} className="transaction-card">
-              <p className="from-address">
-                From: {shortenAddress(txn.walletAddress)}
+              <p className="dashboard-amount">
+                <SiEthereum />
+                {txn.amount} ETH
               </p>
-              <p className="to-address">To: {shortenAddress(txn.recipient)}</p>
-              <p className="amount">Amount: {txn.amount}</p>
-              <p className="date">Date: {shortenDateFormat(txn.timestamp)}</p>
+
+              <div>
+                <p className="address-labels">
+                  <span className="address-from-label">From</span>
+                  <span className="address-to-label">To</span>
+                </p>
+                <p className="addresses">
+                  {shortenAddress(txn.recipient)} →{" "}
+                  {shortenDateFormat(txn.timestamp)}
+                </p>
+              </div>
+              <p className="date">{shortenDateFormat(txn.timestamp)}</p>
             </div>
           ))}
         </div>
@@ -55,4 +66,4 @@ const TransactionsDashboard = ({ loggedInUser }) => {
   );
 };
 
-export default TransactionsDashboard;
+export default TransactionsDBCards;

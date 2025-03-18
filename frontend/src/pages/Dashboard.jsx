@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import NavigationBar from "../components/Navbar";
 import Footer from "../components/Footer";
-import TransactionsDashboard from "../components/TransactionsDashboard";
+import TransactionsDBCards from "../components/TransactionDBCards";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -15,7 +15,7 @@ function Dashboard() {
     if (!user) {
       // If user is not signed in, navigates to login page
       navigate("/login");
-    } 
+    }
   }, [user, navigate]);
 
   return (
@@ -30,7 +30,7 @@ function Dashboard() {
         </main>
 
         <article className="article">
-          <TransactionsDashboard loggedInUser={user} />
+          <TransactionsDBCards loggedInUser={user} />
         </article>
 
         <footer className="p-10">

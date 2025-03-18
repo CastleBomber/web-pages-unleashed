@@ -2,8 +2,7 @@ import React from "react";
 import Footer from "../components/Footer";
 import Balance from "../components/Balance";
 import NavigationBar from "../components/Navbar";
-import TransactionsHome from "../components/TransactionsHome";
-import TransactionGifCards from "../components/TransactionGifCards";
+import TransactionBCGifCards from "../components/TransactionBCGifCards";
 
 export const Home = () => {
   return (
@@ -18,9 +17,7 @@ export const Home = () => {
       </header>
 
       <main>
-        
-        <TransactionGifCards />
-        <TransactionsHome />
+        <TransactionBCGifCards />
       </main>
 
       <footer>

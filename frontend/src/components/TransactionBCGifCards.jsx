@@ -4,7 +4,8 @@ import { TransactionContext } from "../context/TransactionContext";
 import { shortenAddress, shortenDateFormat } from "../utils/shortenAddress";
 import { SiEthereum } from "react-icons/si";
 
-const TransactionGifCard = ({
+// [Home] Transactions pulled from the blockchain's smart contract
+const TransactionBCGifCard = ({
   addressTo,
   addressFrom,
   timestamp,
@@ -19,7 +20,7 @@ const TransactionGifCard = ({
     <div>
       <div className="transaction-card">
         <img src={gifURL || url} alt="nature" className="image" />
-        <p className="gif-amount">
+        <p className="home-amount">
           <SiEthereum />
           {amount} ETH
         </p>
@@ -30,12 +31,12 @@ const TransactionGifCard = ({
         )}
 
         <div>
-          <p className="address-title">
-            <span className="from-label">From</span>
-            <span className="to-label">To</span>
+          <p className="address-labels">
+            <span className="address-from-label">From</span>
+            <span className="address-to-label">To</span>
           </p>
 
-          <p className="from-address">
+          <p className="addresses">
             {shortenAddress(addressFrom)} → {shortenAddress(addressTo)}
           </p>
         </div>
@@ -48,7 +49,7 @@ const TransactionGifCard = ({
   );
 };
 
-const TransactionGifCards = () => {
+const TransactionBCGifCards = () => {
   const { transactions, currentAccount } = useContext(TransactionContext);
 
   // Get the 6 newest transactions
@@ -63,7 +64,7 @@ const TransactionGifCards = () => {
         transactions?.length > 0 ? (
           <div className="transactions-grid">
             {getNewestTransactions(transactions).map((txn, i) => (
-              <TransactionGifCard key={i} {...txn} />
+              <TransactionBCGifCard key={i} {...txn} />
             ))}
           </div>
         ) : (
@@ -78,4 +79,4 @@ const TransactionGifCards = () => {
   );
 };
 
-export default TransactionGifCards;
+export default TransactionBCGifCards;
