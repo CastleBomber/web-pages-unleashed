@@ -30,7 +30,7 @@ const TransactionBCGifCard = ({
           </>
         )}
 
-        <div>
+        <div className="address-box">
           <p className="address-labels">
             <span className="address-from-label">From</span>
             <span className="address-to-label">To</span>

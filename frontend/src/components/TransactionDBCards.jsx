@@ -45,14 +45,14 @@ const TransactionsDBCards = ({ loggedInUser }) => {
                 {txn.amount} ETH
               </p>
 
-              <div>
+              <div className="address-box">
                 <p className="address-labels">
                   <span className="address-from-label">From</span>
                   <span className="address-to-label">To</span>
                 </p>
                 <p className="addresses">
                   {shortenAddress(txn.recipient)} →{" "}
-                  {shortenDateFormat(txn.timestamp)}
+                  {shortenAddress(txn.walletAddress)}
                 </p>
               </div>
               <p className="date">{shortenDateFormat(txn.timestamp)}</p>

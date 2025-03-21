@@ -5,9 +5,13 @@ export const shortenBalance = (balance) => `${balance.slice(0, 6)}`;
 
 export const shortenDateFormat = (timestamp) => {
   const date = new Date(timestamp);
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  const year = date.getFullYear();
 
-  return `${month}-${day}-${year}`;
+  const formattedDate = new Intl.DateTimeFormat("en-US", {
+    weekday: "short", // "Tue"
+    month: "short", // Mar
+    day: "numeric", // "11"
+    year: "numeric", // "2025"
+  }).format(date); // "TUE, MAR 11 2025"
+
+  return formattedDate;
 };
