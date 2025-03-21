@@ -35,7 +35,7 @@ Uses a full-stack JWT authentication system, enabling: create, read, update and 
 Pulls multiple users' transactions from the blockchain contract.
 
 <p align = "center">
-<img alt="UML-LS-v1" src="https://github.com/CastleBomber/web-pages-unleashed/blob/main/frontend/src/images/home-page.jpg">
+<img alt="UML-LS-v1" src="https://github.com/CastleBomber/web-pages-unleashed/blob/main/frontend/src/images/home-page-0x1.jpg">
 
 </p>
 
