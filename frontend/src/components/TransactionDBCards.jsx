@@ -35,7 +35,7 @@ const TransactionsDBCards = ({ loggedInUser }) => {
 
   return (
     <div>
-      <h2>Latest Database Transactions from User</h2>
+      <h2>User's Latest Database Transactions</h2>
       {transactions.length > 0 ? (
         <div className="transactions-grid">
           {transactions.slice(0, 6).map((txn) => (

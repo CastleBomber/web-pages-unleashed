@@ -45,7 +45,7 @@ Pulls logged-in user's transactions from the MERN database.
 
 <p align = "center">
 
-<img alt="UML-LS-v1" src="https://github.com/CastleBomber/web-pages-unleashed/blob/main/frontend/src/images/dashboard.jpg">
+<img alt="UML-LS-v1" src="https://github.com/CastleBomber/web-pages-unleashed/blob/main/frontend/src/images/dashboard-0x1.jpg">
 
 </p>
 
