@@ -59,8 +59,8 @@ function CardTileGroup({ tiles }) {
             <Button variant="danger" onClick={() => handleClick()}>
               {tiles[2].smalltext}
             </Button>
-            <Button href="/PageBlue" variant="danger">
-              Go to Page Green
+            <Button href="/GoalsPage" variant="danger">
+              Go to Goals Page
             </Button>
           </small>
         </Card.Footer>

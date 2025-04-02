@@ -93,7 +93,7 @@ import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import PageRed from "./pages/PageRed";
-import PageGreen from "./pages/PageGreen";
+import GoalsPage from "./pages/GoalsPage";
 import PageBlue from "./pages/PageBlue";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -112,7 +112,7 @@ class App extends Component {
               <Route path="/" element={<Home />} />
               <Route path="/PageRed" element={<PageRed />} />
               <Route path="/PageBlue" element={<PageBlue />} />
-              <Route path="/PageGreen" element={<PageGreen />} />
+              <Route path="/GoalsPage" element={<GoalsPage />} />
               <Route path="/Dashboard" element={<Dashboard />} />
               <Route path="/Login" element={<Login />} />
               <Route path="/Register" element={<Register />} />

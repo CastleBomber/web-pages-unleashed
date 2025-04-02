@@ -36,8 +36,8 @@ const NavigationBar = () => {
               Blue
             </Nav.Link>
 
-            <Nav.Link className="link" href="/PageGreen">
-              Green
+            <Nav.Link className="link" href="/GoalsPage">
+              Goals
             </Nav.Link>
 
             {user ? (

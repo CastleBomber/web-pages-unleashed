@@ -79,7 +79,7 @@ p {
 }
 
 /* Page Green */
-.page-green {
+.goals-page {
   display: grid;
 
   grid-template-areas:

@@ -49,6 +49,17 @@ Pulls logged-in user's transactions from the MERN database.
 
 </p>
 
+## MongoDB
+
+Users, transactions, and goals are stored and accessible with MongoDB.
+
+
+<p align = "center">
+
+<img alt="UML-LS-v1" src="https://github.com/CastleBomber/web-pages-unleashed/blob/main/frontend/src/images/mongo-db-0x1.jpg">
+
+</p>
+
 <p align="right"></p>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getGoals, reset } from "../features/goals/goalSlice";
 
-export const PageGreen = () => {
+export const GoalsPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -40,7 +40,7 @@ export const PageGreen = () => {
   }
 
   return (
-    <div className="page-green">
+    <div className="goals-page">
       <nav>
         <NavigationBar className="navbar" />
       </nav>
@@ -71,4 +71,4 @@ export const PageGreen = () => {
   );
 };
 
-export default PageGreen;
+export default GoalsPage;
