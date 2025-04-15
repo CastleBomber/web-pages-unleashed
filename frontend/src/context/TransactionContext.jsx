@@ -1,24 +1,56 @@
-import React, { useEffect, useState, useCallback } from "react";
+import { useWeb3React } from "@web3-react/core";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 import { ethers } from "ethers";
-import { contractABI, contractAddress } from "../utils/constants";
+import { contractABI, contractAddresses } from "../utils/constants";
 import { toast } from "react-toastify";
 const { ethereum } = window;
 export const TransactionContext = React.createContext();
 const Big = require("big.js");
 
-const getEthereumContract = () => {
+const getEthereumContract = (chainId) => {
+  if (!chainId) {
+    throw new Error("Chain ID is required.");
+  }
+
   const provider = new ethers.providers.Web3Provider(ethereum);
   const signer = provider.getSigner();
+
+  if (
+    !contractAddresses ||
+    !contractAddresses.sepolia ||
+    !contractAddresses.holesky
+  ) {
+    throw new Error("Contract addresses not configured properly");
+  }
+
+  // If chainId is X, then use contractAddresses.s/h
+  const contractAddress =
+    chainId === 11155111
+      ? contractAddresses.sepolia // Sepolia chainId
+      : chainId === 17000
+        ? contractAddresses.holesky // Holesky chainId
+        : null; // Handle unsupported networks
+
+  if (!contractAddress) {
+    throw new Error(`Unsupported network with chainId: ${chainId}`);
+  }
+
   const transactionContract = new ethers.Contract(
     contractAddress,
     contractABI,
     signer
   );
 
+  console.log("Current chainId:", chainId);
+  console.log("Contract addresses", contractAddresses);
+
   return transactionContract;
 };
 
 export const TransactionProvider = ({ children }) => {
+  // In your context provider
+  const { chainId } = useWeb3React();
+
   const [currentAccount, setCurrentAccount] = useState("");
   const [userBalance, setUserBalance] = useState("");
   const [lastCheckedBalance, setLastCheckedBalance] = useState("");
@@ -43,13 +75,13 @@ export const TransactionProvider = ({ children }) => {
   };
 
   // Transactions from the Blockchain
-  const getAllTransactions = async () => {
+  const getAllTransactions = useCallback(async () => {
     try {
       if (!ethereum) {
         return alert("Please install metamask");
       }
 
-      const transactionContract = getEthereumContract();
+      const transactionContract = getEthereumContract(chainId);
 
       const availableTransactions =
         await transactionContract.getAllTransactions();
@@ -71,7 +103,7 @@ export const TransactionProvider = ({ children }) => {
     } catch (error) {
       console.log(error);
     }
-  };
+  }, [chainId]);
 
   const checkIfWalletIsConnected = useCallback(async () => {
     try {
@@ -113,6 +145,67 @@ export const TransactionProvider = ({ children }) => {
     }
   };
 
+  const switchNetwork = async (targetChainId) => {
+    console.log("Attempting to switch to chainId:", targetChainId);
+
+    try {
+      if (!window.ethereum) {
+        throw new Error("Metamask not installed");
+      }
+
+      // Validate that target chain is supported
+      if (![11155111, 17000].includes(targetChainId)) {
+        throw new Error(`Chain ID: ${targetChainId} not supported`);
+      }
+
+      await window.ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: `0x${targetChainId.toString(16)}` }],
+      });
+    } catch (error) {
+      console.error("Failed to switch netowrk:", error);
+
+      // Add network if not found
+      if (error.code === 4902) {
+        try {
+          await addNetwork(targetChainId);
+          // Retry after adding
+          await switchNetwork(targetChainId);
+        } catch (addError) {
+          console.log("Failed to add network:", addError);
+        }
+      }
+    }
+  };
+
+  const addNetwork = async (chainId) => {
+    const networkConfig = {
+      11155111: {
+        // Sepolia
+        chainId: `0x${(11155111).toString(16)}`,
+        chainName: "Sepolia Test Network",
+        nativeCurrency: { name: "Sepolia ETH", symbol: "ETH", decimals: 18 },
+        rpcUrls: [
+          `https://eth-sepolia.g.alchemy.com/v2/${process.env.ALCHEMY_SEPOLIA_FRONTEND_REACT_APP_API_KEY}`,
+        ],
+        blockExplorerUrls: ["https://sepolia.etherscan.io"],
+      },
+      17000: {
+        // Holesky
+        chainId: `0x${(17000).toString(16)}`,
+        chainName: "Holesky Test Network",
+        nativeCurrency: { name: "Holesky ETH", symbol: "ETH", decimals: 18 },
+        rpcUrls: ["https://ethereum-holesky.publicnode.com"],
+        blockExplorerUrls: ["https://holesky.etherscan.io"],
+      },
+    };
+
+    await window.ethereum.request({
+      method: "wallet_addEthereumChain",
+      params: [networkConfig[chainId]],
+    });
+  };
+
   const getUserBalance = async (account) => {
     // Validate that account is not empty or undefined
     if (!account || account.trim() === "") {
@@ -136,7 +229,7 @@ export const TransactionProvider = ({ children }) => {
       if (!ethereum) return alert("please install metamask");
 
       const { addressTo, amount, keyword, message } = formData;
-      const transactionContract = getEthereumContract();
+      const transactionContract = getEthereumContract(chainId);
       const parsedAmount = new Big(amount).times(1e18).toFixed(0); // Convert Ether to Wei
       const hexValue = `0x${parseInt(parsedAmount, 10).toString(16)}`; // Convert to hex
 
@@ -274,12 +367,19 @@ export const TransactionProvider = ({ children }) => {
       getUserBalance(currentAccount);
       getAllTransactions();
     }
-  }, [currentAccount, transactionCount, checkIfWalletIsConnected]);
+  }, [
+    currentAccount,
+    transactionCount,
+    checkIfWalletIsConnected,
+    getUserBalance,
+    getAllTransactions,
+  ]);
 
   return (
     <TransactionContext.Provider
       value={{
         connectWallet,
+        switchNetwork,
         currentAccount,
         userBalance,
         formData,
@@ -290,9 +390,14 @@ export const TransactionProvider = ({ children }) => {
         isLoading,
         transactionCount,
         getAllTransactions,
+        currentChainId: chainId,
       }}
     >
       {children}
     </TransactionContext.Provider>
   );
+};
+
+export const useTransactionContext = () => {
+  return useContext(TransactionContext);
 };

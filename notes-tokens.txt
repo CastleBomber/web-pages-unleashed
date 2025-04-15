@@ -7,6 +7,27 @@ Native tokens:
 ERC20 tokens:
 -USDC, Chainlink, Uniswap
 
+Testnets:
+Ethereum Testnet: SepoliaEth, HoleskyEth, GoerliEth
+Mumbai: Polygon
+BNB Testnet: BNB Chainlink
+DevNet, Testnet: Solana
+Fuji Testnet: Avalanche
+
+Deprecated/Phasing Out:
+SepoliaEth is being phased out by Holesky (current)
+Goerli (PoA → Being replaced by Holesky in 2024)
+Rinkeby (Shut down in 2023)
+Ropsten (Shut down in 2022)
+
+Categories of Ethereum Testnets:
+Public Testnets
+Protocol Testnets
+Private/Devnets
+
 
 SepoliaETH Faucet:
 https://cloud.google.com/application/web3/faucet/ethereum/sepolia
+
+HoleskyEth Faucet:
+https://cloud.google.com/application/web3/faucet/ethereum/holesky

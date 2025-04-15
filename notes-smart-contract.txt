@@ -7,17 +7,19 @@ Do we need to clean up folder beforehand? Probably not
 rm -rf artifacts cache node_modules package-lock.json
 npm install
 
+*****
 Solidity smart contract address, video: @1:31:30
 run this in smart-contract folder:
 
 npx hardhat run scripts/deploy.js --network sepolia
+npx hardhat run scripts/deploy.js --network holesky
 
-command will create a contractAddress that we shall store in: 
+each command will create a contractAddress that we shall store in: 
 frontend/src/utils/constants.js
 and
 command will create folder/file: 
-smart-contract/artifacts/contract/Transactions.sol/Transactions.json
-we call this an ABI. we will copy this file and store it in:
+smart-contract/artifacts/contracts/Transactions.sol/Transactions.json
+We call this an ABI. We will copy this file and store it in:
 frontend/src/utils/Transactions.json 
 
 When making solidity code adjustments
