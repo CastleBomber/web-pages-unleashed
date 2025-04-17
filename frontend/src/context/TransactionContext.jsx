@@ -47,6 +47,42 @@ const getEthereumContract = (chainId) => {
   return transactionContract;
 };
 
+// Creates the POST request to MongoDB
+const logTransactionToDB = async (
+  walletAddress,
+  recipient,
+  amount,
+  transactionHash
+) => {
+  try {
+    // Construct the POST request body
+    const requestBody = {
+      walletAddress,
+      recipient,
+      amount,
+      transactionHash,
+      status: "completed",
+      timestamp: new Date().toISOString(),
+    };
+
+    // Send the POST request
+    const response = await fetch("/api/transactions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody), // Convert requestBody to JSON
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to log transaction: ${response.statusText}`);
+    }
+    console.log("Transaction logged successfully");
+  } catch (error) {
+    console.error("Error logging transaction:", error);
+  }
+};
+
 export const TransactionProvider = ({ children }) => {
   // In your context provider
   const { chainId } = useWeb3React();
@@ -105,6 +141,24 @@ export const TransactionProvider = ({ children }) => {
     }
   }, [chainId]);
 
+  const getUserBalance = useCallback(async (account) => {
+    // Validate that account is not empty or undefined
+    if (!account || account.trim() === "") {
+      console.error("Invalid account address provided to getUserBalance()");
+      return null;
+    }
+    try {
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const balance = await provider.getBalance(account);
+      const formattedBalance = ethers.utils.formatEther(balance);
+      setUserBalance(formattedBalance); // Update the state as needed
+      return formattedBalance; // Return the balance for other uses
+    } catch (error) {
+      console.error("Error in getUserBalance():", error);
+      return null;
+    }
+  }, []);
+
   const checkIfWalletIsConnected = useCallback(async () => {
     try {
       if (!ethereum) {
@@ -125,7 +179,7 @@ export const TransactionProvider = ({ children }) => {
 
       throw new Error("No ethereum object in checkIfWalletIsConnected()");
     }
-  }, []);
+  }, [getAllTransactions, getUserBalance]);
 
   const connectWallet = async () => {
     try {
@@ -146,9 +200,9 @@ export const TransactionProvider = ({ children }) => {
   };
 
   const switchNetwork = async (targetChainId) => {
-    console.log("Attempting to switch to chainId:", targetChainId);
-
     try {
+      console.log("Attempting to switch to chainId:", targetChainId);
+
       if (!window.ethereum) {
         throw new Error("Metamask not installed");
       }
@@ -164,6 +218,7 @@ export const TransactionProvider = ({ children }) => {
       });
     } catch (error) {
       console.error("Failed to switch netowrk:", error);
+      toast.error(`Failed to switch network: ${error.message}`);
 
       // Add network if not found
       if (error.code === 4902) {
@@ -206,24 +261,6 @@ export const TransactionProvider = ({ children }) => {
     });
   };
 
-  const getUserBalance = async (account) => {
-    // Validate that account is not empty or undefined
-    if (!account || account.trim() === "") {
-      console.error("Invalid account address provided to getUserBalance()");
-      return null;
-    }
-    try {
-      const provider = new ethers.providers.Web3Provider(ethereum);
-      const balance = await provider.getBalance(account);
-      const formattedBalance = ethers.utils.formatEther(balance);
-      setUserBalance(formattedBalance); // Update the state as needed
-      return formattedBalance; // Return the balance for other uses
-    } catch (error) {
-      console.error("Error in getUserBalance():", error);
-      return null;
-    }
-  };
-
   const sendTransaction = async () => {
     try {
       if (!ethereum) return alert("please install metamask");
@@ -247,7 +284,7 @@ export const TransactionProvider = ({ children }) => {
         ],
       });
 
-      const tx = await ethereum.request({
+      await ethereum.request({
         method: "eth_sendTransaction",
         params: [
           {
@@ -277,7 +314,7 @@ export const TransactionProvider = ({ children }) => {
       // Wait for confirmation
       setIsLoading(true);
       console.log(`Loading - ${transactionHash.hash}`);
-      const receipt = await transactionHash.wait();
+      await transactionHash.wait();
       console.log(`Success - ${transactionHash.hash}`);
       setIsLoading(false);
 
@@ -295,42 +332,6 @@ export const TransactionProvider = ({ children }) => {
       console.log(error);
     }
   };
-
-  // Creates the POST request to MongoDB
-  async function logTransactionToDB(
-    walletAddress,
-    recipient,
-    amount,
-    transactionHash
-  ) {
-    try {
-      // Construct the POST request body
-      const requestBody = {
-        walletAddress,
-        recipient,
-        amount,
-        transactionHash,
-        status: "completed",
-        timestamp: new Date().toISOString(),
-      };
-
-      // Send the POST request
-      const response = await fetch("/api/transactions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody), // Convert requestBody to JSON
-      });
-
-      if (!response.ok) {
-        throw new Error(`Failed to log transaction: ${response.statusText}`);
-      }
-      console.log("Transaction logged successfully");
-    } catch (error) {
-      console.error("Error logging transaction:", error);
-    }
-  }
 
   // Polling mechanism to check balance changes
   useEffect(() => {
@@ -359,7 +360,7 @@ export const TransactionProvider = ({ children }) => {
     console.warn = () => {};
 
     return () => clearInterval(interval); // Cleanup interval on component unmount
-  }, [currentAccount, lastCheckedBalance]);
+  }, [currentAccount, lastCheckedBalance, getUserBalance]);
 
   useEffect(() => {
     checkIfWalletIsConnected();

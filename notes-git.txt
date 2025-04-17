@@ -1,0 +1,15 @@
+git checkout main                             # Switch to main branch
+git pull                                      # Pull latest changes (if collaborating)
+
+git checkout -b feature/holesky-testnet       # Switches to separate workspace
+git add .                                     # Stage changes
+git commit -m "message"                       # Commit
+
+git push --set-upstream origin feature/holesky # If the branch doesn’t exist remotely, Git will prompt you to set the upstream (tracking) branch
+git push
+
+git branch                                    # Show all branches and your current branch
+
+git checkout main                             # Switching b/n the two branches
+git checkout feature/holesky-testnet
+
