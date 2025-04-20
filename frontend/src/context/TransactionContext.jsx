@@ -6,10 +6,12 @@ import { toast } from "react-toastify";
 const { ethereum } = window;
 export const TransactionContext = React.createContext();
 const Big = require("big.js");
+const DEFAULT_CHAIN_ID = 11155111; // Sepolia as default
 
-const getEthereumContract = (chainId) => {
+const getEthereumContract = (chainId = DEFAULT_CHAIN_ID) => {
   if (!chainId) {
-    throw new Error("Chain ID is required.");
+    console.warn("No chainId provided, using default");
+    chainId = DEFAULT_CHAIN_ID;
   }
 
   const provider = new ethers.providers.Web3Provider(ethereum);
@@ -162,7 +164,8 @@ export const TransactionProvider = ({ children }) => {
   const checkIfWalletIsConnected = useCallback(async () => {
     try {
       if (!ethereum) {
-        return alert("Please install metamask");
+        console.log("Metamask not detected, please install.");
+        return false;
       }
 
       const accounts = await ethereum.request({ method: "eth_accounts" });
@@ -171,13 +174,15 @@ export const TransactionProvider = ({ children }) => {
         setCurrentAccount(accounts[0]);
         getUserBalance(accounts[0]);
         getAllTransactions();
-      } else {
-        console.log("No accounts found");
-      }
-    } catch (error) {
-      console.log(error);
 
-      throw new Error("No ethereum object in checkIfWalletIsConnected()");
+        return true;
+      }
+
+      console.log("Wallet available but not connected");
+      return false;
+    } catch (error) {
+      console.log("Connection check error:", error);
+      return false;
     }
   }, [getAllTransactions, getUserBalance]);
 
@@ -216,6 +221,16 @@ export const TransactionProvider = ({ children }) => {
         method: "wallet_switchEthereumChain",
         params: [{ chainId: `0x${targetChainId.toString(16)}` }],
       });
+
+      // Refresh contract and data after switch
+      if (currentAccount) {
+        await getUserBalance(currentAccount);
+        await getAllTransactions();
+      }
+
+      toast.success(
+        `Switched to ${targetChainId === 11155111 ? "Sepolia" : "Holesky"}`
+      );
     } catch (error) {
       console.error("Failed to switch netowrk:", error);
       toast.error(`Failed to switch network: ${error.message}`);
@@ -263,16 +278,52 @@ export const TransactionProvider = ({ children }) => {
 
   const sendTransaction = async () => {
     try {
-      if (!ethereum) return alert("please install metamask");
+      // 1. Validate prerequisites
+      if (!ethereum) {
+        toast.error("Metamask is not installed");
+        return;
+      }
+
+      if (!currentAccount) {
+        toast.error("Please connect wallet first");
+        return;
+      }
+
+      if (!formData.addressTo || !ethers.utils.isAddress(formData.addressTo)) {
+        toast.error("Invalid recipient address");
+        return;
+      }
+    
+      if (!formData.amount || isNaN(formData.amount) || Number(formData.amount) <= 0) {
+        toast.error("Invalid amount");
+        return;
+      }
+
+      // 2. Ensure correct network
+      if (![11155111, 17000].includes(chainId)) {
+        // Auto-switch to default network if none selected
+        await switchNetwork(DEFAULT_CHAIN_ID);
+        toast.info("Automatically switched to Sepolia network");
+        return; // Let user retry after switch
+      }
 
       const { addressTo, amount, keyword, message } = formData;
+
+      console.log("Transaction initiated with:", {
+        from: currentAccount,
+        to: formData.addressTo,
+        amount: formData.amount,
+        chainId,
+      });
+
+      // 3. Get contract instance
       const transactionContract = getEthereumContract(chainId);
+
+      // 4. Convert parsed amount to wei
       const parsedAmount = new Big(amount).times(1e18).toFixed(0); // Convert Ether to Wei
       const hexValue = `0x${parseInt(parsedAmount, 10).toString(16)}`; // Convert to hex
 
-      console.log(`Loading - A`);
-
-      // Dynamically estimates gas to use
+      // 5. Estimate gas
       const gasLimit = await ethereum.request({
         method: "eth_estimateGas",
         params: [
@@ -284,7 +335,10 @@ export const TransactionProvider = ({ children }) => {
         ],
       });
 
-      await ethereum.request({
+      console.log("Gas estimage:", gasLimit);
+
+      // 6. Send transaction
+      const transactionHash = await ethereum.request({
         method: "eth_sendTransaction",
         params: [
           {
@@ -296,19 +350,22 @@ export const TransactionProvider = ({ children }) => {
         ],
       });
 
-      console.log(
-        `Loading - Before: transactionHash = await transactionContract.addToBlockChain()`
+      console.log("Transaction hash:", transactionHash);
+      toast.success(
+        `Transaction sent! Hash: ${transactionHash.slice(0, 8)}...`
       );
 
-      const transactionHash = await transactionContract.addToBlockChain(
+      // 7. Wait for blockchain confirmation
+      const receipt =
+        await transactionContract.provider.waitForTransaction(transactionHash);
+      console.log("Transaction mined:", receipt);
+
+      // 8. Update contract state
+      await transactionContract.addToBlockChain(
         addressTo,
         parsedAmount,
         message,
         keyword
-      );
-
-      console.log(
-        `Loading - After: transactionHash = await transactionContract.addToBlockChain()`
       );
 
       // Wait for confirmation
@@ -329,7 +386,12 @@ export const TransactionProvider = ({ children }) => {
         transactionHash.hash
       );
     } catch (error) {
-      console.log(error);
+      console.error("Full transaction error:", {
+        error,
+        message: error.message,
+        stack: error.stack,
+      });
+      toast.error(`Failed: ${error.message}`);
     }
   };
 
@@ -392,6 +454,13 @@ export const TransactionProvider = ({ children }) => {
         transactionCount,
         getAllTransactions,
         currentChainId: chainId,
+        currentNetwork:
+          chainId === 11155111
+            ? "Sepolia"
+            : chainId === 17000
+              ? "Holesky"
+              : "Not Connected",
+        isSupportedNetwork: [11155111, 17000].includes(chainId),
       }}
     >
       {children}
