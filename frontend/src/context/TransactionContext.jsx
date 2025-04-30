@@ -8,30 +8,26 @@ export const TransactionContext = React.createContext();
 const Big = require("big.js");
 const DEFAULT_CHAIN_ID = 11155111; // Sepolia as default
 
-const getEthereumContract = (chainId = DEFAULT_CHAIN_ID) => {
-  if (!chainId) {
-    console.warn("No chainId provided, using default");
-    chainId = DEFAULT_CHAIN_ID;
+const getEthereumContract = (chainId) => {
+  // Validate chainId or use default
+  const validatedChainId = [11155111, 17000].includes(chainId)
+    ? chainId
+    : DEFAULT_CHAIN_ID;
+
+  if (chainId !== validatedChainId) {
+    console.warn(`Invalid chainId (${chainId}), using ${validatedChainId}`);
   }
 
   const provider = new ethers.providers.Web3Provider(ethereum);
   const signer = provider.getSigner();
 
-  if (
-    !contractAddresses ||
-    !contractAddresses.sepolia ||
-    !contractAddresses.holesky
-  ) {
+  if (!contractAddresses.sepolia || !contractAddresses.holesky) {
     throw new Error("Contract addresses not configured properly");
   }
 
-  // If chainId is X, then use contractAddresses.s/h
+  // Directly use the validated chainId
   const contractAddress =
-    chainId === 11155111
-      ? contractAddresses.sepolia // Sepolia chainId
-      : chainId === 17000
-        ? contractAddresses.holesky // Holesky chainId
-        : null; // Handle unsupported networks
+    contractAddresses[validatedChainId === 11155111 ? "sepolia" : "holesky"];
 
   if (!contractAddress) {
     throw new Error(`Unsupported network with chainId: ${chainId}`);
@@ -43,8 +39,8 @@ const getEthereumContract = (chainId = DEFAULT_CHAIN_ID) => {
     signer
   );
 
-  console.log("Current chainId:", chainId);
-  console.log("Contract addresses", contractAddresses);
+  console.log("Using current contract address:", contractAddress);
+  console.log("For chain:", validatedChainId);
 
   return transactionContract;
 };
@@ -87,7 +83,8 @@ const logTransactionToDB = async (
 
 export const TransactionProvider = ({ children }) => {
   // In your context provider
-  const { chainId } = useWeb3React();
+  const { chainId: web3ChainId } = useWeb3React();
+  const [currentChainId, setCurrentChainId] = useState(DEFAULT_CHAIN_ID);
 
   const [currentAccount, setCurrentAccount] = useState("");
   const [userBalance, setUserBalance] = useState("");
@@ -116,11 +113,19 @@ export const TransactionProvider = ({ children }) => {
   const getAllTransactions = useCallback(async () => {
     try {
       if (!ethereum) {
-        return alert("Please install metamask");
+        toast.error("MetaMask not connected");
+        return;
       }
 
-      const transactionContract = getEthereumContract(chainId);
+      // First verify contract deployment
+      const isDeployed = await verifyContractDeployment(currentChainId);
+      if (!isDeployed) {
+        toast.error("Contract not deployed on this network");
+        return;
+      }
 
+      // Proceed with transaction loading
+      const transactionContract = getEthereumContract(currentChainId);
       const availableTransactions =
         await transactionContract.getAllTransactions();
 
@@ -141,7 +146,7 @@ export const TransactionProvider = ({ children }) => {
     } catch (error) {
       console.log(error);
     }
-  }, [chainId]);
+  }, [currentChainId]);
 
   const getUserBalance = useCallback(async (account) => {
     // Validate that account is not empty or undefined
@@ -217,10 +222,19 @@ export const TransactionProvider = ({ children }) => {
         throw new Error(`Chain ID: ${targetChainId} not supported`);
       }
 
+      // Request network switch
       await window.ethereum.request({
         method: "wallet_switchEthereumChain",
         params: [{ chainId: `0x${targetChainId.toString(16)}` }],
       });
+
+      // Verify switch completed
+      const newChainId = await window.ethereum.request({
+        method: "eth_chainId",
+      });
+      if (parseInt(newChainId) !== targetChainId) {
+        throw new Error("Network switch not confirmed");
+      }
 
       // Refresh contract and data after switch
       if (currentAccount) {
@@ -231,6 +245,8 @@ export const TransactionProvider = ({ children }) => {
       toast.success(
         `Switched to ${targetChainId === 11155111 ? "Sepolia" : "Holesky"}`
       );
+
+      setCurrentChainId(targetChainId);
     } catch (error) {
       console.error("Failed to switch netowrk:", error);
       toast.error(`Failed to switch network: ${error.message}`);
@@ -276,6 +292,33 @@ export const TransactionProvider = ({ children }) => {
     });
   };
 
+  const verifyContractDeployment = async (chainId) => {
+    try {
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const contractAddress =
+        chainId === 11155111
+          ? contractAddresses.sepolia
+          : contractAddresses.holesky;
+
+      const code = await provider.getCode(contractAddress);
+      const isDeployed = code !== "0x";
+
+      console.group("Contract Verification");
+      console.log("Network:", chainId === 11155111 ? "Sepolia" : "Holesky");
+      console.log("Contract Address:", contractAddress);
+      console.log(
+        "Deployment Status:",
+        isDeployed ? "DEPLOYED" : "NOT DEPLOYED"
+      );
+      console.groupEnd();
+
+      return isDeployed;
+    } catch (error) {
+      console.error("Verification failed:", error);
+      return false;
+    }
+  };
+
   const sendTransaction = async () => {
     try {
       // 1. Validate prerequisites
@@ -293,37 +336,47 @@ export const TransactionProvider = ({ children }) => {
         toast.error("Invalid recipient address");
         return;
       }
-    
-      if (!formData.amount || isNaN(formData.amount) || Number(formData.amount) <= 0) {
+
+      if (
+        !formData.amount ||
+        isNaN(formData.amount) ||
+        Number(formData.amount) <= 0
+      ) {
         toast.error("Invalid amount");
         return;
       }
 
-      // 2. Ensure correct network
-      if (![11155111, 17000].includes(chainId)) {
-        // Auto-switch to default network if none selected
-        await switchNetwork(DEFAULT_CHAIN_ID);
-        toast.info("Automatically switched to Sepolia network");
-        return; // Let user retry after switch
+      // 2. Network validation with auto-switch
+      if (![11155111, 17000].includes(currentChainId)) {
+        try {
+          await switchNetwork(DEFAULT_CHAIN_ID);
+          toast.info(
+            `Switched to default network. Please try your transaction again.`
+          );
+        } catch (switchError) {
+          toast.error(`Failed to switch networks: ${switchError.message}`);
+        }
+        return;
       }
 
+      // 3. Prepare contract
       const { addressTo, amount, keyword, message } = formData;
-
-      console.log("Transaction initiated with:", {
-        from: currentAccount,
-        to: formData.addressTo,
-        amount: formData.amount,
-        chainId,
-      });
-
-      // 3. Get contract instance
-      const transactionContract = getEthereumContract(chainId);
-
-      // 4. Convert parsed amount to wei
+      const transactionContract = getEthereumContract(currentChainId);
       const parsedAmount = new Big(amount).times(1e18).toFixed(0); // Convert Ether to Wei
       const hexValue = `0x${parseInt(parsedAmount, 10).toString(16)}`; // Convert to hex
 
-      // 5. Estimate gas
+      // Debug logs
+      console.group("Transaction Details");
+      console.log(
+        "Network:",
+        currentChainId === 11155111 ? "Sepolia" : "Holesky"
+      );
+      console.log("From:", currentAccount);
+      console.log("To:", addressTo);
+      console.log("Amount (wei):", parsedAmount);
+      console.groupEnd();
+
+      // 4. Estimate gas
       const gasLimit = await ethereum.request({
         method: "eth_estimateGas",
         params: [
@@ -337,7 +390,7 @@ export const TransactionProvider = ({ children }) => {
 
       console.log("Gas estimage:", gasLimit);
 
-      // 6. Send transaction
+      // 5. Send transaction
       const transactionHash = await ethereum.request({
         method: "eth_sendTransaction",
         params: [
@@ -350,48 +403,55 @@ export const TransactionProvider = ({ children }) => {
         ],
       });
 
-      console.log("Transaction hash:", transactionHash);
       toast.success(
-        `Transaction sent! Hash: ${transactionHash.slice(0, 8)}...`
+        `Transaction submitted! Hash: ${transactionHash.slice(0, 8)}...`
       );
 
-      // 7. Wait for blockchain confirmation
+      setIsLoading(true);
+
+      // 6. Wait for blockchain confirmation
       const receipt =
         await transactionContract.provider.waitForTransaction(transactionHash);
-      console.log("Transaction mined:", receipt);
+      console.log("Transaction confirmed:", receipt);
 
-      // 8. Update contract state
-      await transactionContract.addToBlockChain(
+      // 7. Update contract state
+      const contractTx = await transactionContract.addToBlockChain(
         addressTo,
         parsedAmount,
         message,
         keyword
       );
+      await contractTx.wait();
 
-      // Wait for confirmation
-      setIsLoading(true);
-      console.log(`Loading - ${transactionHash.hash}`);
-      await transactionHash.wait();
-      console.log(`Success - ${transactionHash.hash}`);
-      setIsLoading(false);
+      // 8. Update UI
+      const newTxCount = await transactionContract.getTransactionCount();
+      setTransactionCount(newTxCount.toNumber());
+      await getUserBalance(currentAccount);
+      await getAllTransactions();
 
-      const transactionCount = await transactionContract.getTransactionCount();
-      setTransactionCount(transactionCount.toNumber());
-
-      // Log the transaction to backend
-      logTransactionToDB(
+      // 9. Log to backend
+      await logTransactionToDB(
         currentAccount,
         addressTo,
         amount,
-        transactionHash.hash
+        transactionHash
       );
     } catch (error) {
-      console.error("Full transaction error:", {
+      console.error("Transaction error:", {
         error,
-        message: error.message,
-        stack: error.stack,
+        currentChainId,
+        account: currentAccount,
+        balance: ethereum
+          ? await ethereum.request({
+              method: "eth_getBalance",
+              params: [currentAccount, "latest"],
+            })
+          : null,
       });
+
       toast.error(`Failed: ${error.message}`);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -426,6 +486,7 @@ export const TransactionProvider = ({ children }) => {
 
   useEffect(() => {
     checkIfWalletIsConnected();
+
     if (currentAccount) {
       getUserBalance(currentAccount);
       getAllTransactions();
@@ -437,6 +498,26 @@ export const TransactionProvider = ({ children }) => {
     getUserBalance,
     getAllTransactions,
   ]);
+
+  // Sync chainId from web3React with local state
+  useEffect(() => {
+    if (web3ChainId && [11155111, 17000].includes(web3ChainId)) {
+      setCurrentChainId(web3ChainId);
+    }
+  }, [web3ChainId]);
+
+  // Chain change event listener
+  useEffect(() => {
+    const handleChainChanged = (newChainId) => {
+      const numericChainId = parseInt(newChainId, 16);
+      setCurrentChainId(numericChainId);
+    };
+
+    ethereum?.on("chainChanged", handleChainChanged);
+    return () => {
+      ethereum?.removeListener("chainChanged", handleChainChanged);
+    };
+  }, []);
 
   return (
     <TransactionContext.Provider
@@ -453,14 +534,15 @@ export const TransactionProvider = ({ children }) => {
         isLoading,
         transactionCount,
         getAllTransactions,
-        currentChainId: chainId,
+        currentChainId,
         currentNetwork:
-          chainId === 11155111
+          currentChainId === 11155111
             ? "Sepolia"
-            : chainId === 17000
+            : currentChainId === 17000
               ? "Holesky"
               : "Not Connected",
-        isSupportedNetwork: [11155111, 17000].includes(chainId),
+        isSupportedNetwork: [11155111, 17000].includes(currentChainId),
+        verifyContractDeployment,
       }}
     >
       {children}
@@ -471,3 +553,4 @@ export const TransactionProvider = ({ children }) => {
 export const useTransactionContext = () => {
   return useContext(TransactionContext);
 };
+
