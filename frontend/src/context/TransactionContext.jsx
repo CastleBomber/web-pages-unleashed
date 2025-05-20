@@ -271,9 +271,7 @@ export const TransactionProvider = ({ children }) => {
         chainId: `0x${(11155111).toString(16)}`,
         chainName: "Sepolia Test Network",
         nativeCurrency: { name: "Sepolia ETH", symbol: "ETH", decimals: 18 },
-        rpcUrls: [
-          `https://eth-sepolia.g.alchemy.com/v2/${process.env.ALCHEMY_SEPOLIA_FRONTEND_REACT_APP_API_KEY}`,
-        ],
+        rpcUrls: [process.env.REACT_APP_ALCHEMY_SEPOLIA_URL],
         blockExplorerUrls: ["https://sepolia.etherscan.io"],
       },
       17000: {
@@ -294,6 +292,15 @@ export const TransactionProvider = ({ children }) => {
 
   const verifyContractDeployment = async (chainId) => {
     try {
+      if (
+        !contractAddresses ||
+        !contractAddresses.sepolia ||
+        !contractAddresses.holesky
+      ) {
+        console.error("Contract addresses not configured");
+        return false;
+      }
+
       const provider = new ethers.providers.Web3Provider(ethereum);
       const contractAddress =
         chainId === 11155111
@@ -359,83 +366,39 @@ export const TransactionProvider = ({ children }) => {
         return;
       }
 
-      // 3. Prepare contract
+      // 3. Prepare transaction data
       const { addressTo, amount, keyword, message } = formData;
+      const parsedAmount = new Big(amount).times(1e18).toFixed(0);
+      const hexValue = `0x${parseInt(parsedAmount, 10).toString(16)}`;
+
+      // 4. Get contract instance
       const transactionContract = getEthereumContract(currentChainId);
-      const parsedAmount = new Big(amount).times(1e18).toFixed(0); // Convert Ether to Wei
-      const hexValue = `0x${parseInt(parsedAmount, 10).toString(16)}`; // Convert to hex
 
-      // Debug logs
-      console.group("Transaction Details");
-      console.log(
-        "Network:",
-        currentChainId === 11155111 ? "Sepolia" : "Holesky"
-      );
-      console.log("From:", currentAccount);
-      console.log("To:", addressTo);
-      console.log("Amount (wei):", parsedAmount);
-      console.groupEnd();
-
-      // 4. Estimate gas
-      const gasLimit = await ethereum.request({
-        method: "eth_estimateGas",
-        params: [
-          {
-            from: currentAccount,
-            to: addressTo,
-            value: hexValue,
-          },
-        ],
-      });
-
-      console.log("Gas estimage:", gasLimit);
-
-      // 5. Send transaction
-      const transactionHash = await ethereum.request({
-        method: "eth_sendTransaction",
-        params: [
-          {
-            from: currentAccount, // MetaMask account
-            to: addressTo,
-            gas: gasLimit,
-            value: hexValue,
-          },
-        ],
-      });
-
-      toast.success(
-        `Transaction submitted! Hash: ${transactionHash.slice(0, 8)}...`
-      );
-
-      setIsLoading(true);
-
-      // 6. Wait for blockchain confirmation
-      const receipt =
-        await transactionContract.provider.waitForTransaction(transactionHash);
-      console.log("Transaction confirmed:", receipt);
-
-      // 7. Update contract state
-      const contractTx = await transactionContract.addToBlockChain(
+      // 5. SINGLE TRANSACTION CALL
+      const tx = await transactionContract.addToBlockChain(
         addressTo,
         parsedAmount,
         message,
-        keyword
+        keyword,
+        {
+          value: hexValue, // ADD THIS LINE TO INCLUDE ETH TRANSFER
+          gasLimit: 300000, // OPTIONAL: Add gas limit if needed
+        }
       );
-      await contractTx.wait();
 
-      // 8. Update UI
-      const newTxCount = await transactionContract.getTransactionCount();
-      setTransactionCount(newTxCount.toNumber());
-      await getUserBalance(currentAccount);
-      await getAllTransactions();
+      // 6. Wait for confirmation
+      setIsLoading(true);
+      console.log(`Loading - ${tx.hash}`);
+      await tx.wait();
+      console.log(`Success - ${tx.hash}`);
+      setIsLoading(false);
 
-      // 9. Log to backend
-      await logTransactionToDB(
-        currentAccount,
-        addressTo,
-        amount,
-        transactionHash
-      );
+      // 7. Update transaction count
+      const transactionCount = await transactionContract.getTransactionCount();
+      setTransactionCount(transactionCount.toNumber());
+
+      // 8. Log to backend
+      await logTransactionToDB(currentAccount, addressTo, amount, tx.hash);
     } catch (error) {
       console.error("Transaction error:", {
         error,
@@ -553,4 +516,3 @@ export const TransactionProvider = ({ children }) => {
 export const useTransactionContext = () => {
   return useContext(TransactionContext);
 };
-

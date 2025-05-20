@@ -1,18 +1,17 @@
 require("@nomicfoundation/hardhat-toolbox");
-require('dotenv').config();
+require("dotenv").config({ path: "../.env" });
 
+// Alchemy private keys (video: @1:28:00) (better than Infura)
 module.exports = {
   solidity: "0.8.9",
   networks: {
     sepolia: {
-      url: `https://eth-sepolia.g.alchemy.com/v2/${process.env.ALCHEMY_SEPOLIA_FRONTEND_REACT_APP_API_KEY}`,
-      accounts: [
-        "0c807c88644d7ddf623611018ec39d7743b3283c11bb3a62fe7867e1ee82f26c",
-      ],
+      url: process.env.ALCHEMY_SEPOLIA_URL,
+      accounts: [process.env.SEPOLIA_PRIVATE_KEY],
     },
     holesky: {
-      url: `https://ethereum-holesky.publicnode.com`,
-      accounts: ["0c807c88644d7ddf623611018ec39d7743b3283c11bb3a62fe7867e1ee82f26c"],
-    }
+      url: "https://ethereum-holesky.publicnode.com",
+      accounts: [process.env.HOLESKY_PRIVATE_KEY],
+    },
   },
 };
