@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState, useCallback } from "react";
 import { ethers } from "ethers";
 import { contractABI, contractAddresses } from "../utils/constants";
 import { toast } from "react-toastify";
-const { ethereum } = window;
+//const { ethereum } = window;
 export const TransactionContext = React.createContext();
 const Big = require("big.js");
 const DEFAULT_CHAIN_ID = 11155111; // Sepolia as default
@@ -18,19 +18,14 @@ const getEthereumContract = (chainId) => {
     console.warn(`Invalid chainId (${chainId}), using ${validatedChainId}`);
   }
 
-  const provider = new ethers.providers.Web3Provider(ethereum);
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
 
-  if (!contractAddresses.sepolia || !contractAddresses.holesky) {
-    throw new Error("Contract addresses not configured properly");
-  }
-
-  // Directly use the validated chainId
-  const contractAddress =
-    contractAddresses[validatedChainId === 11155111 ? "sepolia" : "holesky"];
+  const networkName = validatedChainId === 11155111 ? "sepolia" : "holesky";
+  const contractAddress = contractAddresses[networkName];
 
   if (!contractAddress) {
-    throw new Error(`Unsupported network with chainId: ${chainId}`);
+    throw new Error(`No contract deployed on ${networkName}`);
   }
 
   const transactionContract = new ethers.Contract(
@@ -39,8 +34,7 @@ const getEthereumContract = (chainId) => {
     signer
   );
 
-  console.log("Using current contract address:", contractAddress);
-  console.log("For chain:", validatedChainId);
+  console.log(`Using ${networkName} contract:`, contractAddress);
 
   return transactionContract;
 };
@@ -112,15 +106,17 @@ export const TransactionProvider = ({ children }) => {
   // Transactions from the Blockchain
   const getAllTransactions = useCallback(async () => {
     try {
-      if (!ethereum) {
+      if (!window.ethereum) {
         toast.error("MetaMask not connected");
         return;
       }
 
       // First verify contract deployment
+      const networkName = currentChainId === 11155111 ? "Sepolia" : "Holesky";
       const isDeployed = await verifyContractDeployment(currentChainId);
+
       if (!isDeployed) {
-        toast.error("Contract not deployed on this network");
+        toast.error(`Contract not deployed on ${networkName}`);
         return;
       }
 
@@ -155,7 +151,7 @@ export const TransactionProvider = ({ children }) => {
       return null;
     }
     try {
-      const provider = new ethers.providers.Web3Provider(ethereum);
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
       const balance = await provider.getBalance(account);
       const formattedBalance = ethers.utils.formatEther(balance);
       setUserBalance(formattedBalance); // Update the state as needed
@@ -168,12 +164,14 @@ export const TransactionProvider = ({ children }) => {
 
   const checkIfWalletIsConnected = useCallback(async () => {
     try {
-      if (!ethereum) {
+      if (!window.ethereum) {
         console.log("Metamask not detected, please install.");
         return false;
       }
 
-      const accounts = await ethereum.request({ method: "eth_accounts" });
+      const accounts = await window.ethereum.request({
+        method: "eth_accounts",
+      });
 
       if (accounts.length) {
         setCurrentAccount(accounts[0]);
@@ -191,78 +189,126 @@ export const TransactionProvider = ({ children }) => {
     }
   }, [getAllTransactions, getUserBalance]);
 
+  // Wait for MetaMask injection (retry if not immediately available)
+  async function checkMetaMask() {
+    // Check if already injected
+    if (window.ethereum?.isMetaMask) {
+      return window.ethereum;
+    }
+
+    // Wait for injection (with timeout)
+    return new Promise((resolve) => {
+      let attempts = 0;
+      const maxAttempts = 10; // ~2 seconds total
+
+      const interval = setInterval(() => {
+        if (window.ethereum?.isMetaMask) {
+          clearInterval(interval);
+          resolve(window.ethereum);
+        } else if (attempts >= maxAttempts) {
+          clearInterval(interval);
+          console.log("MetaMask injection timed out");
+        }
+        attempts++;
+      }, 200); // Check every 200ms
+    });
+  }
+
   const connectWallet = async () => {
     try {
-      if (!ethereum) return alert("please install metamask");
+      // Ensure MetaMask is injected
+      const ethereum = await checkMetaMask();
 
+      // Check if already connected
       const accounts = await ethereum.request({
+        method: "eth_accounts",
+      });
+      if (accounts.length > 0) {
+        setCurrentAccount(accounts[0]);
+        return accounts[0];
+      }
+
+      // If not connected, request new connection
+      const newAccounts = await ethereum.request({
         method: "eth_requestAccounts",
       });
+      console.log("Connected", newAccounts[0]);
 
-      setCurrentAccount(accounts[0]);
-      getUserBalance(accounts[0]);
-      getAllTransactions();
+      setCurrentAccount(newAccounts[0]);
+
+      return newAccounts[0];
     } catch (error) {
-      console.log(error);
-
-      throw new Error("No ethereum object");
+      console.error("MetaMask connection failed:", error);
+      toast.error(
+        error.message.includes("timed out")
+          ? "MetaMask took too long to respond. Try refreshing."
+          : "Failed to connect MetaMask"
+      );
+      throw error;
     }
   };
 
-  const switchNetwork = async (targetChainId) => {
-    try {
-      console.log("Attempting to switch to chainId:", targetChainId);
+  const switchNetwork = useCallback(
+    async (targetChainId, showToast = true) => {
+      try {
+        console.log("Attempting to switch to chainId:", targetChainId);
 
-      if (!window.ethereum) {
-        throw new Error("Metamask not installed");
-      }
+        if (!window.ethereum) {
+          throw new Error("Metamask not installed");
+        }
 
-      // Validate that target chain is supported
-      if (![11155111, 17000].includes(targetChainId)) {
-        throw new Error(`Chain ID: ${targetChainId} not supported`);
-      }
+        // Validate that target chain is supported
+        if (![11155111, 17000].includes(targetChainId)) {
+          throw new Error(`Chain ID: ${targetChainId} not supported`);
+        }
 
-      // Request network switch
-      await window.ethereum.request({
-        method: "wallet_switchEthereumChain",
-        params: [{ chainId: `0x${targetChainId.toString(16)}` }],
-      });
+        // Request network switch
+        await window.ethereum.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: `0x${targetChainId.toString(16)}` }],
+        });
 
-      // Verify switch completed
-      const newChainId = await window.ethereum.request({
-        method: "eth_chainId",
-      });
-      if (parseInt(newChainId) !== targetChainId) {
-        throw new Error("Network switch not confirmed");
-      }
+        // Verify switch completed
+        const newChainId = await window.ethereum.request({
+          method: "eth_chainId",
+        });
+        if (parseInt(newChainId) !== targetChainId) {
+          throw new Error("Network switch not confirmed");
+        }
 
-      // Refresh contract and data after switch
-      if (currentAccount) {
-        await getUserBalance(currentAccount);
-        await getAllTransactions();
-      }
+        // Refresh contract and data after switch
+        if (currentAccount) {
+          await Promise.all([
+            getUserBalance(currentAccount),
+            getAllTransactions(),
+          ]);
+        }
 
-      toast.success(
-        `Switched to ${targetChainId === 11155111 ? "Sepolia" : "Holesky"}`
-      );
+        if (showToast) {
+          toast.success(
+            `Switched to ${targetChainId === 11155111 ? "Sepolia" : "Holesky"}`
+          );
+        }
 
-      setCurrentChainId(targetChainId);
-    } catch (error) {
-      console.error("Failed to switch netowrk:", error);
-      toast.error(`Failed to switch network: ${error.message}`);
+        setCurrentChainId(targetChainId);
+      } catch (error) {
+        console.error("Failed to switch netowrk:", error);
+        toast.error(`Failed to switch network: ${error.message}`);
 
-      // Add network if not found
-      if (error.code === 4902) {
-        try {
-          await addNetwork(targetChainId);
-          // Retry after adding
-          await switchNetwork(targetChainId);
-        } catch (addError) {
-          console.log("Failed to add network:", addError);
+        // Add network if not found
+        if (error.code === 4902) {
+          try {
+            await addNetwork(targetChainId);
+            // Retry after adding
+            await switchNetwork(targetChainId);
+          } catch (addError) {
+            console.log("Failed to add network:", addError);
+          }
         }
       }
-    }
-  };
+    },
+    [currentAccount, getUserBalance, getAllTransactions]
+  );
 
   const addNetwork = async (chainId) => {
     const networkConfig = {
@@ -292,36 +338,25 @@ export const TransactionProvider = ({ children }) => {
 
   const verifyContractDeployment = async (chainId) => {
     try {
-      if (
-        !contractAddresses ||
-        !contractAddresses.sepolia ||
-        !contractAddresses.holesky
-      ) {
-        console.error("Contract addresses not configured");
+      const networkName = chainId === 11155111 ? "sepolia" : "holesky";
+      const contractAddress = contractAddresses[networkName];
+
+      if (!contractAddress) {
+        console.warn(`No contract address for ${networkName}`);
         return false;
       }
 
-      const provider = new ethers.providers.Web3Provider(ethereum);
-      const contractAddress =
-        chainId === 11155111
-          ? contractAddresses.sepolia
-          : contractAddresses.holesky;
-
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
       const code = await provider.getCode(contractAddress);
-      const isDeployed = code !== "0x";
 
-      console.group("Contract Verification");
-      console.log("Network:", chainId === 11155111 ? "Sepolia" : "Holesky");
-      console.log("Contract Address:", contractAddress);
       console.log(
-        "Deployment Status:",
-        isDeployed ? "DEPLOYED" : "NOT DEPLOYED"
+        `[${networkName}] Contract ${contractAddress} deployed:`,
+        code !== "0x"
       );
-      console.groupEnd();
 
-      return isDeployed;
+      return code !== "0x";
     } catch (error) {
-      console.error("Verification failed:", error);
+      console.error(`Verification failed for chain ${chainId}:`, error);
       return false;
     }
   };
@@ -329,7 +364,7 @@ export const TransactionProvider = ({ children }) => {
   const sendTransaction = async () => {
     try {
       // 1. Validate prerequisites
-      if (!ethereum) {
+      if (!window.ethereum) {
         toast.error("Metamask is not installed");
         return;
       }
@@ -374,45 +409,48 @@ export const TransactionProvider = ({ children }) => {
       // 4. Get contract instance
       const transactionContract = getEthereumContract(currentChainId);
 
-      // 5. SINGLE TRANSACTION CALL
+      // 5. Estimate gas
+      const estimatedGas =
+        await transactionContract.estimateGas.addToBlockChain(
+          addressTo,
+          parsedAmount,
+          message,
+          keyword,
+          { value: hexValue }
+        );
+
+      // 6. Transaction execution
       const tx = await transactionContract.addToBlockChain(
         addressTo,
         parsedAmount,
         message,
         keyword,
         {
-          value: hexValue, // ADD THIS LINE TO INCLUDE ETH TRANSFER
-          gasLimit: 300000, // OPTIONAL: Add gas limit if needed
+          value: hexValue,
+          gasLimit: estimatedGas.mul(2),
         }
       );
 
-      // 6. Wait for confirmation
       setIsLoading(true);
-      console.log(`Loading - ${tx.hash}`);
-      await tx.wait();
-      console.log(`Success - ${tx.hash}`);
-      setIsLoading(false);
+      const receipt = await tx.wait();
 
-      // 7. Update transaction count
+      // 7. Update all data
+      await Promise.all([
+        getUserBalance(currentAccount),
+        getAllTransactions(),
+        logTransactionToDB(currentAccount, addressTo, amount, tx.hash),
+      ]);
+
+      // 8. Success message
+      toast.success(`Transaction mined! Block: ${receipt}`);
+
+      // Transaction count update
       const transactionCount = await transactionContract.getTransactionCount();
       setTransactionCount(transactionCount.toNumber());
-
-      // 8. Log to backend
-      await logTransactionToDB(currentAccount, addressTo, amount, tx.hash);
     } catch (error) {
-      console.error("Transaction error:", {
-        error,
-        currentChainId,
-        account: currentAccount,
-        balance: ethereum
-          ? await ethereum.request({
-              method: "eth_getBalance",
-              params: [currentAccount, "latest"],
-            })
-          : null,
-      });
+      console.error("Transaction error:", error);
 
-      toast.error(`Failed: ${error.message}`);
+      toast.error(`Failed: ${error?.data?.message || error.message}`);
     } finally {
       setIsLoading(false);
     }
@@ -473,20 +511,28 @@ export const TransactionProvider = ({ children }) => {
   useEffect(() => {
     const handleChainChanged = (newChainId) => {
       const numericChainId = parseInt(newChainId, 16);
-      setCurrentChainId(numericChainId);
+      switchNetwork(numericChainId, false);
+
+      // Force reload all data on chain change
+      if (currentAccount) {
+        getAllTransactions();
+        getUserBalance(currentAccount);
+      }
     };
 
-    ethereum?.on("chainChanged", handleChainChanged);
+    window.ethereum?.on("chainChanged", handleChainChanged);
+
     return () => {
-      ethereum?.removeListener("chainChanged", handleChainChanged);
+      window.ethereum?.removeListener("chainChanged", handleChainChanged);
     };
-  }, []);
+  }, [currentAccount, getAllTransactions, getUserBalance, switchNetwork]);
 
   return (
     <TransactionContext.Provider
       value={{
         connectWallet,
-        switchNetwork,
+        switchNetwork: (chainId, showToast) =>
+          switchNetwork(chainId, showToast),
         currentAccount,
         userBalance,
         formData,
