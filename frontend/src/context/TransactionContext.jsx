@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { useWeb3React } from "@web3-react/core";
 import React, { useContext, useEffect, useState, useCallback } from "react";
 import { ethers } from "ethers";
@@ -83,6 +84,7 @@ export const TransactionProvider = ({ children }) => {
   const [currentAccount, setCurrentAccount] = useState("");
   const [userBalance, setUserBalance] = useState("");
   const [lastCheckedBalance, setLastCheckedBalance] = useState("");
+  const intervalRef = useRef();
 
   const [formData, setFormData] = useState({
     addressTo: "",
@@ -251,7 +253,11 @@ export const TransactionProvider = ({ children }) => {
   const switchNetwork = useCallback(
     async (targetChainId, showToast = true) => {
       try {
-        console.log("Attempting to switch to chainId:", targetChainId);
+        console.log("Switching to chainId:", targetChainId);
+
+        // Disable balance updates during switch
+        const wasCheckingBalance = intervalRef.current;
+        if (wasCheckingBalance) clearInterval(intervalRef.current);
 
         if (!window.ethereum) {
           throw new Error("Metamask not installed");
@@ -286,7 +292,10 @@ export const TransactionProvider = ({ children }) => {
 
         if (showToast) {
           toast.success(
-            `Switched to ${targetChainId === 11155111 ? "Sepolia" : "Holesky"}`
+            `Switched to ${targetChainId === 11155111 ? "Sepolia" : "Holesky"}`,
+            {
+              toastId: "network-switch", // Unique ID prevents duplicates
+            }
           );
         }
 
@@ -456,34 +465,38 @@ export const TransactionProvider = ({ children }) => {
     }
   };
 
+  const startBalancePolling = useCallback(() => {
+    intervalRef.current = setInterval(async () => {
+      const currentBalance = await getUserBalance(currentAccount);
+
+      if (lastCheckedBalance && currentBalance !== lastCheckedBalance) {
+        toast.success("Balance updated", { toastId: "balance-update" });
+        // toast.success("Balance updated", {
+        //   position: "top-center",
+        //   autoClose: 5000,
+        //   pauseOnHover: true,
+        //   theme: "colored",
+        // });
+      }
+
+      setLastCheckedBalance(currentBalance);
+    }, 3000);
+  }, [currentAccount, lastCheckedBalance, getUserBalance]);
+
   // Polling mechanism to check balance changes
   useEffect(() => {
     if (!currentAccount) {
       return;
     }
 
-    const interval = setInterval(async () => {
-      const currentBalance = await getUserBalance(currentAccount);
-
-      // Keep comparision logic (initially lastCheckedBalance will be undefined)
-      if (lastCheckedBalance && currentBalance !== lastCheckedBalance) {
-        toast.success("Balance updated", {
-          position: "top-center",
-          autoClose: 5000,
-          pauseOnHover: true,
-          theme: "colored",
-        });
-      }
-
-      setLastCheckedBalance(currentBalance);
-    }, 3000); // Check every 3 seconds
+    startBalancePolling(); // Start polling on mount/account change
 
     // Suppress console warnings (Timer [Violation] X handlers)
     // Chrome Dev Filter Box: -[Violation]
     console.warn = () => {};
 
-    return () => clearInterval(interval); // Cleanup interval on component unmount
-  }, [currentAccount, lastCheckedBalance, getUserBalance]);
+    return () => clearInterval(intervalRef.current); // Cleanup interval on component unmount
+  }, [currentAccount, startBalancePolling]);
 
   useEffect(() => {
     checkIfWalletIsConnected();
@@ -511,7 +524,8 @@ export const TransactionProvider = ({ children }) => {
   useEffect(() => {
     const handleChainChanged = (newChainId) => {
       const numericChainId = parseInt(newChainId, 16);
-      switchNetwork(numericChainId, false);
+      //switchNetwork(numericChainId, false);
+      setCurrentChainId(numericChainId);
 
       // Force reload all data on chain change
       if (currentAccount) {
