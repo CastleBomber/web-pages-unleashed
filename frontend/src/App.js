@@ -59,6 +59,11 @@
  *
  * MongoDB Server:
  * const dotenv = require("dotenv").config();
+ * 
+ * Cursor: 
+ *    CMD + SHIFT + P -> Search up commands
+ *    CMD + R -> Fold code
+ * 
  *
  *
  * Quick Fix:

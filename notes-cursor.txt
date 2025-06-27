@@ -1,0 +1,3 @@
+Cursor
+Search commands: Cmd+Shift+P
+Fold code: Cmd+R Cmd+0 (Zero)

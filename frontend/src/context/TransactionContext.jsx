@@ -106,19 +106,22 @@ export const TransactionProvider = ({ children }) => {
   };
 
   // Transactions from the Blockchain
-  const getAllTransactions = useCallback(async () => {
+  const getAllTransactions = useCallback(async (isInitialLoad = false) => {
     try {
       if (!window.ethereum) {
-        toast.error("MetaMask not connected");
+        if (!isInitialLoad) {
+          toast.error("MetaMask not connected");
+        }
         return;
       }
 
       // First verify contract deployment
-      const networkName = currentChainId === 11155111 ? "Sepolia" : "Holesky";
-      const isDeployed = await verifyContractDeployment(currentChainId);
+      const isDeployed = await verifyContractDeployment(currentChainId, !isInitialLoad);
 
       if (!isDeployed) {
-        toast.error(`Contract not deployed on ${networkName}`);
+        if (!isInitialLoad) {
+          toast.error(`Contract not deployed on ${currentChainId === 11155111 ? "Sepolia" : "Holesky"}`);
+        }
         return;
       }
 
@@ -142,7 +145,9 @@ export const TransactionProvider = ({ children }) => {
 
       setTransactions(structuredTransactions);
     } catch (error) {
-      console.log(error);
+      if (!isInitialLoad) {
+        console.log(error);
+      }
     }
   }, [currentChainId]);
 
@@ -178,7 +183,7 @@ export const TransactionProvider = ({ children }) => {
       if (accounts.length) {
         setCurrentAccount(accounts[0]);
         getUserBalance(accounts[0]);
-        getAllTransactions();
+        getAllTransactions(true);
 
         return true;
       }
@@ -345,13 +350,16 @@ export const TransactionProvider = ({ children }) => {
     });
   };
 
-  const verifyContractDeployment = async (chainId) => {
+  const verifyContractDeployment = async (chainId, showToast = false) => {
     try {
       const networkName = chainId === 11155111 ? "sepolia" : "holesky";
       const contractAddress = contractAddresses[networkName];
 
       if (!contractAddress) {
         console.warn(`No contract address for ${networkName}`);
+        if (showToast) {
+          toast.error(`No contract deployed on ${networkName}`);
+        }
         return false;
       }
 
@@ -491,19 +499,19 @@ export const TransactionProvider = ({ children }) => {
 
     startBalancePolling(); // Start polling on mount/account change
 
-    // Suppress console warnings (Timer [Violation] X handlers)
-    // Chrome Dev Filter Box: -[Violation]
+    // Suppress console warnings (Timer [Violation] X handlers), Chrome Dev Filter Box: -[Violation]
     console.warn = () => {};
 
     return () => clearInterval(intervalRef.current); // Cleanup interval on component unmount
   }, [currentAccount, startBalancePolling]);
 
+  // Check if wallet is connected and get balance and transactions
   useEffect(() => {
     checkIfWalletIsConnected();
 
     if (currentAccount) {
       getUserBalance(currentAccount);
-      getAllTransactions();
+      getAllTransactions(true);
     }
   }, [
     currentAccount,
