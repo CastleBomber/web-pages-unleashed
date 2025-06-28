@@ -1,3 +1,7 @@
 Cursor
 Search commands: Cmd+Shift+P
 Fold code: Cmd+R Cmd+0 (Zero)
+Unfold all code: Cmd+R Cmd+J
+
+Cursor Settings
+Cursor Tab (off)

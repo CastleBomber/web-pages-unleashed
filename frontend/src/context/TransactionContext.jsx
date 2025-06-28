@@ -283,6 +283,7 @@ export const TransactionProvider = ({ children }) => {
         const newChainId = await window.ethereum.request({
           method: "eth_chainId",
         });
+
         if (parseInt(newChainId) !== targetChainId) {
           throw new Error("Network switch not confirmed");
         }
@@ -291,7 +292,7 @@ export const TransactionProvider = ({ children }) => {
         if (currentAccount) {
           await Promise.all([
             getUserBalance(currentAccount),
-            getAllTransactions(),
+            getAllTransactions(true), // Add true to supress "not deployed" toast
           ]);
         }
 
@@ -537,7 +538,7 @@ export const TransactionProvider = ({ children }) => {
 
       // Force reload all data on chain change
       if (currentAccount) {
-        getAllTransactions();
+        getAllTransactions(true);
         getUserBalance(currentAccount);
       }
     };
