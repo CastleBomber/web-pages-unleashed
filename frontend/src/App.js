@@ -35,14 +35,6 @@
  *
  *
  * Shortcuts:
- *  VS Code:
- *      code folding: cmd+k, cmd+2
- *      code expanding: cmd+k, release, cmd+j
- * 	    c++ VS Code clang-formatter: shift+alt+f
- *      Go to definition - F12
- *      Command pallete - shtift+cmd+p
- *
- *
  *  Visual Studio:
  *      code folding: select region, ctrl+m+m
  *      full screen: shift+alt+enter

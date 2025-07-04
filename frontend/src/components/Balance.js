@@ -1,4 +1,3 @@
-// This may be an original class I created, probably morphed from another script
 import React, { useContext, useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
@@ -12,6 +11,7 @@ import { shortenAddress, shortenBalance } from "../utils/shortenAddress";
 import { AiFillPlayCircle } from "react-icons/ai";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { networkNames } from "../utils/networks";
 
 // Display Crypto balances on Home page
 const Balance = () => {
@@ -23,6 +23,7 @@ const Balance = () => {
     sendTransaction,
     handleChange,
     isLoading,
+    currentChainId,
   } = useContext(TransactionContext);
 
   const [displayName, setDisplayName] = useState("");
@@ -87,7 +88,9 @@ const Balance = () => {
           <div className="p1">{displayName}</div>
           <div className="p1">{shortenAddress(currentAccount)}</div>
           <div className="p1">Balance: {shortenBalance(userBalance)}</div>
-          <div className="p1">SepoliaETH</div>
+          <div className="p1">
+            {networkNames[currentChainId] || "Unknown Network"}
+          </div>
         </div>
       </div>
 
