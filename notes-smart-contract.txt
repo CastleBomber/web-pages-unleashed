@@ -1,3 +1,6 @@
+Extension
+Solidity @1:06:09
+
 npm install --save-dev hardhat
 npx hardhat init
 npx hardhat compile
