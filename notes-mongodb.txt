@@ -1,0 +1,17 @@
+Learn The MERN Stack - Express & MongoDB Rest API (video 1)
+@36:00
+
+Log into MongoDB website
+https://www.mongodb.com/
+
+Select Cluster
+
+Copy given connection string
+check .env for 
+MONGO_URI
+MONGO_DB_PROJECT_USER
+MONGO_DB_PROJECT_PASSWORD
+
+Paste into MongoDB Compass
+
+

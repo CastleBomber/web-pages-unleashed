@@ -1,3 +1,4 @@
-When calling the .env variable, may need the .env file placed in the a closer "root" directory
+When calling the .env variable, 
+may need the .env file placed in the a closer "root" directory
 
 A useful command to get 'echo $var' statements to run: 'source .env'
