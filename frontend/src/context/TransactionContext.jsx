@@ -460,7 +460,7 @@ export const TransactionProvider = ({ children }) => {
       ]);
 
       // 8. Success message
-      toast.success(`Transaction mined! Block: ${receipt}`);
+      toast.success(`Sent ${formData.amount} ETH to ${formData.addressTo.slice(0, 6)}...${formData.addressTo.slice(-4)}`);
 
       // Transaction count update
       const transactionCount = await transactionContract.getTransactionCount();

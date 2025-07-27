@@ -59,7 +59,8 @@ const TransactionBCGifCards = () => {
 
   return (
     <div>
-      <h2>Latest Transactions</h2>
+      <h2>Latest Sepolia/Holesky Transactions</h2>
+      <h3>From All Users</h3>
       {currentAccount ? (
         transactions?.length > 0 ? (
           <div className="transactions-grid">
