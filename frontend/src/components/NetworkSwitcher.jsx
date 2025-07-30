@@ -1,12 +1,11 @@
 import {
   useTransactionContext
 } from "../context/TransactionContext";
-import { toast } from "react-toastify";
 
 const NetworkSwitcher = () => {
   const { switchNetwork, verifyContractDeployment } = useTransactionContext();
 
-  const killAnnoyingGifs = () => {
+  const hideGifs = () => {
     // Pauses ALL GIFs on the page
     document.querySelectorAll('img, video').forEach(el => {
       if (el.src?.endsWith('.gif') || el.tagName === 'VIDEO') {
@@ -28,7 +27,7 @@ const NetworkSwitcher = () => {
             `Contracts: ${sepoliaOK ? "Sepolia OK" : "Sepolia MISSING"} | ${holeskyOK ? "Holesky OK" : "Holesky MISSING"}`
           );
 
-          killAnnoyingGifs();
+          hideGifs();
         }}
       >
         Verify Contracts

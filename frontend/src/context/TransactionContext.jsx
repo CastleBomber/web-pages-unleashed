@@ -288,6 +288,10 @@ export const TransactionProvider = ({ children }) => {
           throw new Error("Network switch not confirmed");
         }
 
+        // "Write" test network choice to localStorage for crypto card; persist after page reload
+        localStorage.setItem("preferredChainId", targetChainId);
+        setCurrentChainId(targetChainId);
+
         // Refresh contract and data after switch
         if (currentAccount) {
           await Promise.all([
@@ -549,6 +553,14 @@ export const TransactionProvider = ({ children }) => {
       window.ethereum?.removeListener("chainChanged", handleChainChanged);
     };
   }, [currentAccount, getAllTransactions, getUserBalance, switchNetwork]);
+
+  // "Reads" the saved test network for the crypto card; persists after page reload
+  useEffect(() => {
+    const savedChainId = localStorage.getItem("preferredChainId");
+    if (savedChainId) {
+      setCurrentChainId(Number(savedChainId));
+    }
+  }, []);
 
   return (
     <TransactionContext.Provider
