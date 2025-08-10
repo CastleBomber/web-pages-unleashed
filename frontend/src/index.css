@@ -265,6 +265,12 @@ footer {
   opacity: 0.3;
 }
 
+/* Visual feedback after switching Metamask account */
+.crypto-card.updating {
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
 @keyframes shimmer {
   0% {
     transform: translateX(-100%);

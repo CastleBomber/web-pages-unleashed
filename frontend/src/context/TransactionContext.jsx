@@ -4,10 +4,11 @@ import React, { useContext, useEffect, useState, useCallback } from "react";
 import { ethers } from "ethers";
 import { contractABI, contractAddresses } from "../utils/constants";
 import { toast } from "react-toastify";
-//const { ethereum } = window;
+import { networkNames } from "../utils/networks";
 export const TransactionContext = React.createContext();
 const Big = require("big.js");
 const DEFAULT_CHAIN_ID = 11155111; // Sepolia as default
+
 
 const getEthereumContract = (chainId) => {
   // Validate chainId or use default
@@ -34,8 +35,6 @@ const getEthereumContract = (chainId) => {
     contractABI,
     signer
   );
-
-  console.log(`Using ${networkName} contract:`, contractAddress);
 
   return transactionContract;
 };
@@ -85,6 +84,8 @@ export const TransactionProvider = ({ children }) => {
   const [userBalance, setUserBalance] = useState("");
   const [lastCheckedBalance, setLastCheckedBalance] = useState("");
   const intervalRef = useRef();
+
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const [formData, setFormData] = useState({
     addressTo: "",
@@ -168,92 +169,6 @@ export const TransactionProvider = ({ children }) => {
       return null;
     }
   }, []);
-
-  const checkIfWalletIsConnected = useCallback(async () => {
-    try {
-      if (!window.ethereum) {
-        console.log("Metamask not detected, please install.");
-        return false;
-      }
-
-      const accounts = await window.ethereum.request({
-        method: "eth_accounts",
-      });
-
-      if (accounts.length) {
-        setCurrentAccount(accounts[0]);
-        getUserBalance(accounts[0]);
-        getAllTransactions(true);
-
-        return true;
-      }
-
-      console.log("Wallet available but not connected");
-      return false;
-    } catch (error) {
-      console.log("Connection check error:", error);
-      return false;
-    }
-  }, [getAllTransactions, getUserBalance]);
-
-  // Wait for MetaMask injection (retry if not immediately available)
-  async function checkMetaMask() {
-    // Check if already injected
-    if (window.ethereum?.isMetaMask) {
-      return window.ethereum;
-    }
-
-    // Wait for injection (with timeout)
-    return new Promise((resolve) => {
-      let attempts = 0;
-      const maxAttempts = 10; // ~2 seconds total
-
-      const interval = setInterval(() => {
-        if (window.ethereum?.isMetaMask) {
-          clearInterval(interval);
-          resolve(window.ethereum);
-        } else if (attempts >= maxAttempts) {
-          clearInterval(interval);
-          console.log("MetaMask injection timed out");
-        }
-        attempts++;
-      }, 200); // Check every 200ms
-    });
-  }
-
-  const connectWallet = async () => {
-    try {
-      // Ensure MetaMask is injected
-      const ethereum = await checkMetaMask();
-
-      // Check if already connected
-      const accounts = await ethereum.request({
-        method: "eth_accounts",
-      });
-      if (accounts.length > 0) {
-        setCurrentAccount(accounts[0]);
-        return accounts[0];
-      }
-
-      // If not connected, request new connection
-      const newAccounts = await ethereum.request({
-        method: "eth_requestAccounts",
-      });
-      console.log("Connected", newAccounts[0]);
-
-      setCurrentAccount(newAccounts[0]);
-
-      return newAccounts[0];
-    } catch (error) {
-      console.error("MetaMask connection failed:", error);
-      toast.error(
-        error.message.includes("timed out")
-          ? "MetaMask took too long to respond. Try refreshing."
-          : "Failed to connect MetaMask"
-      );
-      throw error;
-    }
-  };
 
   const switchNetwork = useCallback(
     async (targetChainId, showToast = true) => {
@@ -355,13 +270,109 @@ export const TransactionProvider = ({ children }) => {
     });
   };
 
+  const checkIfWalletIsConnected = useCallback(async () => {
+    try {
+      if (!window.ethereum) {
+        console.log("Metamask not detected, please install.");
+        return false;
+      }
+
+      // Check to ensure we're on the right network
+      const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+      const numericChainId = parseInt(chainId);
+
+      // Only switch if not any of our supported networks
+      if (!Object.keys(networkNames).includes(String(numericChainId))) {
+        await switchNetwork(DEFAULT_CHAIN_ID);
+      }
+
+      const accounts = await window.ethereum.request({
+        method: "eth_accounts",
+      });
+
+      if (accounts.length) {
+        setCurrentAccount(accounts[0]);
+        await getUserBalance(accounts[0]);
+        await getAllTransactions(true);
+
+        return true;
+      }
+
+      return false;
+    } catch (error) {
+      console.log("Connection check error:", error);
+      return false;
+    }
+  }, [getAllTransactions, getUserBalance, switchNetwork]);
+
+  // Wait for MetaMask injection (retry if not immediately available)
+  async function checkMetaMask() {
+    // Check if already injected
+    if (window.ethereum?.isMetaMask) {
+      return window.ethereum;
+    }
+
+    // Wait for injection (with timeout)
+    return new Promise((resolve) => {
+      let attempts = 0;
+      const maxAttempts = 10; // ~2 seconds total
+
+      const interval = setInterval(() => {
+        if (window.ethereum?.isMetaMask) {
+          clearInterval(interval);
+          resolve(window.ethereum);
+        } else if (attempts >= maxAttempts) {
+          clearInterval(interval);
+          console.log("MetaMask injection timed out");
+        }
+        attempts++;
+      }, 200); // Check every 200ms
+    });
+  }
+
+  const connectWallet = async () => {
+    try {
+      // Ensure MetaMask is injected
+      const ethereum = await checkMetaMask();
+
+      // Check if already connected
+      const accounts = await ethereum.request({
+        method: "eth_accounts",
+      });
+      if (accounts.length > 0) {
+        setCurrentAccount(accounts[0]);
+        return accounts[0];
+      }
+
+      // If not connected, request new connection
+      const newAccounts = await ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      console.log("Connected", newAccounts[0]);
+
+      setCurrentAccount(newAccounts[0]);
+
+      return newAccounts[0];
+    } catch (error) {
+      console.error("MetaMask connection failed:", error);
+      toast.error(
+        error.message.includes("timed out")
+          ? "MetaMask took too long to respond. Try refreshing."
+          : "Failed to connect MetaMask"
+      );
+      throw error;
+    }
+  };
+
   const verifyContractDeployment = async (chainId, showToast = false) => {
     try {
+      // Delay to prevent RPC rate limiting
+      await new Promise(resolve => setTimeout(resolve, 300));
+
       const networkName = chainId === 11155111 ? "sepolia" : "holesky";
       const contractAddress = contractAddresses[networkName];
 
       if (!contractAddress) {
-        console.warn(`No contract address for ${networkName}`);
         if (showToast) {
           toast.error(`No contract deployed on ${networkName}`);
         }
@@ -369,12 +380,7 @@ export const TransactionProvider = ({ children }) => {
       }
 
       const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const code = await provider.getCode(contractAddress);
-
-      console.log(
-        `[${networkName}] Contract ${contractAddress} deployed:`,
-        code !== "0x"
-      );
+      const code = await provider.getCode(contractAddress).catch(() => "0x");
 
       return code !== "0x";
     } catch (error) {
@@ -480,21 +486,23 @@ export const TransactionProvider = ({ children }) => {
 
   const startBalancePolling = useCallback(() => {
     intervalRef.current = setInterval(async () => {
-      const currentBalance = await getUserBalance(currentAccount);
+      try {
+        const currentBalance = await getUserBalance(currentAccount);
 
-      if (lastCheckedBalance && currentBalance !== lastCheckedBalance) {
-        toast.success("Balance updated", { toastId: "balance-update" });
-        // toast.success("Balance updated", {
-        //   position: "top-center",
-        //   autoClose: 5000,
-        //   pauseOnHover: true,
-        //   theme: "colored",
-        // });
+        // Only show balance update if account hasn't just changed
+        if (lastCheckedBalance && currentBalance !== lastCheckedBalance && !isUpdating) {
+          toast.success("Balance updated", {
+            toastId: "balance-update",
+            delay: 2000
+          });
+        }
+
+        setLastCheckedBalance(currentBalance);
+      } catch (error) {
+        console.error("Balance polling error:", error);
       }
-
-      setLastCheckedBalance(currentBalance);
     }, 3000);
-  }, [currentAccount, lastCheckedBalance, getUserBalance]);
+  }, [currentAccount, lastCheckedBalance, getUserBalance, isUpdating]);
 
   // Polling mechanism to check balance changes
   useEffect(() => {
@@ -505,7 +513,7 @@ export const TransactionProvider = ({ children }) => {
     startBalancePolling(); // Start polling on mount/account change
 
     // Suppress console warnings (Timer [Violation] X handlers), Chrome Dev Filter Box: -[Violation]
-    console.warn = () => {};
+    console.warn = () => { };
 
     return () => clearInterval(intervalRef.current); // Cleanup interval on component unmount
   }, [currentAccount, startBalancePolling]);
@@ -562,6 +570,32 @@ export const TransactionProvider = ({ children }) => {
     }
   }, []);
 
+  // Update crypto card when switching MetaMask accounts w/o requiring a page reload
+  useEffect(() => {
+    const handleAccountsChanged = (accounts) => {
+      if (accounts.length === 0) {
+        // MetaMask is locked or user disconnected all accounts
+        setCurrentAccount("");
+      } else if (accounts[0] !== currentAccount) {
+        // Show user switched toast
+        toast.success(`Switched account`, {
+          toastId: "account-switch" // Prevent duplicate toasts
+        });
+
+        // Account changed
+        setCurrentAccount(accounts[0]);
+        getUserBalance(accounts[0]);
+        getAllTransactions(true);
+      }
+    };
+
+    window.ethereum?.on("accountsChanged", handleAccountsChanged);
+
+    return () => {
+      window.ethereum?.removeListener("accountsChanged", handleAccountsChanged);
+    };
+  }, [currentAccount, getUserBalance, getAllTransactions]);
+
   return (
     <TransactionContext.Provider
       value={{
@@ -587,6 +621,8 @@ export const TransactionProvider = ({ children }) => {
               : "Not Connected",
         isSupportedNetwork: [11155111, 17000].includes(currentChainId),
         verifyContractDeployment,
+        isUpdating,
+        setIsUpdating
       }}
     >
       {children}

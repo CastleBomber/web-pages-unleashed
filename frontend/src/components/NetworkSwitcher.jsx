@@ -10,7 +10,7 @@ const NetworkSwitcher = () => {
     document.querySelectorAll('img, video').forEach(el => {
       if (el.src?.endsWith('.gif') || el.tagName === 'VIDEO') {
         el.src = ''; // Kills GIFs
-        el.remove(); // Optional: Remove them from DOM
+        el.remove(); // Remove them from DOM
       }
     });
   }
@@ -21,10 +21,10 @@ const NetworkSwitcher = () => {
       <button onClick={() => switchNetwork(17000)}>Switch to Holesky</button>
       <button
         onClick={async () => {
-          const sepoliaOK = await verifyContractDeployment(11155111);
-          const holeskyOK = await verifyContractDeployment(17000);
+          const sepoliaON = await verifyContractDeployment(11155111);
+          const holeskyON = await verifyContractDeployment(17000);
           console.log(
-            `Contracts: ${sepoliaOK ? "Sepolia OK" : "Sepolia MISSING"} | ${holeskyOK ? "Holesky OK" : "Holesky MISSING"}`
+            `Contracts: ${sepoliaON ? "Sepolia ON" : "Sepolia OFF"} | ${holeskyON ? "Holesky ON" : "Holesky OFF"}`
           );
 
           hideGifs();

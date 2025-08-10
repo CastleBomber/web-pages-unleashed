@@ -24,11 +24,13 @@ const Balance = () => {
     handleChange,
     isLoading,
     currentChainId,
+    isUpdating,
+    setIsUpdating
   } = useContext(TransactionContext);
 
   const [displayName, setDisplayName] = useState("");
 
-  // Fetch user data based on currentAccount
+  // Fetch username based on currentAccount
   useEffect(() => {
     const fetchUserName = async () => {
       if (!currentAccount) {
@@ -38,21 +40,32 @@ const Balance = () => {
 
       try {
         const response = await fetch(`/api/wallets/address/${currentAccount}`);
-        const data = await response.json();
 
-        if (response.ok && data.name) {
-          setDisplayName(data.name); // User name if found
-        } else {
-          setDisplayName("Guest User"); // Fallback to Guest User
+        if (!response.ok) {
+          throw new Error("Failed to fetch user data");
         }
+
+        const data = await response.json();
+        setDisplayName(data.name || "Guest User"); // Default to Guest User if no name found
       } catch (error) {
         console.error("Error fetching user data:", error);
-        setDisplayName("Guest User XXX"); // Handle API errors
+        setDisplayName("Guest User");
       }
     };
 
-    fetchUserName();
-  }, [currentAccount]);
+    // Small debounce to prevent rapid firing
+    const timer = setTimeout(fetchUserName, 300);
+    return () => clearTimeout(timer);
+  }, [currentAccount]); // Only run when currentAccount changes
+
+  // Helps with visual feedback when Metamask account changes
+  useEffect(() => {
+    if (currentAccount) {
+      setIsUpdating(true);
+      const timer = setTimeout(() => setIsUpdating(false), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [currentAccount]); // Only run when currentAccount changes
 
   const handleSubmit = (e) => {
     const { addressTo, amount } = formData;
@@ -80,7 +93,7 @@ const Balance = () => {
       )}
 
       {/* Crypto card */}
-      <div className="crypto-card mb-3 mt-3">
+      <div className={`crypto-card mb-3 mt-3 ${isUpdating ? "updating" : ""}`}>
         <div className="crypto-card-container-1">
           <SiEthereum />
         </div>

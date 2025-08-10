@@ -6,4 +6,4 @@ export const networkNames = {
     80001: "Mumbai",
     137: "Polygon",
     43114: "Avalanche",
-  };
+};

@@ -15,3 +15,16 @@ MONGO_DB_PROJECT_PASSWORD
 Paste into MongoDB Compass
 
 
+
+Error:
+Error occured after switching from android hotspot to iPhone hotspot
+"Invalid options object. Dev Server has been initialized using an options object that does not match the API schema.
+- options.allowedHosts[0] should be a non-empty string."
+# Resolved by forcing IPv4 (iPhone was using IPv6)
+# Make IPv4 permanent for Wi-Fi
+networksetup -setv6off Wi-Fi
+# Verify
+networksetup -getinfo Wi-Fi
+# Also had added these DNS servers
+8.8.8.8       # Google DNS
+1.1.1.1       # Cloudflare DNS
