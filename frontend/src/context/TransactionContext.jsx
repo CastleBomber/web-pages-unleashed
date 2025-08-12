@@ -490,7 +490,11 @@ export const TransactionProvider = ({ children }) => {
         const currentBalance = await getUserBalance(currentAccount);
 
         // Only show balance update if account hasn't just changed
-        if (lastCheckedBalance && currentBalance !== lastCheckedBalance && !isUpdating) {
+        if (
+          (lastCheckedBalance) && 
+          (currentBalance !== lastCheckedBalance) && 
+          (!isUpdating)
+        ) {
           toast.success("Balance updated", {
             toastId: "balance-update",
             delay: 2000
@@ -502,7 +506,7 @@ export const TransactionProvider = ({ children }) => {
         console.error("Balance polling error:", error);
       }
     }, 3000);
-  }, [currentAccount, lastCheckedBalance, getUserBalance, isUpdating]);
+  }, [currentAccount, lastCheckedBalance, getUserBalance, ]);
 
   // Polling mechanism to check balance changes
   useEffect(() => {

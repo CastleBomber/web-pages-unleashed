@@ -30,7 +30,7 @@ const NetworkSwitcher = () => {
           hideGifs();
         }}
       >
-        Verify Contracts
+        Hide Gifs
       </button>
     </div>
   );
