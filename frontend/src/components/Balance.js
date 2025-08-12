@@ -79,6 +79,7 @@ const Balance = () => {
 
     sendTransaction();
   };
+  
 
   return (
     <div className="balance">
