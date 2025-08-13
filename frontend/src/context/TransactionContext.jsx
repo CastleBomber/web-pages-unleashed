@@ -85,7 +85,7 @@ export const TransactionProvider = ({ children }) => {
   const [lastCheckedBalance, setLastCheckedBalance] = useState("");
   const intervalRef = useRef();
 
-  const [isUpdating, setIsUpdating] = useState(false);
+  const [isAccountSwitching, setIsAccountSwitching] = useState(false);
 
   const [formData, setFormData] = useState({
     addressTo: "",
@@ -165,7 +165,7 @@ export const TransactionProvider = ({ children }) => {
       setUserBalance(formattedBalance); // Update the state as needed
       return formattedBalance; // Return the balance for other uses
     } catch (error) {
-      console.error("Error in getUserBalance():", error);
+      console.error("Error in getUserBalance():", error.message);
       return null;
     }
   }, []);
@@ -493,7 +493,7 @@ export const TransactionProvider = ({ children }) => {
         if (
           (lastCheckedBalance) && 
           (currentBalance !== lastCheckedBalance) && 
-          (!isUpdating)
+          (!isAccountSwitching)
         ) {
           toast.success("Balance updated", {
             toastId: "balance-update",
@@ -505,8 +505,8 @@ export const TransactionProvider = ({ children }) => {
       } catch (error) {
         console.error("Balance polling error:", error);
       }
-    }, 3000);
-  }, [currentAccount, lastCheckedBalance, getUserBalance, ]);
+    }, 4000);
+  }, [currentAccount, lastCheckedBalance, getUserBalance, isAccountSwitching]);
 
   // Polling mechanism to check balance changes
   useEffect(() => {
@@ -625,8 +625,8 @@ export const TransactionProvider = ({ children }) => {
               : "Not Connected",
         isSupportedNetwork: [11155111, 17000].includes(currentChainId),
         verifyContractDeployment,
-        isUpdating,
-        setIsUpdating
+        isAccountSwitching,
+        setIsAccountSwitching
       }}
     >
       {children}
