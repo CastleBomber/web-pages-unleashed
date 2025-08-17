@@ -24,6 +24,7 @@ const Balance = () => {
     handleChange,
     isLoading,
     currentChainId,
+    isAccountChanging,
   } = useContext(TransactionContext);
 
   const [displayName, setDisplayName] = useState("");
@@ -83,7 +84,7 @@ const Balance = () => {
       )}
 
       {/* Crypto card */}
-      <div className={`crypto-card mb-3 mt-3 ${isLoading ? "updating" : ""}`}>
+      <div className={`crypto-card mb-3 mt-3 ${isAccountChanging || isLoading ? "updating" : ""}`}>
         <div className="crypto-card-container-1">
           <SiEthereum />
         </div>

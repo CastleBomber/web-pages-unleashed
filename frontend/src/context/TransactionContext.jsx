@@ -76,17 +76,16 @@ const logTransactionToDB = async (
 };
 
 export const TransactionProvider = ({ children }) => {
-  // In your context provider
   const { chainId: web3ChainId } = useWeb3React();
   const [currentChainId, setCurrentChainId] = useState(DEFAULT_CHAIN_ID);
-
   const [currentAccount, setCurrentAccount] = useState("");
   const [userBalance, setUserBalance] = useState("");
   const [lastCheckedBalance, setLastCheckedBalance] = useState("");
+  const [balanceUpdateAllowed, setBalanceUpdateAllowed] = useState(true);
+  const [isAccountChanging, setIsAccountChanging] = useState(false);
   const intervalRef = useRef();
 
-  const [balanceUpdateAllowed, setBalanceUpdateAllowed] = useState(true);
-
+  
   const [formData, setFormData] = useState({
     addressTo: "",
     amount: "",
@@ -581,7 +580,10 @@ export const TransactionProvider = ({ children }) => {
         // MetaMask is locked or user disconnected all accounts
         setCurrentAccount("");
       } else if (accounts[0] !== currentAccount) {
-        // Block balance updates during switch
+        // Visual feedback trigger
+        setIsAccountChanging(true);
+        
+        // Block the balance updates during switch
         setBalanceUpdateAllowed(false);
 
         // Show user switched toast
@@ -591,10 +593,13 @@ export const TransactionProvider = ({ children }) => {
 
         // Account changed
         setCurrentAccount(accounts[0]);
-        setLastCheckedBalance(null); // Reset balance tracking
 
-        // Re-enable balance updates after 1 second
+        // Reset balance tracking
+        setLastCheckedBalance(null); 
+
+        // Re-enable after 1 second (balance update toasts, card opacity on account switch)
         setTimeout(() => {
+          setIsAccountChanging(false);
           setBalanceUpdateAllowed(true);
         }, 1000)
 
@@ -636,6 +641,7 @@ export const TransactionProvider = ({ children }) => {
               : "Not Connected",
         isSupportedNetwork: [11155111, 17000].includes(currentChainId),
         verifyContractDeployment,
+        isAccountChanging
       }}
     >
       {children}
