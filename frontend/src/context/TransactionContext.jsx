@@ -85,7 +85,7 @@ export const TransactionProvider = ({ children }) => {
   const [lastCheckedBalance, setLastCheckedBalance] = useState("");
   const intervalRef = useRef();
 
-  const [isAccountSwitching, setIsAccountSwitching] = useState(false);
+  const [balanceUpdateAllowed, setBalanceUpdateAllowed] = useState(true);
 
   const [formData, setFormData] = useState({
     addressTo: "",
@@ -493,7 +493,7 @@ export const TransactionProvider = ({ children }) => {
         if (
           (lastCheckedBalance) && 
           (currentBalance !== lastCheckedBalance) && 
-          (!isAccountSwitching)
+          (balanceUpdateAllowed)
         ) {
           toast.success("Balance updated", {
             toastId: "balance-update",
@@ -506,7 +506,7 @@ export const TransactionProvider = ({ children }) => {
         console.error("Balance polling error:", error);
       }
     }, 4000);
-  }, [currentAccount, lastCheckedBalance, getUserBalance, isAccountSwitching]);
+  }, [currentAccount, lastCheckedBalance, getUserBalance, balanceUpdateAllowed]);
 
   // Polling mechanism to check balance changes
   useEffect(() => {
@@ -581,6 +581,9 @@ export const TransactionProvider = ({ children }) => {
         // MetaMask is locked or user disconnected all accounts
         setCurrentAccount("");
       } else if (accounts[0] !== currentAccount) {
+        // Block balance updates during switch
+        setBalanceUpdateAllowed(false);
+
         // Show user switched toast
         toast.success(`Switched account`, {
           toastId: "account-switch" // Prevent duplicate toasts
@@ -588,6 +591,14 @@ export const TransactionProvider = ({ children }) => {
 
         // Account changed
         setCurrentAccount(accounts[0]);
+        setLastCheckedBalance(null); // Reset balance tracking
+
+        // Re-enable balance updates after 1 second
+        setTimeout(() => {
+          setBalanceUpdateAllowed(true);
+        }, 1000)
+
+        // Fetch new data
         getUserBalance(accounts[0]);
         getAllTransactions(true);
       }
@@ -625,8 +636,6 @@ export const TransactionProvider = ({ children }) => {
               : "Not Connected",
         isSupportedNetwork: [11155111, 17000].includes(currentChainId),
         verifyContractDeployment,
-        isAccountSwitching,
-        setIsAccountSwitching
       }}
     >
       {children}

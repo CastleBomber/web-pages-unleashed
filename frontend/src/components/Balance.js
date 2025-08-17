@@ -24,8 +24,6 @@ const Balance = () => {
     handleChange,
     isLoading,
     currentChainId,
-    isAccountSwitching,
-    setIsAccountSwitching
   } = useContext(TransactionContext);
 
   const [displayName, setDisplayName] = useState("");
@@ -58,15 +56,6 @@ const Balance = () => {
     return () => clearTimeout(timer);
   }, [currentAccount]); // Only run when currentAccount changes
 
-  // Helps with visual feedback when Metamask account changes
-  useEffect(() => {
-    if (currentAccount) {
-      setIsAccountSwitching(true);
-      const timer = setTimeout(() => setIsAccountSwitching(false), 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [currentAccount]); // Only run when currentAccount changes
-
   const handleSubmit = (e) => {
     const { addressTo, amount } = formData;
 
@@ -94,7 +83,7 @@ const Balance = () => {
       )}
 
       {/* Crypto card */}
-      <div className={`crypto-card mb-3 mt-3 ${isAccountSwitching ? "updating" : ""}`}>
+      <div className={`crypto-card mb-3 mt-3 ${isLoading ? "updating" : ""}`}>
         <div className="crypto-card-container-1">
           <SiEthereum />
         </div>
