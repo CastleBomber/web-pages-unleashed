@@ -83,6 +83,7 @@ export const TransactionProvider = ({ children }) => {
   const [lastCheckedBalance, setLastCheckedBalance] = useState("");
   const [balanceUpdateAllowed, setBalanceUpdateAllowed] = useState(true);
   const [isAccountChanging, setIsAccountChanging] = useState(false);
+  const [gifsHidden, setGifsHidden] = useState(false);
   const intervalRef = useRef();
 
   
@@ -616,6 +617,15 @@ export const TransactionProvider = ({ children }) => {
     };
   }, [currentAccount, getUserBalance, getAllTransactions]);
 
+  const hideGifs = () => {
+    setGifsHidden(true);
+  };
+
+  // Reset gif visibility when switching networks
+  useEffect(() => {
+    setGifsHidden(false);
+  }, [currentChainId])
+
   return (
     <TransactionContext.Provider
       value={{
@@ -641,7 +651,9 @@ export const TransactionProvider = ({ children }) => {
               : "Not Connected",
         isSupportedNetwork: [11155111, 17000].includes(currentChainId),
         verifyContractDeployment,
-        isAccountChanging
+        isAccountChanging,
+        gifsHidden,
+        hideGifs,
       }}
     >
       {children}

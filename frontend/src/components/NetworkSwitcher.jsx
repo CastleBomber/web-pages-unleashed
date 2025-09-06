@@ -3,17 +3,7 @@ import {
 } from "../context/TransactionContext";
 
 const NetworkSwitcher = () => {
-  const { switchNetwork, verifyContractDeployment } = useTransactionContext();
-
-  const hideGifs = () => {
-    // Pauses ALL GIFs on the page
-    document.querySelectorAll('img, video').forEach(el => {
-      if (el.src?.endsWith('.gif') || el.tagName === 'VIDEO') {
-        el.src = ''; // Kills GIFs
-        el.remove(); // Remove them from DOM
-      }
-    });
-  }
+  const { switchNetwork, verifyContractDeployment, hideGifs } = useTransactionContext();
 
   return (
     <div>

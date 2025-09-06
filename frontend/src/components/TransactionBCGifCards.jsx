@@ -15,11 +15,16 @@ const TransactionBCGifCard = ({
   url,
 }) => {
   const gifURL = useFetch({ keyword });
+  const {gifsHidden} = useContext(TransactionContext);
 
   return (
     <div>
       <div className="transaction-card">
-        <img src={gifURL || url} alt="nature" className="image" />
+        {!gifsHidden && (
+          <img src={gifURL || url}
+            alt="nature"
+            className="image" />
+        )}
         <p className="home-amount">
           <SiEthereum />
           {amount} ETH
