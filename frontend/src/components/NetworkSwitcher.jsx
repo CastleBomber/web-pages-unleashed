@@ -3,7 +3,7 @@ import {
 } from "../context/TransactionContext";
 
 const NetworkSwitcher = () => {
-  const { switchNetwork, verifyContractDeployment, hideGifs } = useTransactionContext();
+  const { switchNetwork, verifyContractDeployment, toggleGifs } = useTransactionContext();
 
   return (
     <div>
@@ -17,10 +17,10 @@ const NetworkSwitcher = () => {
             `Contracts: ${sepoliaON ? "Sepolia ON" : "Sepolia OFF"} | ${holeskyON ? "Holesky ON" : "Holesky OFF"}`
           );
 
-          hideGifs();
+          toggleGifs();
         }}
       >
-        Hide Gifs
+        Toggle Gifs
       </button>
     </div>
   );

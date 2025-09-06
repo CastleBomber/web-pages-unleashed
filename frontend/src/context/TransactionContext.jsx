@@ -617,11 +617,12 @@ export const TransactionProvider = ({ children }) => {
     };
   }, [currentAccount, getUserBalance, getAllTransactions]);
 
-  const hideGifs = () => {
-    setGifsHidden(true);
+  // Toggle gifs on or off in transaction cards
+  const toggleGifs = () => {
+    setGifsHidden(prev => !prev);
   };
 
-  // Reset gif visibility when switching networks
+  // Reset gif visibility when network changes
   useEffect(() => {
     setGifsHidden(false);
   }, [currentChainId])
@@ -653,7 +654,7 @@ export const TransactionProvider = ({ children }) => {
         verifyContractDeployment,
         isAccountChanging,
         gifsHidden,
-        hideGifs,
+        toggleGifs,
       }}
     >
       {children}
