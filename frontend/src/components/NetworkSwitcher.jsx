@@ -6,7 +6,7 @@ const NetworkSwitcher = () => {
   const { switchNetwork, verifyContractDeployment, toggleGifs } = useTransactionContext();
 
   return (
-    <div>
+    <div className="network-switcher">
       <button onClick={() => switchNetwork(11155111)}>Switch to Sepolia</button>
       <button onClick={() => switchNetwork(17000)}>Switch to Holesky</button>
       <button

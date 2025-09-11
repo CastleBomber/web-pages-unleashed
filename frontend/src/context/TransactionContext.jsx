@@ -646,9 +646,9 @@ export const TransactionProvider = ({ children }) => {
         currentChainId,
         currentNetwork:
           currentChainId === 11155111
-            ? "Sepolia"
+            ? "SepoliaETH"
             : currentChainId === 17000
-              ? "Holesky"
+              ? "HoleskyETH"
               : "Not Connected",
         isSupportedNetwork: [11155111, 17000].includes(currentChainId),
         verifyContractDeployment,

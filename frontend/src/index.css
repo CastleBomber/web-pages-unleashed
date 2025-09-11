@@ -9,7 +9,7 @@ h1 {
   color: white;
   text-align: center;
   text-decoration: underline;
-  margin-top: 10px;
+  margin-top: 60px;
 }
 
 h2 {
@@ -180,14 +180,19 @@ footer {
 
 /* NavBar Component */
 .navbar {
-  max-width: auto;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 1030 !important;
+  /* Higher than Bootstrap's default */
+  /* background-color: #1e1e2f !important; */
+  border-bottom: 1px solid #1e1e2f !important;
+}
 
-  padding-right: 0px;
-  padding-left: 0px;
-  padding-top: 0px;
-  padding-bottom: 0px;
-  margin-right: 0;
-  margin-left: 0;
+/* Header Component */
+.network-switcher {
+  padding-top: 60px;
 }
 
 /* Balance Component */

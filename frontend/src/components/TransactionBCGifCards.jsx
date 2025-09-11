@@ -3,6 +3,7 @@ import useFetch from "../hooks/useFetch";
 import { TransactionContext } from "../context/TransactionContext";
 import { shortenAddress, shortenDateFormat } from "../utils/shortenAddress";
 import { SiEthereum } from "react-icons/si";
+import { networkNames } from "../utils/networks";
 
 // [Home] Transactions pulled from the blockchain's smart contract
 const TransactionBCGifCard = ({
@@ -15,7 +16,7 @@ const TransactionBCGifCard = ({
   url,
 }) => {
   const gifURL = useFetch({ keyword });
-  const {gifsHidden} = useContext(TransactionContext);
+  const { gifsHidden } = useContext(TransactionContext);
 
   return (
     <div>
@@ -27,7 +28,7 @@ const TransactionBCGifCard = ({
         )}
         <p className="home-amount">
           <SiEthereum />
-          {amount} ETH
+          {amount} 
         </p>
         {message && (
           <>
@@ -55,7 +56,7 @@ const TransactionBCGifCard = ({
 };
 
 const TransactionBCGifCards = () => {
-  const { transactions, currentAccount } = useContext(TransactionContext);
+  const { transactions, currentAccount, currentChainId } = useContext(TransactionContext);
 
   // Get the 6 newest transactions
   const getNewestTransactions = (transactions, limit = 6) => {
@@ -64,7 +65,10 @@ const TransactionBCGifCards = () => {
 
   return (
     <div>
-      <h2>Latest Sepolia/Holesky Transactions</h2>
+      <h2>
+        Latest{" "}
+        {networkNames[currentChainId] || "Unknown Network"} 
+        {" "}Transactions</h2>
       <h3>From All Users</h3>
       {currentAccount ? (
         transactions?.length > 0 ? (
