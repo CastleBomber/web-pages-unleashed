@@ -7,6 +7,7 @@ import { SiEthereum } from "react-icons/si";
 const TransactionsDBCards = ({ loggedInUser }) => {
   const [transactions, setTransactions] = useState([]);
   const [error, setError] = useState("");
+  const [userMap, setUserMap] = useState({}); // Store address-to-username mapping
 
   useEffect(() => {
     // Fetch transactions for the logged-in user's walletAddress
@@ -21,6 +22,27 @@ const TransactionsDBCards = ({ loggedInUser }) => {
             (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
           );
           setTransactions(sortedTransactions);
+
+          // Extract all unique addresses from transactions
+          const allAddresses = new Set();
+          sortedTransactions.forEach(txn => {
+            allAddresses.add(txn.recipient.toLowerCase());
+            allAddresses.add(txn.walletAddress.toLowerCase());
+          });
+
+          // Fetch usernames for all addresses
+          if (allAddresses.size > 0) {
+            axios
+              .post(`/api/users/usernames`, { 
+                addresses: Array.from(allAddresses) 
+              })
+              .then((userResponse) => {
+                setUserMap(userResponse.data);
+              })
+              .catch((err) => {
+                console.error("Error fetching usernames:", err);
+              });
+          }
         })
         .catch((err) => {
           console.error(err);
@@ -30,6 +52,13 @@ const TransactionsDBCards = ({ loggedInUser }) => {
       setError("No wallet address found for logged-in user.");
     }
   }, [loggedInUser]);
+
+  // Function to display address or username
+  const displayAddress = (address) => {
+    const normalizedAddress = address.toLowerCase();
+    //const normalizedAddress = address;
+    return userMap[normalizedAddress] || shortenAddress(address);
+  };
 
   if (error) return <p className="error-message">{error}</p>;
 
@@ -51,8 +80,8 @@ const TransactionsDBCards = ({ loggedInUser }) => {
                   <span className="address-to-label">To</span>
                 </p>
                 <p className="addresses">
-                  {shortenAddress(txn.recipient)} →{" "}
-                  {shortenAddress(txn.walletAddress)}
+                  {displayAddress(txn.recipient)} →{" "}
+                  {displayAddress(txn.walletAddress)}
                 </p>
               </div>
               <p className="date">{shortenDateFormat(txn.timestamp)}</p>

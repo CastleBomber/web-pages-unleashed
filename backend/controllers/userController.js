@@ -104,4 +104,41 @@ const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "30d" });
 };
 
-module.exports = { registerUser, loginUser, getMe };
+// @desc    Get usernames by wallet addresses
+// @route   POST /api/users/usernames
+// @access  Public 
+const getUsernamesByAddresses = asyncHandler(async (req, res) => {
+  try {
+    const { addresses } = req.body;
+    
+    if (!addresses || !Array.isArray(addresses)) {
+      res.status(400);
+      throw new Error("Addresses array is required");
+    }
+
+    // Convert all addresses to lowercase for case-insensitive matching
+    const lowercaseAddresses = addresses.map(addr => addr.toLowerCase());
+    
+    // Query your database for users with these addresses
+    const users = await User.find({ 
+      walletAddress: { 
+        $in: lowercaseAddresses.map(addr => RegExp(`^${addr}$`, 'i'))
+      } 
+    }).select('walletAddress name');
+    
+    // Create a mapping of address to username
+    const userMap = {};
+    users.forEach(user => {
+      userMap[user.walletAddress.toLowerCase()] = user.name;
+    });
+    
+    res.json(userMap);
+  } catch (error) {
+    console.error('Error fetching usernames:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+
+module.exports = { registerUser, loginUser, getMe, getUsernamesByAddresses };

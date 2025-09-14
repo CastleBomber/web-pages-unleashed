@@ -13,7 +13,7 @@ c@c.com, hack123
 
 A4 Wizard
 d@d.com, hack123
-0x0
+0x0  (vs 0x2)
 
 
 
@@ -24,7 +24,8 @@ d@d.com, hack123
 
 
 
-Old Database Users
+Old Database Users 
+(**Deleted, reuse for later)
 CastleBomber, a@b.com, hack123
 Draggy, d@b.com, hack123
 Theo, theo@gg.com, red
