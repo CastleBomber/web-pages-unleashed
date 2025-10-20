@@ -1,0 +1,3 @@
+Automatic reloads with useContext()
+ex:
+const { transactions } = useContext(TransactionContext); // ← React re-renders when this changes

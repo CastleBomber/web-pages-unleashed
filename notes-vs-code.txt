@@ -4,7 +4,7 @@ Shortcuts for VS Code (Mac)
 
 Fold all: cmd+k, cmd+0/1 (Cursor position, vs highlighted code)
 Unfold Recursively: ⌘K , ⌘] (Highlight block of code)
-Unfold All: cmd+k, cmd+j
+*Unfold All: cmd+k, cmd+j
 Go to definition: F12
 
 

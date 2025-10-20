@@ -16,7 +16,12 @@ const TransactionBCGifCard = ({
   url,
 }) => {
   const gifURL = useFetch({ keyword });
-  const { gifsHidden } = useContext(TransactionContext);
+  const { gifsHidden, userMap } = useContext(TransactionContext);
+
+  const displayAddress = (address) => {
+    const normalizedAddress = address.toLowerCase();
+    return userMap[normalizedAddress] || shortenAddress(address);
+  };
 
   return (
     <div>
@@ -28,7 +33,7 @@ const TransactionBCGifCard = ({
         )}
         <p className="home-amount">
           <SiEthereum />
-          {amount} 
+          {amount}
         </p>
         {message && (
           <>
@@ -43,7 +48,7 @@ const TransactionBCGifCard = ({
           </p>
 
           <p className="addresses">
-            {shortenAddress(addressFrom)} → {shortenAddress(addressTo)}
+            {displayAddress(addressFrom)} → {displayAddress(addressTo)}
           </p>
         </div>
 
@@ -56,7 +61,11 @@ const TransactionBCGifCard = ({
 };
 
 const TransactionBCGifCards = () => {
-  const { transactions, currentAccount, currentChainId } = useContext(TransactionContext);
+  const { 
+    transactions, 
+    currentAccount, 
+    currentChainId 
+  } = useContext(TransactionContext); // React re-renders when this changes
 
   // Get the 6 newest transactions
   const getNewestTransactions = (transactions, limit = 6) => {
@@ -67,7 +76,7 @@ const TransactionBCGifCards = () => {
     <div>
       <h2>
         Latest{" "}
-        {networkNames[currentChainId] || "Unknown Network"} 
+        {networkNames[currentChainId] || "Unknown Network"}
         {" "}Transactions</h2>
       <h3>From All Users</h3>
       {currentAccount ? (

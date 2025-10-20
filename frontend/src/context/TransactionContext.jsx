@@ -5,6 +5,7 @@ import { ethers } from "ethers";
 import { contractABI, contractAddresses } from "../utils/constants";
 import { toast } from "react-toastify";
 import { networkNames } from "../utils/networks";
+import axios from "axios";
 export const TransactionContext = React.createContext();
 const Big = require("big.js");
 const DEFAULT_CHAIN_ID = 11155111; // Sepolia as default
@@ -84,9 +85,13 @@ export const TransactionProvider = ({ children }) => {
   const [balanceUpdateAllowed, setBalanceUpdateAllowed] = useState(true);
   const [isAccountChanging, setIsAccountChanging] = useState(false);
   const [gifsHidden, setGifsHidden] = useState(false);
+  const [userMap, setUserMap] = useState({}); // Map of walletAddress to username
   const intervalRef = useRef();
+  const [isLoading, setIsLoading] = useState(false);
+  const [transactionCount, setTransactionCount] = useState(localStorage.getItem("transactionCount"));
+  const [transactions, setTransactions] = useState([]);
+  const [dbRefreshFlag, setDbRefreshFlag] = useState(0);
 
-  
   const [formData, setFormData] = useState({
     addressTo: "",
     amount: "",
@@ -94,17 +99,18 @@ export const TransactionProvider = ({ children }) => {
     message: "",
   });
 
-  const [isLoading, setIsLoading] = useState(false);
-
-  const [transactionCount, setTransactionCount] = useState(
-    localStorage.getItem("transactionCount")
-  );
-
-  const [transactions, setTransactions] = useState([]);
-
   const handleChange = (e, name) => {
     setFormData((prevState) => ({ ...prevState, [name]: e.target.value }));
   };
+
+  const fetchUsernames = useCallback(async (addresses) => {
+    try {
+      const response = await axios.post('/api/users/usernames', { addresses });
+      setUserMap(prev => ({ ...prev, ...response.data }));
+    } catch (error) {
+      console.error("Error fetching usernames:", error);
+    }
+  }, []);
 
   // Transactions from the Blockchain
   const getAllTransactions = useCallback(async (isInitialLoad = false) => {
@@ -118,7 +124,6 @@ export const TransactionProvider = ({ children }) => {
 
       // First verify contract deployment
       const isDeployed = await verifyContractDeployment(currentChainId, !isInitialLoad);
-
       if (!isDeployed) {
         if (!isInitialLoad) {
           toast.error(`Contract not deployed on ${currentChainId === 11155111 ? "Sepolia" : "Holesky"}`);
@@ -144,13 +149,25 @@ export const TransactionProvider = ({ children }) => {
         })
       );
 
+      // State update, assists with re-rendering after transactions
       setTransactions(structuredTransactions);
+
+      // Extract addresses and fetch usernames
+      const allAddresses = new Set();
+      structuredTransactions.forEach(txn => {
+        allAddresses.add(txn.addressFrom.toLowerCase());
+        allAddresses.add(txn.addressTo.toLowerCase());
+      });
+
+      if (allAddresses.size > 0) {
+        fetchUsernames(Array.from(allAddresses));
+      }
     } catch (error) {
       if (!isInitialLoad) {
         console.log(error);
       }
     }
-  }, [currentChainId]);
+  }, [currentChainId, fetchUsernames]);
 
   const getUserBalance = useCallback(async (account) => {
     // Validate that account is not empty or undefined
@@ -292,6 +309,7 @@ export const TransactionProvider = ({ children }) => {
 
       if (accounts.length) {
         setCurrentAccount(accounts[0]);
+
         await getUserBalance(accounts[0]);
         await getAllTransactions(true);
 
@@ -462,15 +480,19 @@ export const TransactionProvider = ({ children }) => {
       setIsLoading(true);
       const receipt = await tx.wait();
 
+      await logTransactionToDB(currentAccount, addressTo, amount, tx.hash);
+
+      // Update Dashboard's transactions
+      setTimeout(() => {
+        triggerDBRefresh();
+        console.log("dbRefreshFlag should now update");
+      }, 1000);
+
       // 7. Update all data
       await Promise.all([
         getUserBalance(currentAccount),
         getAllTransactions(),
-        logTransactionToDB(currentAccount, addressTo, amount, tx.hash),
       ]);
-
-      // 8. Success message
-      toast.success(`Sent ${formData.amount} ETH to ${formData.addressTo.slice(0, 6)}...${formData.addressTo.slice(-4)}`);
 
       // Transaction count update
       const transactionCount = await transactionContract.getTransactionCount();
@@ -491,8 +513,8 @@ export const TransactionProvider = ({ children }) => {
 
         // Only show balance update if account hasn't just changed
         if (
-          (lastCheckedBalance) && 
-          (currentBalance !== lastCheckedBalance) && 
+          (lastCheckedBalance) &&
+          (currentBalance !== lastCheckedBalance) &&
           (balanceUpdateAllowed)
         ) {
           toast.success("Balance updated", {
@@ -549,7 +571,6 @@ export const TransactionProvider = ({ children }) => {
   useEffect(() => {
     const handleChainChanged = (newChainId) => {
       const numericChainId = parseInt(newChainId, 16);
-      //switchNetwork(numericChainId, false);
       setCurrentChainId(numericChainId);
 
       // Force reload all data on chain change
@@ -583,7 +604,7 @@ export const TransactionProvider = ({ children }) => {
       } else if (accounts[0] !== currentAccount) {
         // Visual feedback trigger
         setIsAccountChanging(true);
-        
+
         // Block the balance updates during switch
         setBalanceUpdateAllowed(false);
 
@@ -596,7 +617,7 @@ export const TransactionProvider = ({ children }) => {
         setCurrentAccount(accounts[0]);
 
         // Reset balance tracking
-        setLastCheckedBalance(null); 
+        setLastCheckedBalance(null);
 
         // Re-enable after 1 second (balance update toasts, card opacity on account switch)
         setTimeout(() => {
@@ -625,7 +646,19 @@ export const TransactionProvider = ({ children }) => {
   // Reset gif visibility when network changes
   useEffect(() => {
     setGifsHidden(false);
-  }, [currentChainId])
+  }, [currentChainId]);
+
+  // Test
+  useEffect(() => {
+    console.log("dbRefreshFlag changed to:", dbRefreshFlag);
+    console.log("🟢 Provider active, dbRefreshFlag =", dbRefreshFlag);
+  }, [dbRefreshFlag]);
+
+  // Assist with update Dashboard transactions
+  const triggerDBRefresh = () => {
+    console.log("DB refresh triggered");
+    setDbRefreshFlag(prev => prev + 1);
+  };
 
   return (
     <TransactionContext.Provider
@@ -655,6 +688,8 @@ export const TransactionProvider = ({ children }) => {
         isAccountChanging,
         gifsHidden,
         toggleGifs,
+        userMap,
+        dbRefreshFlag,
       }}
     >
       {children}

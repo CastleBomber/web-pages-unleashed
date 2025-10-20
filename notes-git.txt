@@ -13,3 +13,4 @@ git branch                                    # Show all branches and your curre
 git checkout main                             # Switching b/n the two branches
 git checkout feature/holesky-testnet
 
+git log -1 --pretty=%s                         # Display last git commit message

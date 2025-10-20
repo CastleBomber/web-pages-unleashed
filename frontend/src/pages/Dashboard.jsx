@@ -4,6 +4,7 @@ import Footer from "../components/Footer";
 import TransactionsDBCards from "../components/TransactionDBCards";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import DebugContext from "./DebugContext";
 
 // Accessed once logged in
 function Dashboard() {
@@ -27,6 +28,7 @@ function Dashboard() {
 
         <main>
           <h1>Welcome {user && user.name}!</h1>
+          <DebugContext />
         </main>
 
         <article className="article">
@@ -42,3 +44,4 @@ function Dashboard() {
 }
 
 export default Dashboard;
+
